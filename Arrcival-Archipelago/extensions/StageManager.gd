@@ -12,11 +12,11 @@ func _ready():
 	GameWorld.archipelago.client.connect("item_received", self, "addItemToPool")
 
 func addItemToPool(itemId: int):
-	if itemId == 4242010 or itemId == 4242020:
+	if itemId == 4242010:
 		GameWorld.archipelago.keeperUpgradesCount += 1
-	elif itemId == 4242030 or itemId == 4242040 or itemId == 4242060 or itemId == 4242080:
+	elif itemId == 4242030:
 		GameWorld.archipelago.domeUpgradesCount += 1
-	elif itemId == 4242100:
+	elif itemId == 4242050:
 		GameWorld.archipelago.gadgetUpgradesCount += 1
 	if itemId == 4242004:
 		GameWorld.archipelago.cobaltRetrieved += 1

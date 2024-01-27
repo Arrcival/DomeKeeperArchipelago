@@ -9,6 +9,9 @@ var gadgetUpgrades: Array = []
 var keeperUpgradesCount: int = 0
 var domeUpgradesCount: int = 0
 var gadgetUpgradesCount: int = 0
+var keeperUpgradesUnlockedCount: int = 0
+var domeUpgradesUnlockedCount: int = 0
+var gadgetUpgradesUnlockedCount: int = 0
 
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
@@ -80,6 +83,10 @@ func generateUpgrades():
 	lockedUpgrades += keeperUpgrades
 	lockedUpgrades += domeUpgrades
 	lockedUpgrades += gadgetUpgrades
+	keeperUpgradesUnlockedCount = 0
+	domeUpgradesUnlockedCount = 0
+	gadgetUpgradesUnlockedCount = 0
+	
 
 func generateKeeperUpgrades(seedNumber):
 	if Level.keeperId() == "keeper1":
@@ -129,16 +136,16 @@ func unlockGadgetUpgrade():
 
 func checkUpgrades() -> Array:
 	var rtr: Array = []
-	while keeperUpgradesCount > 0:
+	while keeperUpgradesUnlockedCount < keeperUpgradesCount:
 		var upgradeName = unlockKeeperUpgrade()
-		keeperUpgradesCount -= 1
+		keeperUpgradesUnlockedCount += 1
 		rtr.append(upgradeName)
-	while domeUpgradesCount > 0:
+	while domeUpgradesUnlockedCount < domeUpgradesCount:
 		var upgradeName = unlockDomeUpgrade()
-		domeUpgradesCount -= 1
+		domeUpgradesCount += 1
 		rtr.append(upgradeName)
-	while gadgetUpgradesCount > 0:
+	while gadgetUpgradesUnlockedCount < gadgetUpgradesCount:
 		var upgradeName = unlockGadgetUpgrade()
-		gadgetUpgradesCount -= 1
+		gadgetUpgradesUnlockedCount += 1
 		rtr.append(upgradeName)
 	return rtr
