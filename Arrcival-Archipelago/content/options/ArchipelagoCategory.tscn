@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://gui/fonts/FontLarge.tres" type="DynamicFont" id=1]
+[ext_resource path="res://gui/fonts/FontNormal.tres" type="DynamicFont" id=2]
+[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/options/ArchipelagoCategory.gd" type="Script" id=3]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 37.0
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_left = 766.0
+margin_right = 949.0
+margin_bottom = 37.0
+custom_fonts/font = ExtResource( 1 )
+text = "Slot name : "
+
+[node name="SlotName" type="LineEdit" parent="HBoxContainer"]
+margin_left = 953.0
+margin_right = 1153.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 200, 0 )
+custom_fonts/font = ExtResource( 2 )
+expand_to_text_length = true
+placeholder_text = "slot name"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+margin_top = 41.0
+margin_right = 1920.0
+margin_bottom = 78.0
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer2"]
+margin_left = 623.0
+margin_right = 893.0
+margin_bottom = 37.0
+custom_fonts/font = ExtResource( 1 )
+text = "Server address : "
+
+[node name="ServerName" type="LineEdit" parent="HBoxContainer2"]
+margin_left = 897.0
+margin_right = 1297.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 400, 0 )
+custom_fonts/font = ExtResource( 2 )
+expand_to_text_length = true
+placeholder_text = "archipelago.gg"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="."]
+margin_top = 82.0
+margin_right = 1920.0
+margin_bottom = 119.0
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer3"]
+margin_left = 767.0
+margin_right = 949.0
+margin_bottom = 37.0
+custom_fonts/font = ExtResource( 1 )
+text = "Password : "
+
+[node name="Password" type="LineEdit" parent="HBoxContainer3"]
+margin_left = 953.0
+margin_right = 1153.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 200, 0 )
+custom_fonts/font = ExtResource( 2 )
+expand_to_text_length = true
+caret_blink = true
+caret_blink_speed = 0.5

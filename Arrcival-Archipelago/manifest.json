@@ -1,0 +1,18 @@
+{
+	"name": "Archipelago",
+	"namespace": "Arrcival",
+	"version_number": "0.1.0",
+	"description": "Adds an Archipelago integration.",
+	"website_url": "https://",
+	"dependencies": [],
+	"extra": {
+		"godot": {
+			"incompatibilities": [],
+			"optional_dependencies": [],
+			"authors": ["Arrcival"],
+			"compatible_mod_loader_version": ["3.0.0"],
+			"compatible_game_version": ["3.1.3"],
+			"config_defaults": {}
+		}
+	}
+}

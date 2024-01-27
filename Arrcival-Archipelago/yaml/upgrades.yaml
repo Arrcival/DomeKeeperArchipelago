@@ -1,0 +1,52 @@
+archipelago:
+  type: gadget
+  slot: none
+
+archipelagoupgradeiron1:
+  cost: iron=4
+  predecessors: [archipelago]
+
+archipelagoupgradeiron2:
+  cost: iron=8
+  predecessors: [archipelagoupgradeiron1]
+
+archipelagoupgradeiron3:
+  cost: iron=12
+  predecessors: [archipelagoupgradeiron2]
+
+archipelagoupgradeiron4:
+  cost: iron=20
+  predecessors: [archipelagoupgradeiron3]
+
+archipelagoupgradewater1:
+  cost: water=2
+  predecessors: [archipelago]
+
+archipelagoupgradewater2:
+  cost: water=3
+  predecessors: [archipelagoupgradewater1]
+
+archipelagoupgradewater3:
+  cost: water=4
+  predecessors: [archipelagoupgradewater2]
+
+archipelagoupgradewater4:
+  cost: water=6
+  predecessors: [archipelagoupgradewater3]
+
+
+archipelagoupgradeironwater1:
+  cost: iron=2, water=1
+  predecessors: [archipelago]
+
+archipelagoupgradeironwater2:
+  cost: iron=4, water=2
+  predecessors: [archipelagoupgradeironwater1]
+
+archipelagoupgradeironwater3:
+  cost: iron=8, water=2
+  predecessors: [archipelagoupgradeironwater2]
+
+archipelagoupgradeironwater4:
+  cost: iron=12, water=3
+  predecessors: [archipelagoupgradeironwater3]

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://gui/fonts/FontNormal.tres" type="DynamicFont" id=1]
+[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/chat/TextChat.gd" type="Script" id=2]
+
+[node name="TextChat" type="Control"]
+script = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 905.0
+margin_bottom = 605.0
+rect_min_size = Vector2( 600, 500 )
+mouse_filter = 2
+custom_fonts/normal_font = ExtResource( 1 )
+scroll_active = false
+
+[node name="Tween" type="Tween" parent="."]
