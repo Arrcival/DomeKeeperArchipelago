@@ -13,6 +13,8 @@ margin_right = 905.0
 margin_bottom = 605.0
 rect_min_size = Vector2( 600, 500 )
 mouse_filter = 2
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 5
 custom_fonts/normal_font = ExtResource( 1 )
 scroll_active = false
 
