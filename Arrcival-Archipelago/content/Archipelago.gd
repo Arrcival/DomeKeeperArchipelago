@@ -142,7 +142,7 @@ func checkUpgrades() -> Array:
 		rtr.append(upgradeName)
 	while domeUpgradesUnlockedCount < domeUpgradesCount:
 		var upgradeName = unlockDomeUpgrade()
-		domeUpgradesCount += 1
+		domeUpgradesUnlockedCount += 1
 		rtr.append(upgradeName)
 	while gadgetUpgradesUnlockedCount < gadgetUpgradesCount:
 		var upgradeName = unlockGadgetUpgrade()
