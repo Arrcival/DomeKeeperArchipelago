@@ -118,7 +118,8 @@ func _connected(_proto = ""):
 func _on_data():
 	var packet = _client.get_peer(1).get_packet()
 	
-	print("Got data from server: " + packet.get_string_from_utf8())
+	if OS.is_debug_build():
+		print("Got data from server: " + packet.get_string_from_utf8())
 		
 	var data = JSON.parse(packet.get_string_from_utf8())
 	if data.error != OK:
@@ -127,7 +128,9 @@ func _on_data():
 
 	for message in data.result:
 		var cmd = message["cmd"]
-		print("Received command: " + cmd)
+		
+		if OS.is_debug_build():
+			print("Received command: " + cmd)
 
 		if cmd == "RoomInfo":
 			_seed = message["seed_name"]
