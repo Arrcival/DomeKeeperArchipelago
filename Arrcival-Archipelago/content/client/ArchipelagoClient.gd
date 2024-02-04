@@ -39,6 +39,7 @@ var _dome: int
 var _domeGadget: int
 var _mapSize: int
 var _difficulty: int
+var _switchesAmount: int
 var _death_link = false
 var _received_indexes = []
 
@@ -116,7 +117,9 @@ func _connected(_proto = ""):
 
 func _on_data():
 	var packet = _client.get_peer(1).get_packet()
+	
 	print("Got data from server: " + packet.get_string_from_utf8())
+		
 	var data = JSON.parse(packet.get_string_from_utf8())
 	if data.error != OK:
 		print("Error parsing packet from AP: " + data.error_string)
@@ -172,6 +175,8 @@ func _on_data():
 				_mapSize = _slot_data["mapSize"]
 			if _slot_data.has("difficulty"):
 				_difficulty = _slot_data["difficulty"]
+			if _slot_data.has("switchesAmount"):
+				_switchesAmount = _slot_data["switchesAmount"]
 			_requestSync()
 
 			emit_signal("packetConnected")
@@ -308,6 +313,8 @@ func sendLocation(loc_id: int):
 	sendMessage([{"cmd": "LocationChecks", "locations": [loc_id]}])
 
 func sendLocations(loc_ids: Array):
+	print("Sent locations : ")
+	print(loc_ids)
 	sendMessage([{"cmd": "LocationChecks", "locations": loc_ids}])
 
 func connectToServer(ap_server, ap_name, ap_pass):
@@ -371,8 +378,8 @@ func processItem(item, index, from, flags):
 
 		_received_indexes.append(index)
 		var item_name = "Unknown"
-		if GameWorld.archipelago.itemsName.has(int(item)):
-			item_name = GameWorld.archipelago.itemsName.get(int(item))
+		if _item_id_to_name.has(item):
+			item_name = _item_id_to_name[item]
 
 		var item_color = colorForItemType(flags)
 		emit_signal("item_received", item)

@@ -49,7 +49,6 @@ func _on_Sprite_animation_finished():
 	elif $Sprite.animation == "empty":
 		$Light.light_active = true
 		$Sprite.play("running")
-		#GameWorld.archipelago.submitSwitch(Vector2(0, 0))
 
 func onUsed():
 	if readyToUse:

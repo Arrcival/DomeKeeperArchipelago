@@ -28,6 +28,7 @@ func build(data: Array):
 	
 	GameWorld.archipelago.client.connect("packetRoomInfo", self, "onArchipelagoConnected")
 	#GameWorld.archipelago.client.connect("packetConnected", self, "onNewGameSuccess")
+	GameWorld.archipelago.client.connect("could_not_connect", self, "onArchipelagoFailure")
 	
 	
 	if GameWorld.archipelago.client.is_connected:
@@ -97,8 +98,10 @@ func connect_archipelago():
 		connectButton.text = "Connect"
 		shouldDisconnect = false
 		newGameButton.disabled = true
-		
-	
+
+func onArchipelagoFailure(errorMessage) -> void:
+	connectButton.text = "Connect"
+
 func onArchipelagoConnected():
 	connectButton.text = "Disconnect"
 	shouldDisconnect = true

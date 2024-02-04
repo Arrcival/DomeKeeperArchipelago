@@ -45,6 +45,7 @@ func addText(text):
 	currentTimer = 0
 	timerReached = false
 	textBox.modulate.a = 1
+	$Tween.stop_all()
 	if textBox.get_line_count() > MAX_LINE_COUNT:
 		textBox.remove_line(0)
 	textBox.newline()

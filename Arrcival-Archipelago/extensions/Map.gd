@@ -10,9 +10,15 @@ func getSceneForTileType(tileType:int)->PackedScene:
 
 func init(fromDeserialize: = false):
 	.init(fromDeserialize)
+	
+	GameWorld.archipelago.switches = []
+	
+	
+	
 	var archipelagoSwitches = tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
 	if GameWorld.devMode:
 		print(archipelagoSwitches)
+	print(archipelagoSwitches)
 	for tile in archipelagoSwitches:
 		addChamber(tile, getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 	if GameWorld.devMode:
