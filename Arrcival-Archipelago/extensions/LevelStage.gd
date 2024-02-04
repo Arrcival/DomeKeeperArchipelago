@@ -7,10 +7,13 @@ func _process(deltaTime: float):
 	
 	var upgrades: Array = GameWorld.archipelago.checkUpgrades()
 	if upgrades.size() > 0:
-		var nodes = get_tree().get_nodes_in_group("techpanel")
-		for node in nodes:
-			if upgrades.has(node.techId):
-				node.reactivate()
+		var tree = get_tree()
+		if tree != null:
+			var nodes = tree.get_nodes_in_group("techpanel")
+			if nodes != null and nodes.size() > 0:
+				for node in nodes:
+					if upgrades.has(node.techId):
+						node.reactivate()
 
 	if GameWorld.archipelago.cobaltGiven < GameWorld.archipelago.cobaltRetrieved:
 		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrieved - GameWorld.archipelago.cobaltGiven)

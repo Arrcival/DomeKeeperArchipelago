@@ -75,7 +75,7 @@ func build(id:String, tier: = - 1):
 	var idLowered = id.to_lower()
 	if not CONSTARRC.isUpgradePurchasable(id):
 		isArchipelagoLocked = true
-		if crossIcon:
+		if crossIcon and state != State.BOUGHT:
 			crossIcon.visible = true
 			
 	_on_Tech_focus_exited()
