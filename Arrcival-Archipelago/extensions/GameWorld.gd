@@ -8,6 +8,20 @@ const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 func init():
 	.init()
+	GameWorld.unlockElement("keeper1")
+	GameWorld.unlockElement("keeper2")
+	GameWorld.unlockElement("dome1")
+	GameWorld.unlockElement("dome2")
+	GameWorld.unlockElement("dome3")
+	GameWorld.unlockElement("dome4")
+	GameWorld.unlockElement("repellent")
+	GameWorld.unlockElement("repellent-battle2")
+	GameWorld.unlockElement("repellent-battle3")
+	GameWorld.unlockElement("orchard")
+	GameWorld.unlockElement("orchard-battle2")
+	GameWorld.unlockElement("shield")
+	GameWorld.unlockElement("shield-battle2")
+	GameWorld.unlockElement("shield-battle3")
 	archipelago.client.connect("item_received", archipelago, "item_found")
 
 func levelInitialized():
@@ -16,12 +30,10 @@ func levelInitialized():
 	archipelago.cobaltGiven = 0
 
 func buyUpgrade(id: String):
-	
-	# prevention
+	# preventing any crash from empty upgrades
 	if id == "":
 		return
-	
-	
+
 	# Archipelago upgrades, default behavior
 	if id.begins_with("archipelago"):
 		archipelago.submitUpgrade(id)

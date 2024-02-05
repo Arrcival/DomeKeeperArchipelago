@@ -236,9 +236,11 @@ func processItem(itemId: int) -> String:
 	return itemName
 
 func _getItemNameAndRemove(array: Array) -> String:
-	var returnedValue = array[0]
-	array.remove(0)
-	return returnedValue
+	if array.size() > 0:
+		var returnedValue = array[0]
+		array.remove(0)
+		return returnedValue
+	return ""
 
 func checkUpgrades() -> Array:
 	var rtr: Array = []

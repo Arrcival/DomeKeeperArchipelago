@@ -2,12 +2,12 @@ extends Reference
 
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
 
-const KEEPER1_DRILL = ["drill1", "drill2", "drill3", "drill4"]
+const KEEPER1_DRILL = ["drill1", "drill2", "drill3", "drill4", "drill4", "drill4"]
 const KEEPER1_JETPACK = ["jetpackspeed1", "jetpackspeed2", "jetpackspeed3", "jetpackspeed4"]
 const KEEPER1_CARRY = ["jetpackstrength1", "jetpackstrength2", "jetpackstrength3", "jetpackstrength4"]
 
 const KEEPER2_MOVEMENT = ["keeper2movement1", "keeper2movement2", "keeper2movement3", "keeper2movement4"]
-const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3", "keeper2pinballdamage4"]
+const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4"]
 const KEEPER2_BUNDLE = ["keeper2bundle1", "keeper2bundle2", "keeper2bundle3", "keeper2bundle4"]
 const KEEPER2_MORESPHERES = ["keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1"]
 const KEEPER2_LIFETIME = ["keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime"]
@@ -26,7 +26,7 @@ const LASER_SPEED_ROLL = ["lasermove2", "laserbend"]
 const LASER_SPEED_AFTER_ROLL = ["lasermove3"]
 const LASER_AIMLINE = ["laseraimline"]
 
-const SWORD_STRENGTH = ["swordBlade1"]
+const SWORD_STRENGTH = ["swordblade1"]
 const SWORD_STRENGTH_CHOICES = [
 	["swordlargeblade1", "swordlargeblade2", "swordlargeblade3"],
 	["swordlongblade1", "swordlongblade2", "swordelectrified"],
@@ -38,7 +38,7 @@ const SWORD_STAB_CHOICES = [
 const SWORD_AIMLINE = ["swordaimline"]
 const SWORD_REFLECTION = ["swordreflection1"]
 const SWORD_REFLECTION_ROLL_1 = ["swordreflection2", "swordfastreflection"]
-const SWORD_REFLECTION_ROLL_2 = ["swordReflection3", "swordexplosivereflection"]
+const SWORD_REFLECTION_ROLL_2 = ["swordreflection3", "swordexplosivereflection"]
 
 const ARTILLERY_MORTAR_HIT_CHOICES = [
 	["artillerydirecthit1", "artillerydirecthit2", "artillerydirecthit3"],
@@ -77,8 +77,8 @@ const ORCHARD_MININGBOOST = ["orcharddrill1", "orcharddrill2", "orcharddrill3"]
 const SHIELD_STRENGTH = ["shieldstrength1", "shieldstrength2", "shieldstrength3"]
 const SHIELD_SPECIAL_CHOICE = [
 	["shieldbattleelectroblast", "shieldbattlelongerafterdepletion", "shieldbattleblastdamage"],
-	["shieldbattleinvulnerable", "shieldbattleactivateondepletion", "shieldbattledestructionprevention"],
 	["shieldbattlereflect", "shieldbattlereflectshortuses", "shieldbattlereflectspeed"],
+	["shieldbattleinvulnerable", "shieldbattleactivateondepletion", "shieldbattledestructionprevention"]
 ]
 const SHIELD_OVERCHARGE = ["shieldovercharge"]
 const SHIELD_OVERCHARGE_ROLL1 = ["shieldoverchargeduration1", "shieldoverchargestrength1"]

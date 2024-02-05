@@ -12,8 +12,6 @@ func build(data: Array):
 	connectButton = Button.new()
 	connectButton.text = "Connect"
 	
-	var continueButton = find_node("ContinueButton")
-	continueButton.disabled = true
 	
 	
 	
@@ -25,6 +23,9 @@ func build(data: Array):
 	
 	add_child_first(find_node("MainMenuButtons"), connectButton)
 	.build(data)
+	
+	var continueButton = find_node("ContinueButton")
+	continueButton.disabled = true
 	
 	GameWorld.archipelago.client.connect("packetRoomInfo", self, "onArchipelagoConnected")
 	#GameWorld.archipelago.client.connect("packetConnected", self, "onNewGameSuccess")
