@@ -1,13 +1,14 @@
 extends Reference
 
+const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
 
-const KEEPER1_DRILL = ["drill1", "drill2", "drill3", "drill4", "drill4", "drill4"]
+const KEEPER1_DRILL = ["drill1", "drill2", "drill3", "drill4", "drill4", "drill4", "drill4"]
 const KEEPER1_JETPACK = ["jetpackspeed1", "jetpackspeed2", "jetpackspeed3", "jetpackspeed4"]
 const KEEPER1_CARRY = ["jetpackstrength1", "jetpackstrength2", "jetpackstrength3", "jetpackstrength4"]
 
 const KEEPER2_MOVEMENT = ["keeper2movement1", "keeper2movement2", "keeper2movement3", "keeper2movement4"]
-const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4"]
+const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4"]
 const KEEPER2_BUNDLE = ["keeper2bundle1", "keeper2bundle2", "keeper2bundle3", "keeper2bundle4"]
 const KEEPER2_MORESPHERES = ["keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1"]
 const KEEPER2_LIFETIME = ["keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime"]
@@ -107,7 +108,8 @@ static func isUpgradePurchasable(upgradeName: String) -> bool:
 	 or upgradeName == "sword"
 	 or upgradeName == "laser"
 	 or upgradeName == "engineer"
-	 or upgradeName == "keeper2"):
+	 or upgradeName == "keeper2"
+	 or upgradeName.begins_with("drillbot")):
 		return true
 	
 	if (upgradeName.begins_with("laser")

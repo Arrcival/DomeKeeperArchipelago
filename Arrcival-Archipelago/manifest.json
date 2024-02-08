@@ -1,7 +1,7 @@
 {
 	"name": "Archipelago",
 	"namespace": "Arrcival",
-	"version_number": "0.2.2",
+	"version_number": "0.4.0",
 	"description": "Adds an Archipelago integration.",
 	"website_url": "https://",
 	"dependencies": [],

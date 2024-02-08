@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitchFrames.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://content/map/TileCover.tscn" type="PackedScene" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://content/map/chamber/cover.png" type="Texture" id=7]
 [ext_resource path="res://systems/audio/Sound.tscn" type="PackedScene" id=8]
 [ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.gd" type="Script" id=9]
-[ext_resource path="res://content/shared/LightLineOfSight.gd" type="Script" id=10]
 [ext_resource path="res://content/shared/Usable.tscn" type="PackedScene" id=11]
 
 [sub_resource type="TileSet" id=1]
@@ -62,18 +61,6 @@ fadeInTime = 5.0
 fadeOutTime = 2.0
 loop = true
 
-[node name="ChamberAmbOpen" parent="." instance=ExtResource( 8 )]
-stream = ExtResource( 3 )
-pitch_scale = 0.85
-bus = "Mine"
-randomVolume = 0.0
-randomPitch = 0.0
-maxAudibleDistance = 80.0
-minAudibleDistance = 40.0
-fadeInTime = 5.0
-fadeOutTime = 1.0
-loop = true
-
 [node name="ChamberSwitchHit" parent="." instance=ExtResource( 8 )]
 stream = ExtResource( 6 )
 bus = "Mine"
@@ -92,16 +79,6 @@ randomPitch = 0.0
 maxAudibleDistance = 200.0
 minAudibleDistance = 48.0
 removeAfterPlaying = true
-
-[node name="Light" type="Node2D" parent="."]
-position = Vector2( 12, 12 )
-script = ExtResource( 10 )
-light_name = "teleporter_cave"
-light_color = Color( 0.12549, 0.568627, 0.156863, 0.588235 )
-light_size = 30.0
-light_active = false
-light_flicker_strength = 1.0
-light_flicker_speed = 4.0
 
 [node name="Tween" type="Tween" parent="."]
 

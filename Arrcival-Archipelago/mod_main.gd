@@ -24,6 +24,7 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "TechTree.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")
+	loadExtension(ext_dir, "Tile.gd")
 	
 	ModLoaderMod.add_translation(dir + "localization/archipelago.en.translation")
 	

@@ -47,7 +47,6 @@ func _on_Sprite_animation_finished():
 		if used:
 			onUsed()
 	elif $Sprite.animation == "empty":
-		$Light.light_active = true
 		$Sprite.play("running")
 
 func onUsed():
@@ -57,7 +56,6 @@ func onUsed():
 		$ChamberSwitchHit.play()
 		$ChamberAmbClosed.stop()
 		$ChamberAmbClosed.queue_free()
-		$ChamberAmbOpen.play()
 		currentState = State.EMPTY
 		var time: = 0.1
 		$Tween.start()
@@ -66,4 +64,4 @@ func onUsed():
 		used = true
 
 func getTileType()->int:
-	return Data.TILE_RELIC_SWITCH
+	return CONSTARRC.TILE_ARCHIPELAGO_SWITCH

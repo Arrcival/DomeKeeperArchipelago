@@ -105,50 +105,50 @@ func generateUpgrades():
 	cobaltGiven = 0
 	itemsFoundToProcess = itemsIdFound.duplicate()
 	
-	upgrades_keeper1_drill = CONSTARRC.KEEPER1_DRILL
-	upgrades_keeper1_jetpack = CONSTARRC.KEEPER1_JETPACK
-	upgrades_keeper1_carry = CONSTARRC.KEEPER1_CARRY
+	upgrades_keeper1_drill = CONSTARRC.KEEPER1_DRILL.duplicate()
+	upgrades_keeper1_jetpack = CONSTARRC.KEEPER1_JETPACK.duplicate()
+	upgrades_keeper1_carry = CONSTARRC.KEEPER1_CARRY.duplicate()
 	
-	upgrades_keeper2_movement = CONSTARRC.KEEPER2_MOVEMENT
-	upgrades_keeper2_damage = CONSTARRC.KEEPER2_DAMAGE
-	upgrades_keeper2_bundle = CONSTARRC.KEEPER2_BUNDLE
-	upgrades_keeper2_more_spheres = CONSTARRC.KEEPER2_MORESPHERES
-	upgrades_keeper2_lifetime = CONSTARRC.KEEPER2_LIFETIME
-	upgrades_keeper2_mining = CONSTARRC.KEEPER2_MINING
+	upgrades_keeper2_movement = CONSTARRC.KEEPER2_MOVEMENT.duplicate()
+	upgrades_keeper2_damage = CONSTARRC.KEEPER2_DAMAGE.duplicate()
+	upgrades_keeper2_bundle = CONSTARRC.KEEPER2_BUNDLE.duplicate()
+	upgrades_keeper2_more_spheres = CONSTARRC.KEEPER2_MORESPHERES.duplicate()
+	upgrades_keeper2_lifetime = CONSTARRC.KEEPER2_LIFETIME.duplicate()
+	upgrades_keeper2_mining = CONSTARRC.KEEPER2_MINING.duplicate()
 	upgrades_keeper2_special = pickRandom(CONSTARRC.KEEPER2_SPECIAL_CHOICES)
 	
-	upgrades_laser_strength = CONSTARRC.LASER_STRENGTH + pickAllRandom(CONSTARRC.LASER_STRENGTH_ROLL) + CONSTARRC.LASER_STRENGTH_AFTER_ROLL
-	upgrades_laser_speed = CONSTARRC.LASER_SPEED + pickAllRandom(CONSTARRC.LASER_SPEED_ROLL) + CONSTARRC.LASER_SPEED_AFTER_ROLL
-	upgrades_laser_aimline = CONSTARRC.LASER_AIMLINE
-	upgrades_sword_strength = CONSTARRC.SWORD_STRENGTH + pickRandom(CONSTARRC.SWORD_STRENGTH_CHOICES)
+	upgrades_laser_strength = CONSTARRC.LASER_STRENGTH.duplicate() + pickAllRandom(CONSTARRC.LASER_STRENGTH_ROLL) + CONSTARRC.LASER_STRENGTH_AFTER_ROLL.duplicate()
+	upgrades_laser_speed = CONSTARRC.LASER_SPEED.duplicate() + pickAllRandom(CONSTARRC.LASER_SPEED_ROLL) + CONSTARRC.LASER_SPEED_AFTER_ROLL.duplicate()
+	upgrades_laser_aimline = CONSTARRC.LASER_AIMLINE.duplicate()
+	upgrades_sword_strength = CONSTARRC.SWORD_STRENGTH.duplicate() + pickRandom(CONSTARRC.SWORD_STRENGTH_CHOICES)
 	upgrades_sword_stab = pickRandom(CONSTARRC.SWORD_STAB_CHOICES)
-	upgrades_sword_aimline = CONSTARRC.SWORD_AIMLINE
-	upgrades_sword_reflection = CONSTARRC.SWORD_REFLECTION + pickAllRandom(CONSTARRC.SWORD_REFLECTION_ROLL_1) + pickAllRandom(CONSTARRC.SWORD_REFLECTION_ROLL_2)
+	upgrades_sword_aimline = CONSTARRC.SWORD_AIMLINE.duplicate()
+	upgrades_sword_reflection = CONSTARRC.SWORD_REFLECTION.duplicate() + pickAllRandom(CONSTARRC.SWORD_REFLECTION_ROLL_1) + pickAllRandom(CONSTARRC.SWORD_REFLECTION_ROLL_2)
 	
 	upgrades_artillery_mortar = pickRandom(CONSTARRC.ARTILLERY_MORTAR_HIT_CHOICES) + CONSTARRC.ARTILLERY_ROTATION + pickRandom(CONSTARRC.ARTILLERY_END_CHOICES)
-	upgrades_artillery_machinegun = CONSTARRC.ARTILLERY_MACHINEGUN + pickRandom(CONSTARRC.ARTILLERY_MACHINEGUN_CHOICES)
+	upgrades_artillery_machinegun = CONSTARRC.ARTILLERY_MACHINEGUN.duplicate() + pickRandom(CONSTARRC.ARTILLERY_MACHINEGUN_CHOICES)
 	
-	upgrades_tesla_reticlespeed = CONSTARRC.TESLA_RETICLESPEED
-	upgrades_tesla_quickshot = CONSTARRC.TESLA_QUICKSHOT
-	upgrades_tesla_shotpower = CONSTARRC.TESLA_SHOTPOWER + pickAllRandom(CONSTARRC.TESLA_SHOTPOWER_ROLL1) + pickAllRandom(CONSTARRC.TESLA_SHOTPOWER_ROLL2)
-	upgrades_tesla_autoaim = CONSTARRC.TESLA_AUTOAIM
+	upgrades_tesla_reticlespeed = CONSTARRC.TESLA_RETICLESPEED.duplicate()
+	upgrades_tesla_quickshot = CONSTARRC.TESLA_QUICKSHOT.duplicate()
+	upgrades_tesla_shotpower = CONSTARRC.TESLA_SHOTPOWER.duplicate() + pickAllRandom(CONSTARRC.TESLA_SHOTPOWER_ROLL1) + pickAllRandom(CONSTARRC.TESLA_SHOTPOWER_ROLL2)
+	upgrades_tesla_autoaim = CONSTARRC.TESLA_AUTOAIM.duplicate()
 	upgrades_tesla_orb = CONSTARRC.TESLA_ORB_DEFAULT + pickAllRandom(CONSTARRC.TESLA_ORB_ROLL1) + pickAllRandom(CONSTARRC.TESLA_ORB_ROLL2) + pickAllRandom(CONSTARRC.TESLA_ORB_ROLL3)
 
-	upgrades_orchard_duration = CONSTARRC.ORCHARD_DURATION
-	upgrades_orchard_overcharge = CONSTARRC.ORCHARD_OVERCHARGE
+	upgrades_orchard_duration = CONSTARRC.ORCHARD_DURATION.duplicate()
+	upgrades_orchard_overcharge = CONSTARRC.ORCHARD_OVERCHARGE.duplicate()
 	upgrades_orchard_special = pickRandom(CONSTARRC.ORCHARD_SPECIAL_CHOICE)
-	upgrades_orchard_speedboost = CONSTARRC.ORCHARD_SPEEDBOOST
-	upgrades_orchard_miningboost = CONSTARRC.ORCHARD_MININGBOOST
+	upgrades_orchard_speedboost = CONSTARRC.ORCHARD_SPEEDBOOST.duplicate()
+	upgrades_orchard_miningboost = CONSTARRC.ORCHARD_MININGBOOST.duplicate()
 
-	upgrades_shield_strength = CONSTARRC.SHIELD_STRENGTH
+	upgrades_shield_strength = CONSTARRC.SHIELD_STRENGTH.duplicate()
 	upgrades_shield_special = pickRandom(CONSTARRC.SHIELD_SPECIAL_CHOICE)
-	upgrades_shield_overcharge = CONSTARRC.SHIELD_OVERCHARGE + pickAllRandom(CONSTARRC.SHIELD_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.SHIELD_OVERCHARGE_ROLL2)
+	upgrades_shield_overcharge = CONSTARRC.SHIELD_OVERCHARGE.duplicate() + pickAllRandom(CONSTARRC.SHIELD_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.SHIELD_OVERCHARGE_ROLL2)
 	
-	upgrades_repellent_delay = CONSTARRC.REPELLENT_DELAY
+	upgrades_repellent_delay = CONSTARRC.REPELLENT_DELAY.duplicate()
 	upgrades_repellent_special = pickRandom(CONSTARRC.REPELLENT_SPECIAL_CHOICE)
 	if upgrades_repellent_special.has("repellentbattleslowdown"):
 		upgrades_repellent_special += pickRandom(CONSTARRC.REPELLENT_DEBILITATE_CHOICE)
-	upgrades_repellent_overcharge = CONSTARRC.REPELLENT_OVERCHARGE + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL2)
+	upgrades_repellent_overcharge = CONSTARRC.REPELLENT_OVERCHARGE.duplicate() + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL2)
 
 func item_found(itemId: int):
 	itemsFoundToProcess.append(itemId)
@@ -263,21 +263,8 @@ func pickAllRandom(array: Array) -> Array:
 		curArray.remove(rand_index)
 	return result
 
-func pickAllRandomOfArrayOfArray(arrayOfArray: Array) -> Array:
-	
-	var curArray = arrayOfArray.duplicate(true)
-	
-	var result = []
-	var rng = RandomNumberGenerator.new()
-	rng.seed = client.slotSeed
-	while curArray.size() > 0:
-		var rand_index:int = rng.randi() % curArray.size()
-		result += curArray[rand_index]
-		curArray.remove(rand_index)
-	return result
-
 func pickRandom(arrayOfArray: Array) -> Array:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = client.slotSeed
 	var rand_index:int = rng.randi() % arrayOfArray.size()
-	return arrayOfArray[rand_index]
+	return arrayOfArray[rand_index].duplicate()
