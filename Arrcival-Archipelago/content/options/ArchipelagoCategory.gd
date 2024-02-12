@@ -8,6 +8,7 @@ func _ready():
 	find_node("Password").text = GameWorld.archipelago.password
 	var archipelagoMod = ModLoaderMod.get_mod_data("Arrcival-Archipelago")
 	find_node("Version").text = archipelagoMod.manifest.version_number
+	find_node("ExtraInfos").text = CONSTARRC.ADDITIONNAL_INFOS
 
 func _exit_tree():
 	GameWorld.archipelago.slotName = find_node("SlotName").text

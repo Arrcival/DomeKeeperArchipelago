@@ -8,7 +8,7 @@ const my_version = "1.0.0"
 const ap_version = {"major": 0, "minor": 4, "build": 4, "class": "Version"}
 const GAME_NAME = "Dome Keeper"
 
-var _client = WebSocketClient.new()
+var _client
 var _should_process = false
 var _initiated_disconnect = false
 var _try_wss = false
@@ -63,6 +63,7 @@ var is_connected = false
 
 func _init():
 	ProjectSettings.set_setting("network/limits/websocket_client/max_in_buffer_kb", 8192)
+	_client = WebSocketClient.new()
 	print("Instantiated APClient")
 	GameWorld.archipelago.client = self
 
@@ -73,6 +74,7 @@ func _ready():
 	_client.connect("connection_error", self, "_errored")
 	_client.connect("connection_established", self, "_connected")
 	_client.connect("data_received", self, "_on_data")
+	_client.connect("server_close_request", self, "_server_closed")
 	print("AP client ready")
 
 # mandatory to receive/emit
@@ -86,12 +88,17 @@ func _reset_state():
 	_authenticated = false
 	_try_wss = false
 
+func _server_closed(code: int, reason: String):
+	print("Error " + str(code) + " : " + reason)
+	
 func _closed(_was_clean = true):
 	print("Connection closed")
 	_reset_state()
 
 	if not _initiated_disconnect:
 		emit_signal("could_not_connect", "Disconnected from Archipelago")
+	else:
+		emit_signal("logInformations", "Connection closed")
 
 	_initiated_disconnect = false
 
@@ -118,8 +125,7 @@ func _connected(_proto = ""):
 func _on_data():
 	var packet = _client.get_peer(1).get_packet()
 	
-	if OS.is_debug_build():
-		print("Got data from server: " + packet.get_string_from_utf8())
+	print("Got data from server: " + packet.get_string_from_utf8())
 		
 	var data = JSON.parse(packet.get_string_from_utf8())
 	if data.error != OK:
@@ -129,8 +135,7 @@ func _on_data():
 	for message in data.result:
 		var cmd = message["cmd"]
 		
-		if OS.is_debug_build():
-			print("Received command: " + cmd)
+		print("Received command: " + cmd)
 
 		if cmd == "RoomInfo":
 			_seed = message["seed_name"]

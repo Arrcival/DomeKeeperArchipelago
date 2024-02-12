@@ -85,3 +85,9 @@ margin_right = 1920.0
 margin_bottom = 137.0
 text = "v0.0.0"
 align = 1
+
+[node name="ExtraInfos" type="Label" parent="."]
+margin_top = 141.0
+margin_right = 1920.0
+margin_bottom = 155.0
+align = 1

@@ -102,6 +102,7 @@ func connect_archipelago():
 
 func onArchipelagoFailure(errorMessage) -> void:
 	connectButton.text = "Connect"
+	shouldDisconnect = false
 
 func onArchipelagoConnected():
 	connectButton.text = "Disconnect"
