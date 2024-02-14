@@ -19,13 +19,13 @@ func generate():
 	for i in range(10, 20):
 		cells += tdBiomes.get_used_cells_by_id(i)
 		
-	var switchCoordinates = generateSwitchesCoordinates(tdResources, cells, GameWorld.archipelago.client._switchesAmount)
+	var switchCoordinates = generateSwitchesCoordinates(tdResources, cells, GameWorld.archipelago.switchesPerLAyer)
 	for switchCoordinate in switchCoordinates:
 		tdResources.set_cell(switchCoordinate.x, switchCoordinate.y, CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
 
 	finishedSuccessful = true
 
-func generateSwitchesCoordinates(tdResources, cells: Array, amount: int) -> Array:
+func generateSwitchesCoordinates(tdResources, cells: Array, switchesPerLayer: Array) -> Array:
 	var switchCoordinates = []
 	if cells.size() > 0:
 		var allCells = Data.seedShuffle(cells, GameWorld.archipelago.client.slotSeed)

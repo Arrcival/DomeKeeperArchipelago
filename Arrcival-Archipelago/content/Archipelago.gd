@@ -83,10 +83,46 @@ var password: String = ""
 
 signal signal_item
 
+# slot data
+var seedNumber: int
+var keeperSlot: int
+var domeSlot: int
+var domeGadgetSlot: int
+var mapSize: int
+var difficulty: int
+var drillUpgrades: Array
+var kineticSphereUpgrades: Array
+var coloredLayersProgression: bool
+var switchesPerLayers: Array
+var death_link = false
+
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 func connectClient():
 	client.connectToServer(serverName, slotName, password)
+	client.connect("slot_data_retrieved", self, "retrieveSlotData")
+
+func retrieveSlotData(slot_data):
+	if slot_data.has("seed"):
+		seedNumber = int(slot_data["seed"])
+	if slot_data.has("keeper"):
+		keeperSlot = slot_data["keeper"]
+	if slot_data.has("dome"):
+		domeSlot = slot_data["dome"]
+	if slot_data.has("domeGadget"):
+		domeGadgetSlot = slot_data["domeGadget"]
+	if slot_data.has("mapSize"):
+		mapSize = slot_data["mapSize"]
+	if slot_data.has("difficulty"):
+		difficulty = slot_data["difficulty"]
+	if slot_data.has("switchesAmount"):
+		switchesPerLayers = slot_data["switchesPerLayers"]
+	if slot_data.has("drillUpgrades"):
+		drillUpgrades = slot_data["drillUpgrades"]
+	if slot_data.has("kineticSpheres"):
+		kineticSphereUpgrades = slot_data["kineticSpheres"]
+	if slot_data.has("coloredLayersProgression"):
+		coloredLayersProgression = bool(slot_data["coloredLayersProgression"])
 
 func submitSwitch(switch):
 	var index = switches.find(switch, 0)

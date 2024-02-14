@@ -27,7 +27,7 @@ func init():
 
 
 func updateBasedOnClient():
-	match GameWorld.archipelago.client._difficulty:
+	match GameWorld.archipelago.difficulty:
 		0:
 			GameWorld.loadoutStageConfig.difficulty = - 2
 		1:
@@ -36,7 +36,7 @@ func updateBasedOnClient():
 			GameWorld.loadoutStageConfig.difficulty = 0
 		3:
 			GameWorld.loadoutStageConfig.difficulty = 2
-	match GameWorld.archipelago.client._mapSize:
+	match GameWorld.archipelago.mapSize:
 		0:
 			GameWorld.loadoutStageConfig.modeConfig[CONST.MODE_CONFIG_RELICHUNT_MAPSIZE] = CONST.MAP_SMALL
 		1:
