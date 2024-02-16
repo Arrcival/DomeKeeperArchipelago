@@ -19,11 +19,11 @@ archipelagoupgradeiron4:
   predecessors: [archipelagoupgradeiron3]
 
 archipelagoupgradewater1:
-  cost: water=2
+  cost: water=1
   predecessors: [archipelago]
 
 archipelagoupgradewater2:
-  cost: water=3
+  cost: water=2
   predecessors: [archipelagoupgradewater1]
 
 archipelagoupgradewater3:
@@ -31,16 +31,16 @@ archipelagoupgradewater3:
   predecessors: [archipelagoupgradewater2]
 
 archipelagoupgradewater4:
-  cost: water=6
+  cost: water=5
   predecessors: [archipelagoupgradewater3]
 
 
 archipelagoupgradeironwater1:
-  cost: iron=2, water=1
+  cost: iron=4
   predecessors: [archipelago]
 
 archipelagoupgradeironwater2:
-  cost: iron=4, water=2
+  cost: water=2
   predecessors: [archipelagoupgradeironwater1]
 
 archipelagoupgradeironwater3:
@@ -48,5 +48,5 @@ archipelagoupgradeironwater3:
   predecessors: [archipelagoupgradeironwater2]
 
 archipelagoupgradeironwater4:
-  cost: iron=12, water=3
+  cost: iron=16, water=2
   predecessors: [archipelagoupgradeironwater3]

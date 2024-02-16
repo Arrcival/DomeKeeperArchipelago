@@ -6,5 +6,10 @@ func afterInitialized():
 
 func propertyChanged(property:String, oldValue, newValue):
 	.propertyChanged(property, oldValue, newValue)
+		
 	if property == "monsters.wavepresent" and not newValue:
-		GameWorld.archipelago.client.completedGoal()
+		if GameWorld.archipelago.miningEverything:
+			if GameWorld.archipelago.tilesLeft <= 0:
+				GameWorld.archipelago.client.completedGoal()
+		else:
+			GameWorld.archipelago.client.completedGoal()

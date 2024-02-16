@@ -18,9 +18,9 @@ func disableButton(node):
 	node.disabled = true
 
 func updateBasedOnClient():
-	setKeeper("keeper" + str(GameWorld.archipelago.client._keeper + 1))
-	setDome("dome" + str(GameWorld.archipelago.client._dome + 1))
-	match GameWorld.archipelago.client._domeGadget:
+	setKeeper("keeper" + str(GameWorld.archipelago.keeperSlot + 1))
+	setDome("dome" + str(GameWorld.archipelago.domeSlot + 1))
+	match GameWorld.archipelago.domeGadgetSlot:
 		0:
 			setGadget("shield")
 		1:

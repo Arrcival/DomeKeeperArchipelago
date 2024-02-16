@@ -20,3 +20,9 @@ func _ready():
 			max_health *= 5
 		health = max_health
 
+func hit(dir:Vector2, dmg:float):
+	var biomeId = Level.map.getBiomeValueByCoord(coord)
+	if not GameWorld.archipelago.hasLayerUnlocked(biomeId):
+		return
+	
+	.hit(dir, dmg)

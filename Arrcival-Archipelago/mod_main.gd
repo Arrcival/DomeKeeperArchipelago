@@ -17,6 +17,7 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "LevelStage.gd")
 	loadExtension(ext_dir, "LoadoutStage.gd")
 	loadExtension(ext_dir, "Map.gd")
+	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
 	loadExtension(ext_dir, "RelichuntPopup.gd")
 	loadExtension(ext_dir, "StageManager.gd")

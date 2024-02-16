@@ -1,7 +1,7 @@
 {
 	"name": "Archipelago",
 	"namespace": "Arrcival",
-	"version_number": "0.4.1",
+	"version_number": "0.5.0",
 	"description": "Adds an Archipelago integration.",
 	"website_url": "https://",
 	"dependencies": [],
@@ -11,7 +11,7 @@
 			"optional_dependencies": [],
 			"authors": ["Arrcival"],
 			"compatible_mod_loader_version": ["3.0.0"],
-			"compatible_game_version": ["3.2.0"],
+			"compatible_game_version": ["3.2.1"],
 			"config_defaults": {}
 		}
 	}

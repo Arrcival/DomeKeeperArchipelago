@@ -6,24 +6,21 @@ const TILE_SCENE_EDITED = preload("res://mods-unpacked/Arrcival-Archipelago/cont
 func init(fromDeserialize: = false):
 	TYPE_MAP.merge({CONSTARRC.TILE_ARCHIPELAGO_SWITCH:CONSTARRC.ARCHIPELAGOSWITCH})
 	.init(fromDeserialize)
+	Data.apply("map.totaltiles", Level.map.tileData().get_remaining_mineable_tile_count())
 	
-	GameWorld.archipelago.switches = []
-	
-	
-	
-	var archipelagoSwitches = tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
-	if GameWorld.devMode or OS.is_debug_build():
-		print(archipelagoSwitches)
-	for tile in archipelagoSwitches:
-		addChamber(tile, getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
-	if GameWorld.devMode:
-		addChamber(Vector2(0, 2), getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
+	if not fromDeserialize:
+		var archipelagoSwitches = tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
+		if GameWorld.devMode or OS.is_debug_build():
+			print(archipelagoSwitches)
+		for tile in archipelagoSwitches:
+			addChamber(tile, getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
+		if GameWorld.devMode:
+			addChamber(Vector2(0, 2), getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 	
 func getSceneForTileType(tileType:int)->PackedScene:
 	if tileType == CONSTARRC.TILE_ARCHIPELAGO_SWITCH:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.tscn")
 	return .getSceneForTileType(tileType)
-
 
 func revealTile(coord:Vector2):
 	var typeId:int = tileData.get_resource(coord.x, coord.y)
@@ -81,3 +78,6 @@ func revealTile(coord:Vector2):
 				invalids.append(listener)
 		for invalid in invalids:
 			tileRevealedListeners.erase(invalid)
+
+func getBiomeValueByCoord(_coord:Vector2):
+	return tileData.get_biomev(_coord)

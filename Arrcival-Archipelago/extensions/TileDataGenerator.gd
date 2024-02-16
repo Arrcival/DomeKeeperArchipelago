@@ -2,8 +2,10 @@ extends "res://content/map/generation/TileDataGenerator.gd"
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
+const FIRSTLAYERID = 10
+
 func init(archetype:MapArchetype, randSeed: = randi()):
-	.init(archetype, GameWorld.archipelago.client.slotSeed)
+	.init(archetype, GameWorld.archipelago.seedNumber)
 
 func generate():
 	.generate()
@@ -14,29 +16,36 @@ func generate():
 	finishedSuccessful = false
 	var tdResources = $TileData / Resources
 	var tdBiomes = $TileData / Biomes
-		
-	var cells = []
-	for i in range(10, 20):
-		cells += tdBiomes.get_used_cells_by_id(i)
-		
-	var switchCoordinates = generateSwitchesCoordinates(tdResources, cells, GameWorld.archipelago.client._switchesAmount)
-	for switchCoordinate in switchCoordinates:
-		tdResources.set_cell(switchCoordinate.x, switchCoordinate.y, CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
+
+
+	if not GameWorld.devMode:
+		generateSwitchesCoordinates(
+			tdBiomes, 
+			tdResources, 
+			GameWorld.archipelago.switchesPerLayers,
+			GameWorld.archipelago.seedNumber)
 
 	finishedSuccessful = true
 
-func generateSwitchesCoordinates(tdResources, cells: Array, amount: int) -> Array:
-	var switchCoordinates = []
-	if cells.size() > 0:
-		var allCells = Data.seedShuffle(cells, GameWorld.archipelago.client.slotSeed)
+func generateSwitchesCoordinates(tdBiomes, tdResources, switchesPerLayers: Array, gen_seed: int) -> void:
+	
+	for i in switchesPerLayers.size():
+		var biomeCells: Array = tdBiomes.get_used_cells_by_id(FIRSTLAYERID + i)
+		if biomeCells.size() == 0:
+			break
+		var biomeCellsShuffled = Data.seedShuffle(biomeCells, gen_seed)
 
-		var switchesGenerated = 0
-		for cell in allCells:
-			var ressourceCell = tdResources.get_cellv(cell)
+		var switchesGenerated: int = 0
+		var array = []
+		for cell in biomeCellsShuffled:
+			var ressourceCell: int = tdResources.get_cell(cell.x, cell.y)
 			if ressourceCell >= Data.TILE_DIRT_START && ressourceCell <= Data.TILE_DIRT_END:
-				switchCoordinates.append(cell)
-				#tdResources.set_cell(cell.x, cell.y, CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
+				tdResources.set_cell(cell.x, cell.y, CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
+				GameWorld.archipelago.switches.append(cell)
+				array.append(cell)
 				switchesGenerated += 1
-			if switchesGenerated >= amount:
+			if switchesGenerated >= switchesPerLayers[i]:
 				break
-	return switchCoordinates
+		if OS.is_debug_build():
+			print("Switches for layer " + str(i) + " : ")
+			print(array)

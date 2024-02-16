@@ -1,19 +1,19 @@
 extends Reference
 
-const ADDITIONNAL_INFOS: String = "Compatible with apworld 0.4.0"
+const ADDITIONNAL_INFOS: String = ""
 
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
 
-const KEEPER1_DRILL = ["drill1", "drill2", "drill3", "drill4", "drill4", "drill4", "drill4"]
+const KEEPER1_DRILL = ["drill1", "drill2", "drill3"]
 const KEEPER1_JETPACK = ["jetpackspeed1", "jetpackspeed2", "jetpackspeed3", "jetpackspeed4"]
 const KEEPER1_CARRY = ["jetpackstrength1", "jetpackstrength2", "jetpackstrength3", "jetpackstrength4"]
 
 const KEEPER2_MOVEMENT = ["keeper2movement1", "keeper2movement2", "keeper2movement3", "keeper2movement4"]
-const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4", "keeper2pinballdamage4"]
+const KEEPER2_DAMAGE = ["keeper2pinballdamage1", "keeper2pinballdamage2", "keeper2pinballdamage3"]
 const KEEPER2_BUNDLE = ["keeper2bundle1", "keeper2bundle2", "keeper2bundle3", "keeper2bundle4"]
 const KEEPER2_MORESPHERES = ["keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1", "keeper2pinballmorespheres1"]
-const KEEPER2_LIFETIME = ["keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime", "keeper2pinballspherelifetime"]
+const KEEPER2_LIFETIME_NAME = "keeper2pinballspherelifetime"
 const KEEPER2_MINING = ["keeper2rotationalmining1", "keeper2rotationalmining2"]
 const KEEPER2_SPECIAL_CHOICES = [
 	["keeper2pinballreflect", "keeper2pinballreflect2"],

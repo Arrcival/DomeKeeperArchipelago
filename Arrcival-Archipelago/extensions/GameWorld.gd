@@ -29,6 +29,10 @@ func levelInitialized():
 	archipelago.generateUpgrades()
 	archipelago.cobaltGiven = 0
 
+func prepareCleanData():
+	.prepareCleanData()
+	Data.apply("map.totaltiles", 0)
+
 func buyUpgrade(id: String):
 	# preventing any crash from empty upgrades
 	if id == "":

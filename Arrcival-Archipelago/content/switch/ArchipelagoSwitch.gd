@@ -9,8 +9,6 @@ var used: = false
 func _ready():
 	$Sprite.visible = false
 	chamberType = CONSTARRC.TILE_ARCHIPELAGO_SWITCH
-	
-	GameWorld.archipelago.switches.append(self)
 
 
 func deserialize(data:Dictionary):
@@ -59,7 +57,7 @@ func onUsed():
 		currentState = State.EMPTY
 		var time: = 0.1
 		$Tween.start()
-		GameWorld.archipelago.submitSwitch(self)
+		GameWorld.archipelago.submitSwitch(self.coord)
 	else :
 		used = true
 

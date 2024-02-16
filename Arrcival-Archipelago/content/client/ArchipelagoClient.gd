@@ -34,17 +34,9 @@ var _players = []
 var _player_name_by_slot = {}
 var _checked_locations = []
 var _slot_data = {}
-var _keeper: int
-var _dome: int
-var _domeGadget: int
-var _mapSize: int
-var _difficulty: int
-var _switchesAmount: int
-var _death_link = false
 var _received_indexes = []
 
-var slotSeed: int = 0
-
+var _death_link: bool
 
 signal could_not_connect(errorMessage)
 signal connect_status(message)
@@ -58,6 +50,7 @@ signal connectedWithRoomInfo
 signal packetRoomInfo
 signal packetConnected
 signal logInformations(informations)
+signal slot_data_retrieved(slot_data)
 
 var is_connected = false
 
@@ -171,20 +164,9 @@ func _on_data():
 			
 			if _death_link:
 				_sendConnectUpdate(["DeathLink"])
-			if _slot_data.has("seed"):
-				slotSeed = int(_slot_data["seed"])
-			if _slot_data.has("keeper"):
-				_keeper = _slot_data["keeper"]
-			if _slot_data.has("dome"):
-				_dome = _slot_data["dome"]
-			if _slot_data.has("domeGadget"):
-				_domeGadget = _slot_data["domeGadget"]
-			if _slot_data.has("mapSize"):
-				_mapSize = _slot_data["mapSize"]
-			if _slot_data.has("difficulty"):
-				_difficulty = _slot_data["difficulty"]
-			if _slot_data.has("switchesAmount"):
-				_switchesAmount = _slot_data["switchesAmount"]
+
+			
+			emit_signal("slot_data_retrieved", _slot_data)
 			_requestSync()
 
 			emit_signal("packetConnected")

@@ -7,7 +7,7 @@ var i = 1
 
 const MAX_LINE_COUNT = 7
 
-const MAX_TIMER := 5
+const MAX_TIMER := 10
 
 var currentTimer = MAX_TIMER
 
@@ -22,6 +22,7 @@ func _ready():
 	GameWorld.archipelago.client.connect("client_connected", self, "addText")
 	GameWorld.archipelago.client.connect("connectedWithRoomInfo", self, "addText")
 	GameWorld.archipelago.client.connect("logInformations", self, "addText")
+	GameWorld.archipelago.connect("logInformations", self, "addText")
 	
 func _process(deltaTime: float):
 	if not timerReached:

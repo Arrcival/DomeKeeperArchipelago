@@ -21,3 +21,17 @@ func _process(deltaTime: float):
 
 func makeUserLose():
 	Data.changeDomeHealth( - 999999)
+
+func beforeStart():
+	.beforeStart()
+	Data.listen(self, "map.tilesdestroyed")
+	
+func propertyChanged(property:String, oldValue, newValue):
+	.propertyChanged(property, oldValue, newValue)
+	if property == "map.tilesdestroyed":
+		var totalTiles = Data.of("map.totaltiles") + 1
+		var tilesDestroyed = Data.of("map.tilesdestroyed")
+		var tilesLeft = totalTiles - tilesDestroyed
+		
+		GameWorld.archipelago.tilesLeft = tilesLeft
+

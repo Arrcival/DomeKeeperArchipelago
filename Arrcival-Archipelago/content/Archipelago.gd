@@ -83,13 +83,68 @@ var password: String = ""
 
 signal signal_item
 
+# slot data
+var seedNumber: int = 0
+var keeperSlot: int
+var domeSlot: int
+var domeGadgetSlot: int
+var mapSize: int
+var difficulty: int
+var drillUpgrades: int
+var kineticSphereUpgrades: int
+var sphereLifetime: int
+var coloredLayersProgression: bool
+var switchesPerLayers: Array = []
+var miningEverything: bool
+var death_link = false
+
+var coloredLayersUnlocked: Array = [0]
+var everyLayersUnlockFound: bool = false
+var tilesLeft: int = 0
+
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+
+signal logInformations(text)
 
 func connectClient():
 	client.connectToServer(serverName, slotName, password)
+	client.connect("slot_data_retrieved", self, "retrieveSlotData")
 
-func submitSwitch(switch):
-	var index = switches.find(switch, 0)
+func retrieveSlotData(slot_data):
+	if slot_data.has("seed"):
+		seedNumber = int(slot_data["seed"])
+	if slot_data.has("keeper"):
+		keeperSlot = slot_data["keeper"]
+	if slot_data.has("dome"):
+		domeSlot = slot_data["dome"]
+	if slot_data.has("domeGadget"):
+		domeGadgetSlot = slot_data["domeGadget"]
+	if slot_data.has("mapSize"):
+		mapSize = slot_data["mapSize"]
+	if slot_data.has("difficulty"):
+		difficulty = slot_data["difficulty"]
+	if slot_data.has("switchesPerLayers"):
+		switchesPerLayers = slot_data["switchesPerLayers"]
+	if slot_data.has("drillUpgrades"):
+		drillUpgrades = slot_data["drillUpgrades"]
+	if slot_data.has("kineticSpheres"):
+		kineticSphereUpgrades = slot_data["kineticSpheres"]
+	if slot_data.has("sphereLifetime"):
+		sphereLifetime = slot_data["sphereLifetime"]
+	if slot_data.has("coloredLayersProgression"):
+		coloredLayersProgression = bool(slot_data["coloredLayersProgression"])
+	if slot_data.has("miningEverything"):
+		miningEverything = bool(slot_data["miningEverything"])
+
+func submitSwitch(switchPos: Vector2):
+	
+	var totalTiles = Data.of("map.totaltiles")
+	print("Tiles destroyed : " + str(Data.of("map.tiledestroyed")))
+	print("Tiles total : " + str(Data.of("map.totaltiles") - 1))
+	print("Tiles remaining : ")
+	print(Data.of("map.totaltiles") - Data.of("map.tiledestroyed") + 1)
+
+	var index = switches.find(switchPos, 0)
 	if index != -1:
 		var switchId = FIRST_SWITCH_ID + index
 		switchesFoundIndexes.append(switchId)
@@ -103,17 +158,18 @@ func submitUpgrade(upgradeName):
 func generateUpgrades():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
+	coloredLayersUnlocked = [0]
 	itemsFoundToProcess = itemsIdFound.duplicate()
 	
-	upgrades_keeper1_drill = CONSTARRC.KEEPER1_DRILL.duplicate()
+	upgrades_keeper1_drill = getKeeper1Drills()
 	upgrades_keeper1_jetpack = CONSTARRC.KEEPER1_JETPACK.duplicate()
 	upgrades_keeper1_carry = CONSTARRC.KEEPER1_CARRY.duplicate()
 	
 	upgrades_keeper2_movement = CONSTARRC.KEEPER2_MOVEMENT.duplicate()
-	upgrades_keeper2_damage = CONSTARRC.KEEPER2_DAMAGE.duplicate()
+	upgrades_keeper2_damage = getKeeper2Spheres()
 	upgrades_keeper2_bundle = CONSTARRC.KEEPER2_BUNDLE.duplicate()
 	upgrades_keeper2_more_spheres = CONSTARRC.KEEPER2_MORESPHERES.duplicate()
-	upgrades_keeper2_lifetime = CONSTARRC.KEEPER2_LIFETIME.duplicate()
+	upgrades_keeper2_lifetime = getSphereLifetime()
 	upgrades_keeper2_mining = CONSTARRC.KEEPER2_MINING.duplicate()
 	upgrades_keeper2_special = pickRandom(CONSTARRC.KEEPER2_SPECIAL_CHOICES)
 	
@@ -150,6 +206,25 @@ func generateUpgrades():
 		upgrades_repellent_special += pickRandom(CONSTARRC.REPELLENT_DEBILITATE_CHOICE)
 	upgrades_repellent_overcharge = CONSTARRC.REPELLENT_OVERCHARGE.duplicate() + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL2)
 
+func getSphereLifetime() -> Array:
+	var upgrade = CONSTARRC.KEEPER2_LIFETIME_NAME
+	var rtr = []
+	for i in range(sphereLifetime):
+		rtr.append(upgrade)
+	return rtr
+
+func getKeeper1Drills() -> Array:
+	var rtr = CONSTARRC.KEEPER1_DRILL.duplicate()
+	for i in range(3, drillUpgrades):
+		rtr.append("drill4")
+	return rtr
+	
+func getKeeper2Spheres() -> Array:
+	var rtr = CONSTARRC.KEEPER2_DAMAGE.duplicate()
+	for i in range(3, kineticSphereUpgrades):
+		rtr.append("keeper2pinballdamage4")
+	return rtr
+	
 func item_found(itemId: int):
 	itemsFoundToProcess.append(itemId)
 
@@ -231,9 +306,37 @@ func processItem(itemId: int) -> String:
 			itemName = _getItemNameAndRemove(upgrades_orchard_speedboost)
 		4242084:
 			itemName = _getItemNameAndRemove(upgrades_orchard_miningboost)
+		4242100:
+			_updateColoredLayers(1) 
+		4242101:
+			_updateColoredLayers(2) 
+		4242102:
+			_updateColoredLayers(3) 
+		4242103:
+			_updateColoredLayers(4) 
+		4242104:
+			_updateColoredLayers(5) 
+		4242105:
+			_updateColoredLayers(6) 
 			
 	GameWorld.buyUpgrade(itemName)
 	return itemName
+
+func _updateColoredLayers(layerId: int) -> void:
+	coloredLayersUnlocked.append(layerId)
+	if mapSize == 0 and layerId == 2:
+		emit_signal("logInformations", "You also unlocked every layers after the third layer.")
+		everyLayersUnlockFound = true
+	if mapSize == 1 and layerId == 3:
+		emit_signal("logInformations", "You also unlocked every layers after the fourth layer.")
+		everyLayersUnlockFound = true
+	if mapSize == 2 and layerId == 5:
+		emit_signal("logInformations", "You also unlocked every layers after the sixth layer.")
+		everyLayersUnlockFound = true
+	if mapSize == 3 and layerId == 6:
+		emit_signal("logInformations", "You also unlocked every layers after the seventh layer.")
+		everyLayersUnlockFound = true
+
 
 func _getItemNameAndRemove(array: Array) -> String:
 	if array.size() > 0:
@@ -251,12 +354,11 @@ func checkUpgrades() -> Array:
 	return rtr
 
 func pickAllRandom(array: Array) -> Array:
-	
 	var curArray = array.duplicate(true)
 	
 	var result = []
 	var rng = RandomNumberGenerator.new()
-	rng.seed = client.slotSeed
+	rng.seed = seedNumber
 	while curArray.size() > 0:
 		var rand_index:int = rng.randi() % curArray.size()
 		result.append(curArray[rand_index])
@@ -265,6 +367,14 @@ func pickAllRandom(array: Array) -> Array:
 
 func pickRandom(arrayOfArray: Array) -> Array:
 	var rng = RandomNumberGenerator.new()
-	rng.seed = client.slotSeed
+	rng.seed = seedNumber
 	var rand_index:int = rng.randi() % arrayOfArray.size()
 	return arrayOfArray[rand_index].duplicate()
+
+func hasLayerUnlocked(layerId: int) -> bool:
+	if not coloredLayersProgression:
+		return true
+
+	if everyLayersUnlockFound:
+		return true
+	return coloredLayersUnlocked.has(layerId)
