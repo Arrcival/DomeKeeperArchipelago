@@ -98,7 +98,7 @@ var switchesPerLayers: Array = []
 var miningEverything: bool
 var death_link = false
 
-var coloredLayersUnlocked: Array = [0]
+var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
 var tilesLeft: int = 0
 
@@ -158,7 +158,7 @@ func submitUpgrade(upgradeName):
 func generateUpgrades():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
-	coloredLayersUnlocked = [0]
+	coloredLayersUnlocked = 0
 	itemsFoundToProcess = itemsIdFound.duplicate()
 	
 	upgrades_keeper1_drill = getKeeper1Drills()
@@ -307,33 +307,23 @@ func processItem(itemId: int) -> String:
 		4242084:
 			itemName = _getItemNameAndRemove(upgrades_orchard_miningboost)
 		4242100:
-			_updateColoredLayers(1) 
-		4242101:
-			_updateColoredLayers(2) 
-		4242102:
-			_updateColoredLayers(3) 
-		4242103:
-			_updateColoredLayers(4) 
-		4242104:
-			_updateColoredLayers(5) 
-		4242105:
-			_updateColoredLayers(6) 
+			_updateColoredLayers()
 			
 	GameWorld.buyUpgrade(itemName)
 	return itemName
 
-func _updateColoredLayers(layerId: int) -> void:
-	coloredLayersUnlocked.append(layerId)
-	if mapSize == 0 and layerId == 2:
+func _updateColoredLayers() -> void:
+	coloredLayersUnlocked += 1
+	if mapSize == 0 and coloredLayersUnlocked == 2:
 		emit_signal("logInformations", "You also unlocked every layers after the third layer.")
 		everyLayersUnlockFound = true
-	if mapSize == 1 and layerId == 3:
+	if mapSize == 1 and coloredLayersUnlocked == 3:
 		emit_signal("logInformations", "You also unlocked every layers after the fourth layer.")
 		everyLayersUnlockFound = true
-	if mapSize == 2 and layerId == 5:
+	if mapSize == 2 and coloredLayersUnlocked == 5:
 		emit_signal("logInformations", "You also unlocked every layers after the sixth layer.")
 		everyLayersUnlockFound = true
-	if mapSize == 3 and layerId == 6:
+	if mapSize == 3 and coloredLayersUnlocked == 6:
 		emit_signal("logInformations", "You also unlocked every layers after the seventh layer.")
 		everyLayersUnlockFound = true
 
@@ -377,4 +367,4 @@ func hasLayerUnlocked(layerId: int) -> bool:
 
 	if everyLayersUnlockFound:
 		return true
-	return coloredLayersUnlocked.has(layerId)
+	return layerId <= coloredLayersUnlocked
