@@ -58,7 +58,11 @@ func build(id:String, tier: = - 1):
 	propertyChanges = data.get("propertychanges", [])
 	
 	title = tr("upgrades." + visualTechId + ".title")
-	explanationBb = GameWorld.iconify(tr("upgrades." + visualTechId + ".desc"))
+	
+	if id.begins_with("archipelagoupgrade"):
+		explanationBb = getArchipelagoDescription(visualTechId)
+	else:
+		explanationBb = GameWorld.iconify(tr("upgrades." + visualTechId + ".desc"))
 	
 	updateState()
 	# end .build()
@@ -80,5 +84,18 @@ func build(id:String, tier: = - 1):
 			
 	_on_Tech_focus_exited()
 
+func getArchipelagoDescription(techId: String) -> String:
+	if not GameWorld.archipelago.locationIds.has(techId):
+		return ""
+	var techNumber: int = GameWorld.archipelago.locationIds[techId]
+	
+	if GameWorld.archipelago.hasLocationChecked(techNumber, techId):
+		return "Location already checked!"
+	
+	if not GameWorld.archipelago.locationScouts.has(techNumber):
+		return ""
+	
+	return GameWorld.archipelago.locationScouts[techNumber]
+	
 func reactivate():
 	crossIcon.visible = false

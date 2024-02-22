@@ -1,6 +1,8 @@
 extends Reference
 
-const ADDITIONNAL_INFOS: String = "Not compatible with .apworld 0.5.0, please use v0.5.1"
+const ADDITIONNAL_INFOS: String = "Please use the .apworld 0.6.0"
+
+const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options.json"
 
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242

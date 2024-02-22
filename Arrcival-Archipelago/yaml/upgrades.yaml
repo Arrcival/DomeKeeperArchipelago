@@ -50,3 +50,66 @@ archipelagoupgradeironwater3:
 archipelagoupgradeironwater4:
   cost: iron=16, water=2
   predecessors: [archipelagoupgradeironwater3]
+
+domeHealthMeter:
+  limit: [hostile]
+  cost: iron=4
+  predecessors: [dome1,dome2,dome3,dome4]
+  predecessorsAny: true
+  hud: content/hud/healthmeter/HealthMeter.tscn
+
+dome1health1:
+  limit: [dome1, hostile]
+  cost: iron=10
+  propertyChanges: 
+    - dome.maxhealth += 300
+    - dome.health += 300
+    - dome.healthbar += 1
+  predecessors: [domesandRepair, domeSandRepairStrong]
+  predecessorsAny: true
+
+dome1health2:
+  cost: iron=20
+  propertyChanges: 
+    - dome.maxhealth += 300
+    - dome.health += 300
+    - dome.healthbar += 1
+  predecessors: [dome1health1]
+
+dome2Health1:
+  limit: [dome2, hostile]
+  cost: iron=12
+  shadowing: dome1health1
+  propertyChanges: 
+    - dome.maxhealth += 400
+    - dome.health += 400
+    - dome.healthbar = 1
+  predecessors: [domesandRepair, domeSandRepairStrong]
+  predecessorsAny: true
+dome2Health2:
+  cost: iron=24
+  shadowing: dome1health2
+  propertyChanges: 
+    - dome.maxhealth += 400
+    - dome.health += 400
+    - dome.healthbar = 2
+  predecessors: [dome2Health1]
+
+dome4health1:
+  limit: [dome4, hostile]
+  cost: iron=12
+  shadowing: dome1health1
+  propertyChanges: 
+    - dome.maxhealth += 300
+    - dome.health += 300
+    - dome.healthbar = 1
+  predecessors: [domesandRepair, domeSandRepairStrong]
+  predecessorsAny: true
+dome4health2:
+  cost: iron=28
+  shadowing: dome1health2
+  propertyChanges: 
+    - dome.maxhealth += 300
+    - dome.health += 300
+    - dome.healthbar = 2
+  predecessors: [dome4health1]

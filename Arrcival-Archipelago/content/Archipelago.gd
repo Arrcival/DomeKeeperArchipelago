@@ -11,6 +11,9 @@ var switches: Array = []
 # websocket client
 var client
 
+var upgradesBought: Array = []
+var missing_locations: Array = []
+
 var locationIds: Dictionary = {
 	"archipelagoupgradeiron1": 4243001,
 	"archipelagoupgradeiron2": 4243002,
@@ -24,6 +27,21 @@ var locationIds: Dictionary = {
 	"archipelagoupgradeironwater2": 4243010,
 	"archipelagoupgradeironwater3": 4243011,
 	"archipelagoupgradeironwater4": 4243012
+}
+
+var locationScouts: Dictionary = {
+	4243001: "",
+	4243002: "",
+	4243003: "",
+	4243004: "",
+	4243005: "",
+	4243006: "",
+	4243007: "",
+	4243008: "",
+	4243009: "",
+	4243010: "",
+	4243011: "",
+	4243012: "",
 }
 
 const FIRST_SWITCH_ID := 4243101
@@ -109,6 +127,11 @@ signal logInformations(text)
 func connectClient():
 	client.connectToServer(serverName, slotName, password)
 	client.connect("slot_data_retrieved", self, "retrieveSlotData")
+	client.connect("location_scout_retrieved", self, "retrieveScout")
+	client.connect("client_disconnected", self, "resetClient")
+
+func resetClient():
+	upgradesBought = []
 
 func retrieveSlotData(slot_data):
 	if slot_data.has("seed"):
@@ -137,12 +160,12 @@ func retrieveSlotData(slot_data):
 		miningEverything = bool(slot_data["miningEverything"])
 
 func submitSwitch(switchPos: Vector2):
-	
 	var totalTiles = Data.of("map.totaltiles")
-	print("Tiles destroyed : " + str(Data.of("map.tiledestroyed")))
-	print("Tiles total : " + str(Data.of("map.totaltiles") - 1))
-	print("Tiles remaining : ")
-	print(Data.of("map.totaltiles") - Data.of("map.tiledestroyed") + 1)
+	if GameWorld.devMode or OS.is_debug_build():
+		print("Tiles destroyed : " + str(Data.of("map.tilesdestroyed")))
+		print("Tiles total : " + str(Data.of("map.totaltiles") - 1))
+		print("Tiles remaining : ")
+		print(Data.of("map.totaltiles") - Data.of("map.tilesdestroyed") + 1)
 
 	var index = switches.find(switchPos, 0)
 	if index != -1:
@@ -327,7 +350,6 @@ func _updateColoredLayers() -> void:
 		emit_signal("logInformations", "You also unlocked every layers after the seventh layer.")
 		everyLayersUnlockFound = true
 
-
 func _getItemNameAndRemove(array: Array) -> String:
 	if array.size() > 0:
 		var returnedValue = array[0]
@@ -368,3 +390,16 @@ func hasLayerUnlocked(layerId: int) -> bool:
 	if everyLayersUnlockFound:
 		return true
 	return layerId <= coloredLayersUnlocked
+
+func hasLocationChecked(locationId: int, upgradeName: String) -> bool:
+	var hasUpgrade: bool = upgradesBought.has(upgradeName)
+	var hasChecked: bool = client._checked_locations.has(locationId)
+	return hasUpgrade or hasChecked
+
+func retrieveScout(networkItems: Array):
+	for item in networkItems:
+		if locationScouts.keys().has(item.locationId):
+			locationScouts[item.locationId] = item.displayUnlock()
+
+func scoutUpgrades():
+	client.sendScout(locationScouts.keys(), 0)

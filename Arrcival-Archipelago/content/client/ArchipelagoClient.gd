@@ -15,10 +15,10 @@ var _try_wss = false
 
 var _datapackages = {}
 var _pending_packages = []
-var _item_id_to_name = {}  # All games
-var _location_id_to_name = {}  # All games
-var _item_name_to_id = {}  # Game only
-var _location_name_to_id = {}  # Game only
+var _item_id_to_name: Dictionary = {}  # All games
+var _location_id_to_name: Dictionary = {}  # All games
+var _item_name_to_id: Dictionary = {}  # Game only
+var _location_name_to_id: Dictionary = {}  # Game only
 
 var _remote_version = {"major": 0, "minor": 0, "build": 0}
 const color_items = [
@@ -31,7 +31,7 @@ var _seed: String = ""
 var _team = 0
 var _slot = 0
 var _players = []
-var _player_name_by_slot = {}
+var _player_name_by_slot: Dictionary = {}
 var _checked_locations = []
 var _slot_data = {}
 var _received_indexes = []
@@ -43,6 +43,7 @@ signal connect_status(message)
 signal client_connected(message)
 signal evaluate_solvability
 
+signal client_disconnected
 signal onDeathFound
 signal item_received(itemId)
 signal connected
@@ -51,6 +52,7 @@ signal packetRoomInfo
 signal packetConnected
 signal logInformations(informations)
 signal slot_data_retrieved(slot_data)
+signal location_scout_retrieved(scout_data)
 
 var is_connected = false
 
@@ -88,6 +90,7 @@ func _closed(_was_clean = true):
 	print("Connection closed")
 	_reset_state()
 
+	emit_signal("client_disconnected")
 	if not _initiated_disconnect:
 		emit_signal("could_not_connect", "Disconnected from Archipelago")
 	else:
@@ -102,6 +105,7 @@ func _errored():
 	else:
 		print("AP connection failed")
 		_reset_state()
+		emit_signal("client_disconnected")
 
 		emit_signal(
 			"could_not_connect",
@@ -154,11 +158,13 @@ func _on_data():
 			_team = message["team"]
 			_slot = message["slot"]
 			_players = message["players"]
-			_checked_locations = message["checked_locations"]
+			_checked_locations = []
+			for loc in message["checked_locations"]:
+				_checked_locations.append(int(loc))
 			_slot_data = message["slot_data"]
 
 			for player in _players:
-				_player_name_by_slot[player["slot"]] = player["alias"]
+				_player_name_by_slot[int(player["slot"])] = player["alias"]
 
 			_death_link = _slot_data.has("deathLink") and _slot_data["deathLink"]
 			
@@ -171,7 +177,6 @@ func _on_data():
 
 			emit_signal("packetConnected")
 			emit_signal("logInformations", "Authenticated !")
-
 		elif cmd == "ConnectionRefused":
 			var error_message = ""
 			for error in message["errors"]:
@@ -211,7 +216,6 @@ func _on_data():
 			emit_signal("could_not_connect", error_message)
 			print("Connection to AP refused")
 			print(message)
-			
 		elif cmd == "DataPackage":
 			for game in message["data"]["games"].keys():
 				_datapackages[game] = message["data"]["games"][game]
@@ -222,13 +226,18 @@ func _on_data():
 			else:
 				processDatapackages()
 				connectToRoom(_ap_user, _ap_pass)
-
 		elif cmd == "ReceivedItems":
 			var i = 0
 			for item in message["items"]:
-				processItem(item["item"], message["index"] + i, item["player"], item["flags"])
+				processItem(int(item["item"]), int(message["index"] + i), int(item["player"]), int(item["flags"]))
 				i += 1
-				
+		elif cmd == "LocationInfo":
+			var _locations = message["locations"]
+			var networkItems: Array = []
+			for networkitem in _locations:
+				networkItems.append(_parseNetworkItem(networkitem))
+			emit_signal("location_scout_retrieved", networkItems)
+		
 		elif cmd == "PrintJSON":
 			if (
 				!message.has("receiving")
@@ -247,7 +256,7 @@ func _on_data():
 
 			var player_name = "Unknown"
 			if _player_name_by_slot.has(message["receiving"]):
-				player_name = _player_name_by_slot[message["receiving"]]
+				player_name = _player_name_by_slot[int(message["receiving"])]
 
 			var item_color = colorForItemType(message["item"]["flags"])
 
@@ -299,12 +308,17 @@ func disconnect_from_ap():
 	_initiated_disconnect = true
 	_client.disconnect_from_host()
 
+func sendScout(loc_ids: Array, create_as_hint: int = 0):
+	sendMessage([{
+		"cmd": "LocationScouts", 
+		"locations": loc_ids,
+		"create_as_hint": create_as_hint
+	}])
+
 func sendLocation(loc_id: int):
 	sendMessage([{"cmd": "LocationChecks", "locations": [loc_id]}])
 
 func sendLocations(loc_ids: Array):
-	print("Sent locations : ")
-	print(loc_ids)
 	sendMessage([{"cmd": "LocationChecks", "locations": loc_ids}])
 
 func connectToServer(ap_server, ap_name, ap_pass):
@@ -342,10 +356,10 @@ func processDatapackages():
 	_location_id_to_name = {}
 	for package in _datapackages.values():
 		for name in package["item_name_to_id"].keys():
-			_item_id_to_name[package["item_name_to_id"][name]] = name
+			_item_id_to_name[int(package["item_name_to_id"][name])] = name
 
 		for name in package["location_name_to_id"].keys():
-			_location_id_to_name[package["location_name_to_id"][name]] = name
+			_location_id_to_name[int(package["location_name_to_id"][name])] = name
 
 	if _datapackages.has(GAME_NAME):
 		_item_name_to_id = _datapackages[GAME_NAME]["item_name_to_id"]
@@ -386,6 +400,32 @@ func processItem(item, index, from, flags):
 				"Received [color=%s]%s[/color] from %s" % [item_color, item_name, player_name]
 			)
 
+func _parseNetworkItem(networkItem: Dictionary) -> NetworkItem:
+	var item: NetworkItem = NetworkItem.new()
+	item.itemId = int(networkItem["item"])
+	item.locationId = int(networkItem["location"])
+	item.playerId = int(networkItem["player"])
+	item.flag = int(networkItem["flags"])
+	_tryUpdatingNetworkItem(item)
+	return item
+
+func _tryUpdatingNetworkItem(networkItem: NetworkItem) -> void:
+	networkItem.playerName = _getPlayerName(networkItem.playerId, false)
+	networkItem.itemName = _getItemName(networkItem.itemId)
+	networkItem.color = colorForItemType(networkItem.flag)
+
+func _getPlayerName(playerId: int, displaySlotName: bool = false) -> String:
+	if playerId == _slot and not displaySlotName:
+		return "[color=#ffffff]you[/color]"
+	if _player_name_by_slot.has(playerId):
+		return _player_name_by_slot[playerId]
+	return "Unknown"
+
+func _getItemName(itemId: int) -> String:
+	if _item_id_to_name.has(itemId):
+		return _item_id_to_name[itemId]
+	return "Unknown"
+	
 func sendMessage(msg):
 	var payload = JSON.print(msg)
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
@@ -437,3 +477,15 @@ func colorForItemType(flags):
 		return "#d63a22"
 	else:  # filler
 		return "#14de9e"
+
+class NetworkItem:
+	var playerId: int
+	var flag: int
+	var itemId: int
+	var locationId: int
+	var playerName: String
+	var itemName: String
+	var color: String
+
+	func displayUnlock():
+		return "Unlocks [color=%s]%s[/color] for %s" % [color, itemName, playerName]

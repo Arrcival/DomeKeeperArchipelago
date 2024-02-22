@@ -25,6 +25,7 @@ func makeUserLose():
 func beforeStart():
 	.beforeStart()
 	Data.listen(self, "map.tilesdestroyed")
+	GameWorld.archipelago.scoutUpgrades()
 	
 func propertyChanged(property:String, oldValue, newValue):
 	.propertyChanged(property, oldValue, newValue)

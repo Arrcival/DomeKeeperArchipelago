@@ -11,5 +11,7 @@ func buyCurrentUpgrade():
 		var tech = GameWorld.upgrades.get(focussedTechPanel.techId)
 		if focussedTechPanel.state == 1 and not focussedTechPanel.isArchipelagoLocked:
 			.buyCurrentUpgrade()
+			if focussedTechPanel.techId.begins_with("archipelagoupgrade"):
+				GameWorld.archipelago.upgradesBought.append(focussedTechPanel.techId)
 		else:
 			focussedTechPanel.error()

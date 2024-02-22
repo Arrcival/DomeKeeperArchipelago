@@ -8,6 +8,8 @@ const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 func init():
 	.init()
+	# prevent randomizer to be on something the user hasn't unlocked
+	# bruteforce unlock everything :/
 	GameWorld.unlockElement("keeper1")
 	GameWorld.unlockElement("keeper2")
 	GameWorld.unlockElement("dome1")

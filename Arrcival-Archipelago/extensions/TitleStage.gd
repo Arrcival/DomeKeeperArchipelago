@@ -10,28 +10,33 @@ var shouldDisconnect = false
 func build(data: Array):
 	newGameButton = find_node("NewGameButton")
 	connectButton = Button.new()
+	connectButton.name = "ConnectButton"
 	connectButton.text = "Connect"
-	
-	
-	
 	
 	connectButton.connect("pressed", self, "connect_archipelago", [])
 	
-	newGameButton.set_focus_neighbour(MARGIN_LEFT, connectButton.get_path())
-	connectButton.set_focus_neighbour(MARGIN_RIGHT, newGameButton.get_path())
-	newGameButton.grab_focus()
-	
-	add_child_first(find_node("MainMenuButtons"), connectButton)
+	add_child_first(find_node("AdditionalButtons"), connectButton)
 	.build(data)
 	
 	var continueButton = find_node("ContinueButton")
 	continueButton.disabled = true
+	continueButton.visible = false
+	
+	var moddingButton = find_node("ModdingButton")
+	moddingButton.set_focus_neighbour(MARGIN_TOP, connectButton.get_path())
+	
+	var prestigeButton = find_node("ToggleBoardButton")
+	connectButton.set_focus_neighbour(MARGIN_TOP, prestigeButton.get_path())
 	
 	GameWorld.archipelago.client.connect("packetRoomInfo", self, "onArchipelagoConnected")
-	#GameWorld.archipelago.client.connect("packetConnected", self, "onNewGameSuccess")
 	GameWorld.archipelago.client.connect("could_not_connect", self, "onArchipelagoFailure")
 	
 	
+	# so hovering prestige from connect goes back to connect when pressing down
+	if GameWorld.isUnlocked(CONST.MODE_PRESTIGE):
+		connectButton.connect("focus_entered", find_node("PrestigeMenu"), "on_mainmenu_button_focussed", [connectButton])
+
+	# in case of coming back from new game to the main menu
 	if GameWorld.archipelago.client.is_connected:
 		onArchipelagoConnected()
 

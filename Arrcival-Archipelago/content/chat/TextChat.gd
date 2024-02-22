@@ -24,6 +24,21 @@ func _ready():
 	GameWorld.archipelago.client.connect("logInformations", self, "addText")
 	GameWorld.archipelago.connect("logInformations", self, "addText")
 	
+	addText("Press T to display again the text box at any time.")
+	
+	
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_T:
+			resetTimer()
+
+func resetTimer():
+	currentTimer = 0
+	timerReached = false
+	textBox.modulate.a = 1
+	$Tween.stop_all()
+	
+
 func _process(deltaTime: float):
 	if not timerReached:
 		currentTimer += deltaTime
@@ -43,10 +58,7 @@ func _process(deltaTime: float):
 
 
 func addText(text):
-	currentTimer = 0
-	timerReached = false
-	textBox.modulate.a = 1
-	$Tween.stop_all()
+	resetTimer()
 	if textBox.get_line_count() > MAX_LINE_COUNT:
 		textBox.remove_line(0)
 	textBox.newline()
