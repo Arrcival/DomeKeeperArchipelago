@@ -12,6 +12,7 @@ margin_top = 5.0
 margin_right = 905.0
 margin_bottom = 605.0
 rect_min_size = Vector2( 600, 500 )
+rect_scale = Vector2( 0.75, 0.75 )
 mouse_filter = 2
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5

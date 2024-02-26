@@ -246,18 +246,9 @@ func _on_data():
 			):
 				continue
 
-			var item_name = "Unknown"
-			if _item_id_to_name.has(message["item"]["item"]):
-				item_name = _item_id_to_name[message["item"]["item"]]
-
-			var location_name = "Unknown"
-			if _location_id_to_name.has(message["item"]["location"]):
-				location_name = _location_id_to_name[message["item"]["location"]]
-
-			var player_name = "Unknown"
-			if _player_name_by_slot.has(message["receiving"]):
-				player_name = _player_name_by_slot[int(message["receiving"])]
-
+			var item_name = _getItemName(int(message["item"]["item"]))
+			var location_name = _getLocationName(int(message["item"]["location"]))
+			var player_name = _getPlayerName(int(message["receiving"]))
 			var item_color = colorForItemType(message["item"]["flags"])
 
 			if message["type"] == "Hint":
@@ -426,6 +417,11 @@ func _getItemName(itemId: int) -> String:
 		return _item_id_to_name[itemId]
 	return "Unknown"
 	
+func _getLocationName(locationId: int) -> String:
+	if _location_id_to_name.has(locationId):
+		return _location_id_to_name[locationId]
+	return "Unknown"
+
 func sendMessage(msg):
 	var payload = JSON.print(msg)
 	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
