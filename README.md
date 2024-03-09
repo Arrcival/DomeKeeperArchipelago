@@ -5,6 +5,12 @@
 A mod to add an Archipelago integration for Dome Keeper
 
 Compatibilities and ncompatibilities with other mods :
+- Tiles counter
 - not yet found, but ***it is highly recommended to avoid using other mods than Archipelago***
 
 If you find any bug or have any feedback, please contact me through the #modding channel on the DK Discord server, I'll see it way faster than comments on my github or steam comments :D
+
+___
+Thanks to NewSoupVi for creating cute little jingles for Archipelago integrations !
+
+You can find the sounds on [his github repo](https://github.com/NewSoupVi/ArchipelagoJingles)
