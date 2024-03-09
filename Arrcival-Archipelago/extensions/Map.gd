@@ -3,6 +3,8 @@ extends "res://content/map/Map.gd"
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 const TILE_SCENE_EDITED = preload("res://mods-unpacked/Arrcival-Archipelago/content/tile/Tile.tscn")
 
+const ARCHIPELAGO_CAVE_SCENE: Resource = preload("res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.tscn")
+
 func init(fromDeserialize: = false):
 	TYPE_MAP.merge({CONSTARRC.TILE_ARCHIPELAGO_SWITCH:CONSTARRC.ARCHIPELAGOSWITCH})
 	.init(fromDeserialize)
@@ -81,3 +83,27 @@ func revealTile(coord:Vector2):
 
 func getBiomeValueByCoord(_coord:Vector2):
 	return tileData.get_biomev(_coord)
+
+func generateCaves(minDistanceToCenter: = 10):
+	.generateCaves()
+
+	addArchipelagoCave(0)
+	addArchipelagoCave(1)
+	addArchipelagoCave(2)
+	
+	if GameWorld.devMode:
+		return
+	
+	if GameWorld.archipelago.mapSize >= 1:
+		addArchipelagoCave(3)
+	if GameWorld.archipelago.mapSize >= 2:
+		addArchipelagoCave(4)
+		addArchipelagoCave(5)
+	if GameWorld.archipelago.mapSize >= 3:
+		addArchipelagoCave(6)
+	
+
+func addArchipelagoCave(biomeId: int):
+	var cave: Node = ARCHIPELAGO_CAVE_SCENE.instance()
+	addCave(cave, biomeId, 0)
+	

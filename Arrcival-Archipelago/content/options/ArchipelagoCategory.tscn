@@ -91,3 +91,18 @@ margin_top = 141.0
 margin_right = 1920.0
 margin_bottom = 155.0
 align = 1
+
+[node name="Recommendations" type="Label" parent="."]
+margin_top = 159.0
+margin_right = 1920.0
+margin_bottom = 190.0
+text = "It is highly recommended to reboot the game if you played on a multiworld
+and you're switching to a different one."
+align = 1
+
+[node name="Credits" type="Label" parent="."]
+margin_top = 194.0
+margin_right = 1920.0
+margin_bottom = 208.0
+text = "Sound effects by NewSoupVi (@newsoupvi)"
+align = 1

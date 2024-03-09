@@ -29,6 +29,8 @@ var locationIds: Dictionary = {
 	"archipelagoupgradeironwater4": 4243012
 }
 
+var locationIdCave: int = 4243020
+
 var locationScouts: Dictionary = {
 	4243001: "",
 	4243002: "",
@@ -177,11 +179,15 @@ func submitUpgrade(upgradeName):
 	var locationId = locationIds.get(upgradeName)
 	if locationId != null:
 		 client.sendLocation(locationId)
+		
+func sendCheck(locationId: int):
+	client.sendLocation(locationId)
 
 func generateUpgrades():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
 	coloredLayersUnlocked = 0
+	locationIdCave = 4243020
 	itemsFoundToProcess = itemsIdFound.duplicate()
 	
 	upgrades_keeper1_drill = getKeeper1Drills()
@@ -403,3 +409,8 @@ func retrieveScout(networkItems: Array):
 
 func scoutUpgrades():
 	client.sendScout(locationScouts.keys(), 0)
+
+func getLocationCaveId():
+	var rtr: int = locationIdCave
+	locationIdCave += 1
+	return rtr
