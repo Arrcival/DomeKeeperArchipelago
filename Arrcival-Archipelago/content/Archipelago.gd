@@ -183,11 +183,14 @@ func submitUpgrade(upgradeName):
 func sendCheck(locationId: int):
 	client.sendLocation(locationId)
 
-func generateUpgrades():
+func reset():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
 	coloredLayersUnlocked = 0
 	locationIdCave = 4243020
+
+func generateUpgrades():
+	reset()
 	itemsFoundToProcess = itemsIdFound.duplicate()
 	
 	upgrades_keeper1_drill = getKeeper1Drills()

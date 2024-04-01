@@ -1,6 +1,6 @@
 extends Reference
 
-const ADDITIONNAL_INFOS: String = "Compatible with .apworld 0.7.0"
+const ADDITIONNAL_INFOS: String = "Please use v0.7.1 !"
 
 const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options.json"
 

@@ -27,6 +27,7 @@ func generate():
 				print("Added water on " + str(cell.x) + ", " + str(cell.y))
 				break
 
+	GameWorld.archipelago.switches = []
 	if not GameWorld.devMode:
 		generateSwitchesCoordinates(
 			tdBiomes, 
