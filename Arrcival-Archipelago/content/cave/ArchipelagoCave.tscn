@@ -62,9 +62,9 @@ biome = "grey"
 minLayer = 0
 
 [node name="Sprites" type="Control" parent="."]
-margin_left = -24.0
+margin_left = -22.0
 margin_top = -24.0
-margin_right = 80.0
+margin_right = 82.0
 margin_bottom = 80.0
 rect_clip_content = true
 mouse_filter = 2
@@ -105,7 +105,7 @@ hframes = 3
 position = Vector2( 22, 22 )
 
 [node name="Slot1" type="Node2D" parent="Background"]
-position = Vector2( -8, 14 )
+position = Vector2( -6, 14 )
 
 [node name="ResourceGrabber1" parent="Background/Slot1" instance=ExtResource( 13 )]
 visible = false
@@ -116,7 +116,7 @@ visible = false
 texture = ExtResource( 12 )
 
 [node name="Slot2" type="Node2D" parent="Background"]
-position = Vector2( 8, 14 )
+position = Vector2( 10, 14 )
 
 [node name="ResourceGrabber2" parent="Background/Slot2" instance=ExtResource( 13 )]
 visible = false
@@ -127,7 +127,7 @@ visible = false
 texture = ExtResource( 12 )
 
 [node name="Slot3" type="Node2D" parent="Background"]
-position = Vector2( -15, -2 )
+position = Vector2( -13, -2 )
 
 [node name="ResourceGrabber3" parent="Background/Slot3" instance=ExtResource( 13 )]
 visible = false
@@ -138,7 +138,7 @@ visible = false
 texture = ExtResource( 12 )
 
 [node name="Slot4" type="Node2D" parent="Background"]
-position = Vector2( 15, -2 )
+position = Vector2( 17, -2 )
 
 [node name="ResourceGrabber4" parent="Background/Slot4" instance=ExtResource( 13 )]
 visible = false
@@ -149,7 +149,7 @@ visible = false
 texture = ExtResource( 12 )
 
 [node name="Slot5" type="Node2D" parent="Background"]
-position = Vector2( 0, -13 )
+position = Vector2( 2, -13 )
 
 [node name="ResourceGrabber5" parent="Background/Slot5" instance=ExtResource( 13 )]
 visible = false

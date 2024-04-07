@@ -105,5 +105,35 @@ func generateCaves(minDistanceToCenter: = 10):
 
 func addArchipelagoCave(biomeId: int):
 	var cave: Node = ARCHIPELAGO_CAVE_SCENE.instance()
-	addCave(cave, biomeId, 0)
+	addCaveWithSpawnProtections(cave, biomeId, 0)
 	
+func addCaveWithSpawnProtections(cave, biomeIndex, minDistanceToCenter):
+	cave.updateUsedTileCoords()
+
+	for _i in 25:
+		var cells = tileData.get_biome_cells_by_index(biomeIndex)
+		if cells.size() < cave.tileCoords.size():
+			return 
+		
+		var cell = cells[Level.rand.randi() % cells.size()]
+		if abs(cell.x) < minDistanceToCenter:
+			continue
+			
+		if isCellInProtectedCells(cell):
+			print("tried generating AP cave at %s but got skipped", cell)
+			continue
+		
+		if not tileData.is_area_free(cell, cave.tileCoords):
+			continue
+		
+		addLandmark(cell, cave)
+		for c in cave.tileCoords:
+			var absCoord = cell + c
+			tileData.set_resource(absCoord.x, absCoord.y, Data.TILE_CAVE)
+		return
+		
+func isCellInProtectedCells(cell) -> bool:
+	for protectedCell in CONSTARRC.PROTECTED_SPAWNS:
+		if cell.x == protectedCell.x and cell.y == protectedCell.y:
+			return true
+	return false

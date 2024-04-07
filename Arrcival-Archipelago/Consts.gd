@@ -1,11 +1,24 @@
 extends Reference
 
-const ADDITIONNAL_INFOS: String = "Please use v0.7.1 !"
+const ADDITIONNAL_INFOS: String = "Please use the v0.7.1 apworld for bug fixes !"
 
 const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options.json"
 
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
+
+const PROTECTED_SPAWNS : Array = [
+	Vector2(0, 0),
+	Vector2(0, 1),
+	Vector2(0, 2),
+	Vector2(0, 3),
+	Vector2(-1, 0),
+	Vector2(-1, 1),
+	Vector2(-1, 2),
+	Vector2(1, 0),
+	Vector2(1, 1),
+	Vector2(1, 2)
+]
 
 const KEEPER1_DRILL = ["drill1", "drill2", "drill3"]
 const KEEPER1_JETPACK = ["jetpackspeed1", "jetpackspeed2", "jetpackspeed3", "jetpackspeed4"]

@@ -405,7 +405,7 @@ func hasLocationChecked(locationId: int, upgradeName: String) -> bool:
 	var hasChecked: bool = client._checked_locations.has(locationId)
 	return hasUpgrade or hasChecked
 
-func retrieveScout(networkItems: Array):
+func retrieveScout(networkItems: Array) -> void:
 	for item in networkItems:
 		if locationScouts.keys().has(item.locationId):
 			locationScouts[item.locationId] = item.displayUnlock()
