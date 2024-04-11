@@ -13,7 +13,7 @@ func _ready():
 	var options: Dictionary = loadDictionary(CONSTARRC.SAVE_OPTIONS_ARCHIPELAGO)
 	setArchipelagoOptions(options)
 
-func loadDictionary (path: String) -> Dictionary:
+func loadDictionary(path: String) -> Dictionary:
 	var file: File = File.new()
 	
 	if not file.file_exists(path):

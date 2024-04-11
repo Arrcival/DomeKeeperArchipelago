@@ -17,8 +17,6 @@ func build(id:String, tier: = - 1):
 	crossIcon.name = "IconCross"
 	add_child(crossIcon)
 	
-	
-	
 	# .build()
 	self.techId = id
 	var data = GameWorld.upgrades.get(id)
@@ -68,6 +66,7 @@ func build(id:String, tier: = - 1):
 	# end .build()
 	
 
+	# Adding visuals for archipelago upgrades
 	if id.begins_with("archipelago"):
 		icon = load("res://mods-unpacked/Arrcival-Archipelago/content/icons/upgrades/" + visualTechId + ".png")
 		find_node("Icon").texture = icon

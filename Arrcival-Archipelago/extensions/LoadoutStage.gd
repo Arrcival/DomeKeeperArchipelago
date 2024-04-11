@@ -1,5 +1,6 @@
 extends "res://stages/loadout/LoadoutStage.gd"
 
+# Make most buttons not clickable but set based on AP slot data
 
 func _ready():
 	disableEveryButtons()

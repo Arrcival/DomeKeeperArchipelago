@@ -77,19 +77,13 @@ func moveMenuIn(delay: = defaultDelay):
 	$Tween.interpolate_property($Canvas / VersionContainer, "rect_position:y", $Canvas / VersionContainer.rect_position.y, versionContainerPos, moveDuration, Tween.TRANS_CUBIC, Tween.EASE_OUT, delay + moveDuration)
 	if find_node("PrestigeMenu"):
 		$Tween.interpolate_callback(find_node("PrestigeMenu"), delay + moveDuration, "mainMenuIn")
-	
-	
-	
+
 	find_node("ContinueButton").hide()
 	$Tween.interpolate_callback(InputSystem, delay + 0.5 * moveDuration, "grabFocus", find_node("NewGameButton"))
 	newGameButton.disabled = !GameWorld.archipelago.client.is_connected
 	newGameButton.focus_neighbour_left = find_node("CreditsButton").get_path()
-		
+
 	$Tween.start()
-	
-#func _on_NewGameButton_pressed()->void :
-#	Audio.sound("gui_title_newgame")
-#	GameWorld.archipelago.client.connectToRoom(GameWorld.archipelago.slotName, GameWorld.archipelago.password)
 
 func add_child_first(node: Node, child: Node):
 	node.add_child(child)

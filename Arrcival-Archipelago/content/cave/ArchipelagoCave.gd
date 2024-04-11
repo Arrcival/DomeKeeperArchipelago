@@ -45,20 +45,14 @@ func useHit(keeper:Keeper)->bool:
 	$Background / Slot3.queue_free()
 	$Background / Slot4.queue_free()
 	$Background / Slot5.queue_free()
-	$Background / Checker.queue_free()
+	$Background / Check / Checker.queue_free()
 	
 	GameWorld.archipelago.sendCheck(locationId)
 	return true
-	
-func onRevealed():
-	.onRevealed()
-	print(self.global_position)
-	print($Background/Slot1/ResourceGrabber1.global_position)
-	print($Background / Slot1 / Resource.global_position)
 
 func _on_Checker_animation_finished():
-	if $Background / Checker.animation == "activating":
-		$Background / Checker.play("active")
+	if $Background / Check / Checker.animation == "activating":
+		$Background / Check / Checker.play("active")
 		activated = true
 
 func _on_ResourceGrabber1_grabbed_resource():
@@ -85,5 +79,5 @@ func onResourceGrabbed():
 	grabs += 1
 	if grabs >= 5:
 		find_node("ActiveAmbSound").play()
-		$Background / Checker.play("activating")
+		$Background / Check / Checker.play("activating")
 

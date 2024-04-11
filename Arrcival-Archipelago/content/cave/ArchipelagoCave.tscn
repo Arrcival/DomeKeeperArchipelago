@@ -159,12 +159,14 @@ dropType = "iron"
 visible = false
 texture = ExtResource( 12 )
 
-[node name="Checker" type="AnimatedSprite" parent="Background"]
-position = Vector2( 0, 1 )
+[node name="Check" type="Node2D" parent="Background"]
+
+[node name="Checker" type="AnimatedSprite" parent="Background/Check"]
+position = Vector2( 2, 1 )
 frames = SubResource( 7 )
 animation = "inactive"
 
-[node name="ActiveAmbSound" parent="Background/Checker" instance=ExtResource( 7 )]
+[node name="ActiveAmbSound" parent="Background/Check/Checker" instance=ExtResource( 7 )]
 stream = ExtResource( 10 )
 volume_db = 2.0
 bus = "Mine"
@@ -173,9 +175,8 @@ randomPitch = 0.0
 maxAudibleDistance = 300.0
 minAudibleDistance = 80.0
 
-[node name="FocusMarker" type="Sprite" parent="."]
-visible = false
-position = Vector2( 22, 23 )
+[node name="FocusMarker" type="Sprite" parent="Background/Check"]
+position = Vector2( 2, 1 )
 texture = ExtResource( 5 )
 
 [node name="ItemTakenSound" parent="." instance=ExtResource( 7 )]
@@ -187,7 +188,7 @@ randomPitch = 0.0
 [node name="Usable" parent="." instance=ExtResource( 4 )]
 visible = false
 position = Vector2( 22, 22 )
-visibleOnFocus = NodePath("../FocusMarker")
+visibleOnFocus = NodePath("../Background/Check/FocusMarker")
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -202,4 +203,4 @@ texture = ExtResource( 2 )
 [connection signal="grabbed_resource" from="Background/Slot3/ResourceGrabber3" to="." method="_on_ResourceGrabber3_grabbed_resource"]
 [connection signal="grabbed_resource" from="Background/Slot4/ResourceGrabber4" to="." method="_on_ResourceGrabber4_grabbed_resource"]
 [connection signal="grabbed_resource" from="Background/Slot5/ResourceGrabber5" to="." method="_on_ResourceGrabber5_grabbed_resource"]
-[connection signal="animation_finished" from="Background/Checker" to="." method="_on_Checker_animation_finished"]
+[connection signal="animation_finished" from="Background/Check/Checker" to="." method="_on_Checker_animation_finished"]

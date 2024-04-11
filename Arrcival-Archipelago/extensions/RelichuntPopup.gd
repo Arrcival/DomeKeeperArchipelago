@@ -25,7 +25,8 @@ func init():
 	updateBasedOnClient()
 	Style.init(self)
 
-
+# Converts difficulty and map size slot data to
+# DomeKeeper actual difficulty and map size loadout
 func updateBasedOnClient():
 	match GameWorld.archipelago.difficulty:
 		0:

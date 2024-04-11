@@ -25,7 +25,6 @@ func generateDictionaryOptions() -> Dictionary:
 		"password": GameWorld.archipelago.password
 	}
 
-
 func saveArchipelagoOptions(path: String, thing_to_save):
 	var file = File.new()
 	file.open(path, File.WRITE)

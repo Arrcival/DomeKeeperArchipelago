@@ -24,6 +24,8 @@ func getSceneForTileType(tileType:int)->PackedScene:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.tscn")
 	return .getSceneForTileType(tileType)
 
+# Unchanged method but weird behavior with Tile.gd
+# Only var tile = TILE_SCENE_EDITED.instance() changes
 func revealTile(coord:Vector2):
 	var typeId:int = tileData.get_resource(coord.x, coord.y)
 	if typeId == Data.TILE_EMPTY:
@@ -84,6 +86,7 @@ func revealTile(coord:Vector2):
 func getBiomeValueByCoord(_coord:Vector2):
 	return tileData.get_biomev(_coord)
 
+# Add one archipelago cave per accessible layer
 func generateCaves(minDistanceToCenter: = 10):
 	.generateCaves()
 
@@ -101,12 +104,12 @@ func generateCaves(minDistanceToCenter: = 10):
 		addArchipelagoCave(5)
 	if GameWorld.archipelago.mapSize >= 3:
 		addArchipelagoCave(6)
-	
 
 func addArchipelagoCave(biomeId: int):
 	var cave: Node = ARCHIPELAGO_CAVE_SCENE.instance()
 	addCaveWithSpawnProtections(cave, biomeId, 0)
-	
+
+# Same as addCave, but adds a protection so cave can't spawn near the dome
 func addCaveWithSpawnProtections(cave, biomeIndex, minDistanceToCenter):
 	cave.updateUsedTileCoords()
 
