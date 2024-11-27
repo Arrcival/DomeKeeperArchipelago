@@ -6,4 +6,4 @@ func storeUpgradeData(key:String, currentData:Dictionary):
 		if not orderedUpgradeKeys.has(key):
 			orderedUpgradeKeys.insert(0, key)
 	else:
-		.storeUpgradeData(key, currentData)
+		super.storeUpgradeData(key, currentData)

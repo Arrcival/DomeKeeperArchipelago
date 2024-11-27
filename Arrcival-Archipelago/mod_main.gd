@@ -12,20 +12,12 @@ func _init(modLoader = ModLoader):
 	
 	# Add extensions
 	loadExtension(ext_dir, "Data.gd")
-	loadExtension(ext_dir, "Dome.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
-	loadExtension(ext_dir, "LevelStage.gd")
-	loadExtension(ext_dir, "LoadoutStage.gd")
-	loadExtension(ext_dir, "Map.gd")
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
-	loadExtension(ext_dir, "RelichuntPopup.gd")
 	loadExtension(ext_dir, "StageManager.gd")
-	loadExtension(ext_dir, "Tech2.gd")
-	loadExtension(ext_dir, "TechTree.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")
-	loadExtension(ext_dir, "Tile.gd")
 	
 	ModLoaderMod.add_translation(dir + "localization/archipelago.en.translation")
 	
@@ -40,5 +32,10 @@ func loadExtension(ext_dir, fileName):
 	ModLoaderMod.install_script_extension(ext_dir + fileName)
 
 func modInit():
+	var levelStage = preload("res://mods-unpacked/Arrcival-Archipelago/content/levelstage/LevelStage2.tscn")
+	levelStage.take_over_path("res://stages/level/LevelStage.tscn")
+	var techTree = preload("res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTreePopup.tscn")
+	techTree.take_over_path("res://content/techtree/TechTreePopup.tscn")
 	var pathToModYaml : String = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR + "yaml/"
 	Data.parseUpgradesYaml(pathToModYaml + "upgrades.yaml")
+	

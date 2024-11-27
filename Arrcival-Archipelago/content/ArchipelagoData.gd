@@ -1,18 +1,20 @@
+class_name ArchipelagoData
+
 # To compute back on new game
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
 var itemsIdFound: Array = []
 var itemsFoundToProcess: Array = []
 
-var switchesFoundIndexes: Array = [] 
+var switchesFoundIndexes: Array[int] = [] 
 
-var switches: Array = []
+# Array of Array of Vector2
+var switchesLocation: Array = []
 
 # websocket client
 var client
 
 var upgradesBought: Array = []
-var missing_locations: Array = []
 
 var locationIds: Dictionary = {
 	"archipelagoupgradeiron1": 4243001,
@@ -47,50 +49,58 @@ var locationScouts: Dictionary = {
 }
 
 const FIRST_SWITCH_ID := 4243101
+const LAYER_OFFSET := 30
 
-var upgrades_keeper1_drill: Array = []
-var upgrades_keeper1_jetpack: Array = []
-var upgrades_keeper1_carry: Array = []
+#region upgrades arrays
+var upgrades_keeper1_drill: Array[String] = []
+var upgrades_keeper1_jetpack: Array[String] = []
+var upgrades_keeper1_carry: Array[String] = []
 
-var upgrades_keeper2_movement: Array = []
-var upgrades_keeper2_damage: Array = []
-var upgrades_keeper2_bundle: Array = []
-var upgrades_keeper2_more_spheres: Array = []
-var upgrades_keeper2_lifetime: Array = []
-var upgrades_keeper2_special: Array = []
-var upgrades_keeper2_mining: Array = []
+var upgrades_keeper2_movement: Array[String] = []
+var upgrades_keeper2_damage: Array[String] = []
+var upgrades_keeper2_bundle: Array[String] = []
+var upgrades_keeper2_more_spheres: Array[String] = []
+var upgrades_keeper2_lifetime: Array[String] = []
+var upgrades_keeper2_special: Array[String] = []
+var upgrades_keeper2_mining: Array[String] = []
 
-var upgrades_laser_strength: Array = []
-var upgrades_laser_speed: Array = []
-var upgrades_laser_aimline: Array = []
+var upgrades_laser_strength: Array[String] = []
+var upgrades_laser_speed: Array[String] = []
+var upgrades_laser_aimline: Array[String] = []
 
-var upgrades_sword_strength: Array = []
-var upgrades_sword_stab: Array = []
-var upgrades_sword_aimline: Array = []
-var upgrades_sword_reflection: Array = []
+var upgrades_sword_strength: Array[String] = []
+var upgrades_sword_stab: Array[String] = []
+var upgrades_sword_aimline: Array[String] = []
+var upgrades_sword_reflection: Array[String] = []
 
-var upgrades_artillery_mortar: Array = []
-var upgrades_artillery_machinegun: Array = []
+var upgrades_artillery_mortar: Array[String] = []
+var upgrades_artillery_machinegun: Array[String] = []
 
-var upgrades_tesla_reticlespeed: Array = []
-var upgrades_tesla_quickshot: Array = []
-var upgrades_tesla_shotpower: Array = []
-var upgrades_tesla_autoaim: Array = []
-var upgrades_tesla_orb: Array = []
+var upgrades_tesla_reticlespeed: Array[String] = []
+var upgrades_tesla_quickshot: Array[String] = []
+var upgrades_tesla_shotpower: Array[String] = []
+var upgrades_tesla_autoaim: Array[String] = []
+var upgrades_tesla_orb: Array[String] = []
 
-var upgrades_orchard_duration: Array = []
-var upgrades_orchard_overcharge: Array = []
-var upgrades_orchard_special: Array = []
-var upgrades_orchard_speedboost: Array = []
-var upgrades_orchard_miningboost: Array = []
+var upgrades_orchard_duration: Array[String] = []
+var upgrades_orchard_overcharge: Array[String] = []
+var upgrades_orchard_special: Array[String] = []
+var upgrades_orchard_speedboost: Array[String] = []
+var upgrades_orchard_miningboost: Array[String] = []
 
-var upgrades_shield_strength: Array = []
-var upgrades_shield_special: Array = []
-var upgrades_shield_overcharge: Array = []
+var upgrades_shield_strength: Array[String] = []
+var upgrades_shield_special: Array[String] = []
+var upgrades_shield_overcharge: Array[String] = []
 
-var upgrades_repellent_delay: Array = []
-var upgrades_repellent_special: Array = []
-var upgrades_repellent_overcharge: Array = []
+var upgrades_repellent_delay: Array[String] = []
+var upgrades_repellent_special: Array[String] = []
+var upgrades_repellent_overcharge: Array[String] = []
+
+var upgrades_droneyard_drones: Array[String] = []
+var upgrades_droneyard_speed: Array[String] = []
+var upgrades_droneyard_special: Array[String] = []
+var upgrades_droneyard_overcharge: Array[String] = []
+#endregion
 
 # Names like sent to client
 var keeper: String = ""
@@ -113,6 +123,7 @@ var difficulty: int
 var drillUpgrades: int
 var kineticSphereUpgrades: int
 var sphereLifetime: int
+var dronesAmount: int
 var coloredLayersProgression: bool
 var switchesPerLayers: Array = []
 var miningEverything: bool
@@ -120,20 +131,20 @@ var death_link = false
 
 var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
-var tilesLeft: int = 0
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 signal logInformations(text)
 
 func connectClient():
+	client.slot_data_retrieved.connect(self.retrieveSlotData)
+	client.location_scout_retrieved.connect(self.retrieveScout)
 	client.connectToServer(serverName, slotName, password)
-	client.connect("slot_data_retrieved", self, "retrieveSlotData")
-	client.connect("location_scout_retrieved", self, "retrieveScout")
-	client.connect("client_disconnected", self, "resetClient")
+	#client.all_scout_cached.connect(self.retrieveScout)
+	#client.disconnected.connect(self.resetClient)
 
 func resetClient():
-	upgradesBought = []
+	upgradesBought.clear()
 
 func retrieveSlotData(slot_data):
 	if slot_data.has("seed"):
@@ -156,29 +167,27 @@ func retrieveSlotData(slot_data):
 		kineticSphereUpgrades = slot_data["kineticSpheres"]
 	if slot_data.has("sphereLifetime"):
 		sphereLifetime = slot_data["sphereLifetime"]
+	if slot_data.has("dronesAmount"):
+		dronesAmount = slot_data["dronesAmount"]
 	if slot_data.has("coloredLayersProgression"):
 		coloredLayersProgression = bool(slot_data["coloredLayersProgression"])
 	if slot_data.has("miningEverything"):
 		miningEverything = bool(slot_data["miningEverything"])
 
-func submitSwitch(switchPos: Vector2):
-	var totalTiles = Data.of("map.totaltiles")
-	if GameWorld.devMode or OS.is_debug_build():
-		print("Tiles destroyed : " + str(Data.of("map.tilesdestroyed")))
-		print("Tiles total : " + str(Data.of("map.totaltiles") - 1))
-		print("Tiles remaining : ")
-		print(Data.of("map.totaltiles") - Data.of("map.tilesdestroyed") + 1)
-
-	var index = switches.find(switchPos, 0)
-	if index != -1:
-		var switchId = FIRST_SWITCH_ID + index
-		switchesFoundIndexes.append(switchId)
-		client.sendLocation(switchId)
+func submitSwitch(switchPos: Vector2i):
+	for i in range(len(switchesLocation)):
+		var layerSwitches: Array[Vector2i]
+		layerSwitches.assign(switchesLocation[i])
+		var index = layerSwitches.find(switchPos)
+		if index != -1:
+			var switchId = FIRST_SWITCH_ID + (i * LAYER_OFFSET) + index
+			switchesFoundIndexes.append(switchId)
+			client.sendLocation(switchId)
 
 func submitUpgrade(upgradeName):
 	var locationId = locationIds.get(upgradeName)
 	if locationId != null:
-		 client.sendLocation(locationId)
+		client.sendLocation(locationId)
 		
 func sendCheck(locationId: int):
 	client.sendLocation(locationId)
@@ -238,23 +247,34 @@ func generateUpgrades():
 		upgrades_repellent_special += pickRandom(CONSTARRC.REPELLENT_DEBILITATE_CHOICE)
 	upgrades_repellent_overcharge = CONSTARRC.REPELLENT_OVERCHARGE.duplicate() + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL1) + pickAllRandom(CONSTARRC.REPELLENT_OVERCHARGE_ROLL2)
 
-func getSphereLifetime() -> Array:
+	upgrades_droneyard_drones = getDroneyardDrones()
+	upgrades_droneyard_speed = CONSTARRC.DRONEYARD_SPEED.duplicate()
+	upgrades_droneyard_special = pickRandom(CONSTARRC.DRONEYARD_SPECIAL_CHOICE)
+	upgrades_droneyard_overcharge = CONSTARRC.DRONEYARD_OVERCHARGE.duplicate()
+
+func getSphereLifetime() -> Array[String]:
 	var upgrade = CONSTARRC.KEEPER2_LIFETIME_NAME
-	var rtr = []
+	var rtr: Array[String] = []
 	for i in range(sphereLifetime):
 		rtr.append(upgrade)
 	return rtr
 
-func getKeeper1Drills() -> Array:
-	var rtr = CONSTARRC.KEEPER1_DRILL.duplicate()
+func getKeeper1Drills() -> Array[String]:
+	var rtr: Array[String] = CONSTARRC.KEEPER1_DRILL.duplicate()
 	for i in range(3, drillUpgrades):
-		rtr.append("drill4")
+		rtr.append("player1.drill4")
 	return rtr
 	
-func getKeeper2Spheres() -> Array:
-	var rtr = CONSTARRC.KEEPER2_DAMAGE.duplicate()
+func getKeeper2Spheres() -> Array[String]:
+	var rtr: Array[String] = CONSTARRC.KEEPER2_DAMAGE.duplicate()
 	for i in range(3, kineticSphereUpgrades):
-		rtr.append("keeper2pinballdamage4")
+		rtr.append("player1.keeper2pinballdamage4")
+	return rtr
+	
+func getDroneyardDrones() -> Array[String]:
+	var rtr: Array[String] = []
+	for i in range(kineticSphereUpgrades):
+		rtr.append(CONSTARRC.DRONEYARD_DRONES_NAME)
 	return rtr
 	
 func item_found(itemId: int):
@@ -338,10 +358,18 @@ func processItem(itemId: int) -> String:
 			itemName = _getItemNameAndRemove(upgrades_orchard_speedboost)
 		4242084:
 			itemName = _getItemNameAndRemove(upgrades_orchard_miningboost)
+		4242085:
+			itemName = _getItemNameAndRemove(upgrades_droneyard_drones)
+		4242086:
+			itemName = _getItemNameAndRemove(upgrades_droneyard_speed)
+		4242087:
+			itemName = _getItemNameAndRemove(upgrades_droneyard_special)
+		4242088:
+			itemName = _getItemNameAndRemove(upgrades_droneyard_overcharge)
 		4242100:
 			_updateColoredLayers()
 			
-	GameWorld.buyUpgrade(itemName)
+	GameWorld.addUpgrade(itemName)
 	return itemName
 
 func _updateColoredLayers() -> void:
@@ -362,7 +390,7 @@ func _updateColoredLayers() -> void:
 func _getItemNameAndRemove(array: Array) -> String:
 	if array.size() > 0:
 		var returnedValue = array[0]
-		array.remove(0)
+		array.remove_at(0)
 		return returnedValue
 	return ""
 
@@ -370,27 +398,30 @@ func checkUpgrades() -> Array:
 	var rtr: Array = []
 	while itemsFoundToProcess.size() > 0:
 		var processedItem = processItem(itemsFoundToProcess[0])
-		itemsFoundToProcess.remove(0)
+		itemsFoundToProcess.remove_at(0)
 		rtr.append(processedItem)
 	return rtr
 
-func pickAllRandom(array: Array) -> Array:
-	var curArray = array.duplicate(true)
+func pickAllRandom(array: Array[String]) -> Array[String]:
+	var curArray: Array[String] = array.duplicate(true)
 	
-	var result = []
+	var result: Array[String] = []
 	var rng = RandomNumberGenerator.new()
 	rng.seed = seedNumber
 	while curArray.size() > 0:
 		var rand_index:int = rng.randi() % curArray.size()
 		result.append(curArray[rand_index])
-		curArray.remove(rand_index)
+		curArray.pop_at(rand_index)
 	return result
 
-func pickRandom(arrayOfArray: Array) -> Array:
+func pickRandom(arrayOfArray: Array) -> Array[String]:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = seedNumber
 	var rand_index:int = rng.randi() % arrayOfArray.size()
-	return arrayOfArray[rand_index].duplicate()
+	var pickedArray: Array = arrayOfArray[rand_index].duplicate()
+	var assignedArray: Array[String]
+	assignedArray.assign(pickedArray)
+	return assignedArray
 
 func hasLayerUnlocked(layerId: int) -> bool:
 	if not coloredLayersProgression:
@@ -417,3 +448,4 @@ func getLocationCaveId():
 	var rtr: int = locationIdCave
 	locationIdCave += 1
 	return rtr
+

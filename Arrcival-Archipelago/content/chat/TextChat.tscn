@@ -1,22 +1,21 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://1wjojddbvskj"]
 
-[ext_resource path="res://gui/fonts/FontNormal.tres" type="DynamicFont" id=1]
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/chat/TextChat.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chat/TextChat.gd" id="2"]
+[ext_resource type="Script" path="res://systems/deprecatedtween/DeprecatedTween.gd" id="2_8l1ac"]
 
 [node name="TextChat" type="Control"]
-script = ExtResource( 2 )
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 905.0
-margin_bottom = 605.0
-rect_min_size = Vector2( 600, 500 )
-rect_scale = Vector2( 0.75, 0.75 )
-mouse_filter = 2
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 5
-custom_fonts/normal_font = ExtResource( 1 )
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+bbcode_enabled = true
 scroll_active = false
 
-[node name="Tween" type="Tween" parent="."]
+[node name="Tween" type="Node" parent="."]
+script = ExtResource("2_8l1ac")

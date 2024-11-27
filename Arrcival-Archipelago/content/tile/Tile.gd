@@ -1,8 +1,9 @@
-extends "res://content/map/tile/Tile.gd"
+extends Tile
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
-func _ready():
+func setType(type:String):
+	super.setType(type)
 	if type == CONSTARRC.ARCHIPELAGOSWITCH:
 		var baseHealth:float = Data.of("map.tileBaseHealth")
 	
@@ -15,8 +16,6 @@ func _ready():
 		healthMultiplier *= (pow(Data.of("map.tileHealthMultiplierPerLayer"), layer))
 		
 		max_health = max(1, round(healthMultiplier * baseHealth))
-		if hasRoots:
-			max_health *= 5
 		health = max_health
 
 # Protect tile from being hit if the layer hasn't been accessed yet
@@ -26,4 +25,4 @@ func hit(dir:Vector2, dmg:float):
 	if not GameWorld.archipelago.hasLayerUnlocked(biomeId):
 		return
 	
-	.hit(dir, dmg)
+	super.hit(dir, dmg)

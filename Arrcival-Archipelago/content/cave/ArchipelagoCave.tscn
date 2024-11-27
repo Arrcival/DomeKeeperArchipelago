@@ -1,202 +1,229 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=20 format=3 uid="uid://b6rbho0mdwjco"]
 
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.gd" type="Script" id=1]
-[ext_resource path="res://content/caves/scannercave/alpha.png" type="Texture" id=2]
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet.png" type="Texture" id=3]
-[ext_resource path="res://content/shared/Usable.tscn" type="PackedScene" id=4]
-[ext_resource path="res://content/gadgets/blastMining/focussed.png" type="Texture" id=5]
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" type="Texture" id=6]
-[ext_resource path="res://systems/audio/Sound.tscn" type="PackedScene" id=7]
-[ext_resource path="res://content/map/Parallaxer.gd" type="Script" id=8]
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" type="AudioStream" id=9]
-[ext_resource path="res://content/sounds/UI/UI_spice_o1.wav" type="AudioStream" id=10]
-[ext_resource path="res://content/drop/iron/iron_smol.png" type="Texture" id=12]
-[ext_resource path="res://content/shared/drops/ResourceGrabber.tscn" type="PackedScene" id=13]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://u63jbkdc0pur" path="res://content/caves/scannercave/alpha.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://btr5tm7qwwxe4" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet.png" id="3_svxeg"]
+[ext_resource type="PackedScene" path="res://content/shared/Usable.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://bi8fw3hrhlkgs" path="res://content/gadgets/blastMining/focussed.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://cnli5sew6h3i5" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" id="6_x6u6q"]
+[ext_resource type="PackedScene" path="res://systems/audio/Sound.tscn" id="7"]
+[ext_resource type="Script" path="res://content/map/Parallaxer.gd" id="8"]
+[ext_resource type="AudioStream" uid="uid://b20ugclvmjrs5" path="res://content/sounds/UI/UI_spice_o1.wav" id="10"]
+[ext_resource type="AudioStream" uid="uid://onkl46qrrlx4" path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" id="10_i7eka"]
+[ext_resource type="Texture2D" uid="uid://rasmosh8h0qm" path="res://content/drop/iron/iron_smol.png" id="12"]
+[ext_resource type="PackedScene" path="res://content/shared/drops/ResourceGrabber.tscn" id="13"]
 
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hgpd"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 6 )
-region = Rect2( 14, 0, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_q53hl"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(14, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 6 )
-region = Rect2( 28, 0, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_q27y0"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(28, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 6 )
-region = Rect2( 42, 0, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_kf4l6"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(42, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 14, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk1f4"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(42, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 14, 14 )
+[sub_resource type="AtlasTexture" id="AtlasTexture_ykksf"]
+atlas = ExtResource("6_x6u6q")
+region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="SpriteFrames" id=7]
-animations = [ {
-"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+[sub_resource type="SpriteFrames" id="7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1hgpd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q53hl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q27y0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kf4l6")
+}],
 "loop": false,
-"name": "activating",
+"name": &"activating",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 12 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk1f4")
+}],
 "loop": true,
-"name": "active",
+"name": &"active",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 13 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ykksf")
+}],
 "loop": false,
-"name": "inactive",
+"name": &"inactive",
 "speed": 0.0
-} ]
+}]
 
 [node name="ArchipelagoCave" type="Node2D" groups=["cave", "saveable", "unstyled"]]
 z_index = -40
-script = ExtResource( 1 )
+script = ExtResource("1")
 biome = "grey"
 minLayer = 0
 
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -22.0
+offset_top = -24.0
+offset_right = 78.0
+offset_bottom = 76.0
+color = Color(0.0980392, 0.0862745, 0.164706, 1)
+
 [node name="Sprites" type="Control" parent="."]
-margin_left = -22.0
-margin_top = -24.0
-margin_right = 82.0
-margin_bottom = 80.0
-rect_clip_content = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -22.0
+offset_top = -24.0
+offset_right = 82.0
+offset_bottom = 80.0
 mouse_filter = 2
-script = ExtResource( 8 )
+script = ExtResource("8")
 start_offset = 0.2
 scaling = 0.8
 
-[node name="Sprite" type="Sprite" parent="Sprites"]
-texture = ExtResource( 3 )
+[node name="Sprite" type="Sprite2D" parent="Sprites"]
+position = Vector2(50, 45)
+texture = ExtResource("3_svxeg")
+hframes = 3
 
 [node name="ColorRect" type="ColorRect" parent="Sprites/Sprite"]
-margin_left = -41.0
-margin_top = -41.0
-margin_right = 126.0
-margin_bottom = 113.0
-color = Color( 0.0980392, 0.0862745, 0.164706, 1 )
+offset_left = -51.0
+offset_top = -46.0
+offset_right = 49.0
+offset_bottom = 54.0
+color = Color(0.0980392, 0.0862745, 0.164706, 1)
+metadata/_edit_use_anchors_ = true
 
-[node name="Sprite2" type="Sprite" parent="Sprites"]
-position = Vector2( 6, 8 )
-texture = ExtResource( 3 )
+[node name="Sprite2" type="Sprite2D" parent="Sprites"]
+position = Vector2(6, 8)
+texture = ExtResource("3_svxeg")
 centered = false
 hframes = 3
 frame = 2
 
-[node name="Sprite3" type="Sprite" parent="Sprites"]
-position = Vector2( 48, 48 )
-texture = ExtResource( 3 )
+[node name="Sprite3" type="Sprite2D" parent="Sprites"]
+position = Vector2(48, 48)
+texture = ExtResource("3_svxeg")
 hframes = 3
 frame = 1
 
-[node name="Sprite4" type="Sprite" parent="Sprites"]
-position = Vector2( 24, 33 )
-texture = ExtResource( 3 )
-offset = Vector2( 22, 22 )
+[node name="Sprite4" type="Sprite2D" parent="Sprites"]
+position = Vector2(24, 33)
+texture = ExtResource("3_svxeg")
+offset = Vector2(22, 22)
 hframes = 3
 
 [node name="Background" type="Node2D" parent="."]
-position = Vector2( 22, 22 )
+position = Vector2(22, 22)
 
 [node name="Slot1" type="Node2D" parent="Background"]
-position = Vector2( -6, 14 )
+position = Vector2(-6, 14)
 
-[node name="ResourceGrabber1" parent="Background/Slot1" instance=ExtResource( 13 )]
+[node name="ResourceGrabber1" parent="Background/Slot1" instance=ExtResource("13")]
 visible = false
 dropType = "iron"
 
-[node name="Resource" type="Sprite" parent="Background/Slot1"]
+[node name="Resource" type="Sprite2D" parent="Background/Slot1"]
 visible = false
-texture = ExtResource( 12 )
+texture = ExtResource("12")
 
 [node name="Slot2" type="Node2D" parent="Background"]
-position = Vector2( 10, 14 )
+position = Vector2(10, 14)
 
-[node name="ResourceGrabber2" parent="Background/Slot2" instance=ExtResource( 13 )]
+[node name="ResourceGrabber2" parent="Background/Slot2" instance=ExtResource("13")]
 visible = false
 dropType = "iron"
 
-[node name="Resource" type="Sprite" parent="Background/Slot2"]
+[node name="Resource" type="Sprite2D" parent="Background/Slot2"]
 visible = false
-texture = ExtResource( 12 )
+texture = ExtResource("12")
 
 [node name="Slot3" type="Node2D" parent="Background"]
-position = Vector2( -13, -2 )
+position = Vector2(-13, -2)
 
-[node name="ResourceGrabber3" parent="Background/Slot3" instance=ExtResource( 13 )]
+[node name="ResourceGrabber3" parent="Background/Slot3" instance=ExtResource("13")]
 visible = false
 dropType = "iron"
 
-[node name="Resource" type="Sprite" parent="Background/Slot3"]
+[node name="Resource" type="Sprite2D" parent="Background/Slot3"]
 visible = false
-texture = ExtResource( 12 )
+texture = ExtResource("12")
 
 [node name="Slot4" type="Node2D" parent="Background"]
-position = Vector2( 17, -2 )
+position = Vector2(17, -2)
 
-[node name="ResourceGrabber4" parent="Background/Slot4" instance=ExtResource( 13 )]
+[node name="ResourceGrabber4" parent="Background/Slot4" instance=ExtResource("13")]
 visible = false
 dropType = "iron"
 
-[node name="Resource" type="Sprite" parent="Background/Slot4"]
+[node name="Resource" type="Sprite2D" parent="Background/Slot4"]
 visible = false
-texture = ExtResource( 12 )
+texture = ExtResource("12")
 
 [node name="Slot5" type="Node2D" parent="Background"]
-position = Vector2( 2, -13 )
+position = Vector2(2, -13)
 
-[node name="ResourceGrabber5" parent="Background/Slot5" instance=ExtResource( 13 )]
+[node name="ResourceGrabber5" parent="Background/Slot5" instance=ExtResource("13")]
 visible = false
 dropType = "iron"
 
-[node name="Resource" type="Sprite" parent="Background/Slot5"]
+[node name="Resource" type="Sprite2D" parent="Background/Slot5"]
 visible = false
-texture = ExtResource( 12 )
+texture = ExtResource("12")
 
 [node name="Check" type="Node2D" parent="Background"]
 
-[node name="Checker" type="AnimatedSprite" parent="Background/Check"]
-position = Vector2( 2, 1 )
-frames = SubResource( 7 )
-animation = "inactive"
+[node name="Checker" type="AnimatedSprite2D" parent="Background/Check"]
+position = Vector2(2, 1)
+sprite_frames = SubResource("7")
+animation = &"inactive"
 
-[node name="ActiveAmbSound" parent="Background/Check/Checker" instance=ExtResource( 7 )]
-stream = ExtResource( 10 )
+[node name="ActiveAmbSound" parent="Background/Check/Checker" instance=ExtResource("7")]
+stream = ExtResource("10")
 volume_db = 2.0
-bus = "Mine"
+bus = &"Mine"
 randomVolume = 0.0
 randomPitch = 0.0
 maxAudibleDistance = 300.0
 minAudibleDistance = 80.0
 
-[node name="FocusMarker" type="Sprite" parent="Background/Check"]
-position = Vector2( 2, 1 )
-texture = ExtResource( 5 )
+[node name="FocusMarker" type="Sprite2D" parent="Background/Check"]
+position = Vector2(2, 1)
+texture = ExtResource("5")
 
-[node name="ItemTakenSound" parent="." instance=ExtResource( 7 )]
-stream = ExtResource( 9 )
-bus = "Mine"
+[node name="ItemTakenSound" parent="." instance=ExtResource("7")]
+stream = ExtResource("10_i7eka")
+bus = &"Mine"
 randomVolume = 0.0
 randomPitch = 0.0
 
-[node name="Usable" parent="." instance=ExtResource( 4 )]
+[node name="Usable" parent="." instance=ExtResource("4")]
 visible = false
-position = Vector2( 22, 22 )
+position = Vector2(22, 22)
 visibleOnFocus = NodePath("../Background/Check/FocusMarker")
 
-[node name="Tween" type="Tween" parent="."]
-
-[node name="AlphaMap" type="Sprite" parent="."]
+[node name="AlphaMap" type="Sprite2D" parent="."]
 visible = false
-position = Vector2( 22.8235, 23 )
-scale = Vector2( 0.647059, 1.38889 )
-texture = ExtResource( 2 )
+position = Vector2(22.8235, 23)
+scale = Vector2(0.647059, 1.38889)
+texture = ExtResource("2")
 
 [connection signal="grabbed_resource" from="Background/Slot1/ResourceGrabber1" to="." method="_on_ResourceGrabber1_grabbed_resource"]
 [connection signal="grabbed_resource" from="Background/Slot2/ResourceGrabber2" to="." method="_on_ResourceGrabber2_grabbed_resource"]

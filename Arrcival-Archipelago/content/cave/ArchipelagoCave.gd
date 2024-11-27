@@ -7,7 +7,12 @@ var grabs: = 0
 # Archipelago
 var locationId: int
 
+# port from godot v3
+func find_node(value: String) -> Node:
+	return find_children(value)[0]
+	
 func _ready():
+	super._ready()
 	Style.init($Background / Slot1 / Resource)
 	Style.init($Background / Slot2 / Resource)
 	Style.init($Background / Slot3 / Resource)
@@ -27,7 +32,7 @@ func updateUsedTileCoords():
 	tileCoords.append(Vector2(0, 1))
 	tileCoords.append(Vector2(1, 1))
 
-func canFocusUse()->bool:
+func canFocusUse(keeper:Keeper)->bool:
 	return hasItem and activated
 
 func useHold(keeper:Keeper):

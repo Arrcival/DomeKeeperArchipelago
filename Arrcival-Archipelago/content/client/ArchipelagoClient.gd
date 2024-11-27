@@ -1,15 +1,14 @@
-extends Node
+class_name ArchipelagoClient extends Node
 
 var _ap_server: String = ""
 var _ap_user: String = ""
 var _ap_pass: String = ""
 
 const my_version = "1.0.0"
-const ap_version = {"major": 0, "minor": 4, "build": 4, "class": "Version"}
+const ap_version = {"major": 0, "minor": 5, "build": 1, "class": "Version"}
 const GAME_NAME = "Dome Keeper"
 
 var _client
-var _should_process = false
 var _initiated_disconnect = false
 var _try_wss = false
 
@@ -52,84 +51,59 @@ signal packetRoomInfo
 signal packetConnected
 signal logInformations(informations)
 signal slot_data_retrieved(slot_data)
+signal slot_data_have_been_retrieved
 signal location_scout_retrieved(scout_data)
-
-var is_connected = false
 
 func _init():
 	ProjectSettings.set_setting("network/limits/websocket_client/max_in_buffer_kb", 8192)
-	_client = WebSocketClient.new()
+	_client = load("res://mods-unpacked/Arrcival-Archipelago/content/client/WebSocketClient.gd").new()
 	print("Instantiated APClient")
 	GameWorld.archipelago.client = self
 
 func _ready():
-	_client.connect("connection_closed", self, "_closed")
-	_client.connect("connection_failed", self, "_closed")
-	_client.connect("server_disconnected", self, "_closed")
-	_client.connect("connection_error", self, "_errored")
-	_client.connect("connection_established", self, "_connected")
-	_client.connect("data_received", self, "_on_data")
-	_client.connect("server_close_request", self, "_server_closed")
+	_client.connection_closed.connect(self._closed)
+	_client.data_received.connect(self._on_data)
+	_client.disconnected_without_connection.connect(self._closed)
+	_client.connected.connect(self._connected)
 	print("AP client ready")
+
+func is_client_connected() -> bool:
+	return _client.is_connected
 
 # mandatory to receive/emit
 func _process(_delta):
-	if _should_process:
-		_client.poll()
+	_client.poll()
 
 # signals received from the client
 func _reset_state():
-	_should_process = false
+	_client.should_process = false
 	_authenticated = false
 	_try_wss = false
 
-func _server_closed(code: int, reason: String):
-	print("Error " + str(code) + " : " + reason)
-	
-func _closed(_was_clean = true):
-	print("Connection closed")
-	_reset_state()
-
-	emit_signal("client_disconnected")
-	if not _initiated_disconnect:
-		emit_signal("could_not_connect", "Disconnected from Archipelago")
-	else:
-		emit_signal("logInformations", "Connection closed")
-
-	_initiated_disconnect = false
-
-func _errored():
+func _closed():
+	# retry wss
 	if _try_wss:
-		print("Could not connect to AP with ws://, now trying wss://")
+		print("Retrying with wss")
 		connectToServer(_ap_server, _ap_user, _ap_pass)
 	else:
-		print("AP connection failed")
-		_reset_state()
-		emit_signal("client_disconnected")
+		client_disconnected.emit()
+		could_not_connect.emit("Disconnected/not connected from AP")
 
-		emit_signal(
-			"could_not_connect",
-			"Could not connect to Archipelago. Check that your server and port are correct. See the error log for more information."
-		)
-
-func _connected(_proto = ""):
+func _connected():
 	print("Connected!")
-	emit_signal("client_connected", "Connected !")
-	emit_signal("connected")
-	is_connected = true
-	_try_wss = false
+	client_connected.emit("Connected !")
 
-func _on_data():
-	var packet = _client.get_peer(1).get_packet()
-	
+func _on_data(packet: PackedByteArray):	
 	print("Got data from server: " + packet.get_string_from_utf8())
-		
-	var data = JSON.parse(packet.get_string_from_utf8())
-	if data.error != OK:
-		print("Error parsing packet from AP: " + data.error_string)
+
+	var json = JSON.new()
+	var errorJson: Error = json.parse(packet.get_string_from_utf8())
+	if errorJson != OK:
+		print("Error parsing packet from AP: " + json.get_error_message())
 		return
 
-	for message in data.result:
+	var data_received = json.data
+	for message in data_received:
 		var cmd = message["cmd"]
 		
 		print("Received command: " + cmd)
@@ -138,7 +112,7 @@ func _on_data():
 			_seed = message["seed_name"]
 			_remote_version = message["version"]
 
-			var needed_games = []
+			var needed_games: Array[String] = []
 			for game in message["datapackage_checksums"].keys():
 				if (
 					!_datapackages.has(game)
@@ -147,7 +121,7 @@ func _on_data():
 					needed_games.append(game)
 
 			emit_signal("packetRoomInfo")
-			if !needed_games.empty():
+			if !needed_games.is_empty():
 				_pending_packages = needed_games
 				var cur_needed = _pending_packages.pop_front()
 				requestDatapackages([cur_needed])
@@ -172,11 +146,12 @@ func _on_data():
 				_sendConnectUpdate(["DeathLink"])
 
 			
-			emit_signal("slot_data_retrieved", _slot_data)
+			slot_data_retrieved.emit(_slot_data)
+			slot_data_have_been_retrieved.emit()
 			_requestSync()
 
-			emit_signal("packetConnected")
-			emit_signal("logInformations", "Authenticated !")
+			packetConnected.emit()
+			logInformations.emit("Authenticated !")
 		elif cmd == "ConnectionRefused":
 			var error_message = ""
 			for error in message["errors"]:
@@ -211,16 +186,16 @@ func _on_data():
 				error_message = "Unknown error."
 
 			_initiated_disconnect = true
-			_client.disconnect_from_host()
+			disconnect_from_ap()
 
-			emit_signal("could_not_connect", error_message)
+			could_not_connect.emit(error_message)
 			print("Connection to AP refused")
 			print(message)
 		elif cmd == "DataPackage":
 			for game in message["data"]["games"].keys():
 				_datapackages[game] = message["data"]["games"][game]
 
-			if !_pending_packages.empty():
+			if !_pending_packages.is_empty():
 				var cur_needed = _pending_packages.pop_front()
 				requestDatapackages([cur_needed])
 			else:
@@ -236,7 +211,7 @@ func _on_data():
 			var networkItems: Array = []
 			for networkitem in _locations:
 				networkItems.append(_parseNetworkItem(networkitem))
-			emit_signal("location_scout_retrieved", networkItems)
+			location_scout_retrieved.emit(networkItems)
 		
 		elif cmd == "PrintJSON":
 			if (
@@ -295,22 +270,10 @@ func _requestSync():
 	sendMessage([{"cmd": "Sync"}])
 
 func disconnect_from_ap():
-	emit_signal("logInformations", "Disconnecting...")
+	logInformations.emit("Disconnecting...")
 	_initiated_disconnect = true
-	_client.disconnect_from_host()
-
-func sendScout(loc_ids: Array, create_as_hint: int = 0):
-	sendMessage([{
-		"cmd": "LocationScouts", 
-		"locations": loc_ids,
-		"create_as_hint": create_as_hint
-	}])
-
-func sendLocation(loc_id: int):
-	sendMessage([{"cmd": "LocationChecks", "locations": [loc_id]}])
-
-func sendLocations(loc_ids: Array):
-	sendMessage([{"cmd": "LocationChecks", "locations": loc_ids}])
+	_client.close()
+	_reset_state()
 
 func connectToServer(ap_server, ap_name, ap_pass):
 	_initiated_disconnect = false
@@ -329,18 +292,24 @@ func connectToServer(ap_server, ap_name, ap_pass):
 		url = "ws://" + ap_server
 		_try_wss = true
 
-	var err = _client.connect_to_url(url)
+	var err: Error = _client.connect_to_url(url)
 	if err != OK:
-		emit_signal(
-			"could_not_connect",
-			(
-				"Could not connect to Archipelago. Check that your server and port are correct. See the error log for more information. Error code: %d."
-				% err
-			)
-		)
+		could_not_connect.emit("Could not connect to AP !")
 		print("Could not connect to AP: " + str(err))
-		return
-	_should_process = true
+	# if it doesn't give an error it doesn't mean we're connected !
+
+func sendScout(loc_ids: Array, create_as_hint: int = 0):
+	sendMessage([{
+		"cmd": "LocationScouts", 
+		"locations": loc_ids,
+		"create_as_hint": create_as_hint
+	}])
+
+func sendLocation(loc_id: int):
+	sendMessage([{"cmd": "LocationChecks", "locations": [loc_id]}])
+
+func sendLocations(loc_ids: Array):
+	sendMessage([{"cmd": "LocationChecks", "locations": loc_ids}])
 
 func processDatapackages():
 	_item_id_to_name = {}
@@ -363,7 +332,7 @@ func requestDatapackages(games):
 
 func completedGoal():
 	sendMessage([{"cmd": "StatusUpdate", "status": 30}])  # CLIENT_GOAL
-	emit_signal("logInformations", "You have completed your goal!")
+	logInformations.emit("You have completed your goal!")
 
 func processItem(item, index, from, flags):
 	if index != null:
@@ -391,8 +360,8 @@ func processItem(item, index, from, flags):
 				"Received [color=%s]%s[/color] from %s" % [item_color, item_name, player_name]
 			)
 
-func _parseNetworkItem(networkItem: Dictionary) -> NetworkItem:
-	var item: NetworkItem = NetworkItem.new()
+func _parseNetworkItem(networkItem: Dictionary) -> NetworkItemAP:
+	var item: NetworkItemAP = NetworkItemAP.new()
 	item.itemId = int(networkItem["item"])
 	item.locationId = int(networkItem["location"])
 	item.playerId = int(networkItem["player"])
@@ -400,7 +369,7 @@ func _parseNetworkItem(networkItem: Dictionary) -> NetworkItem:
 	_tryUpdatingNetworkItem(item)
 	return item
 
-func _tryUpdatingNetworkItem(networkItem: NetworkItem) -> void:
+func _tryUpdatingNetworkItem(networkItem: NetworkItemAP) -> void:
 	networkItem.playerName = _getPlayerName(networkItem.playerId, false)
 	networkItem.itemName = _getItemName(networkItem.itemId)
 	networkItem.color = colorForItemType(networkItem.flag)
@@ -423,9 +392,9 @@ func _getLocationName(locationId: int) -> String:
 	return "Unknown"
 
 func sendMessage(msg):
-	var payload = JSON.print(msg)
-	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
-	_client.get_peer(1).put_packet(payload.to_utf8())
+	var json = JSON.new()
+	var payload = json.stringify(msg)
+	_client.send_text(payload)
 
 func connectToRoom(ap_user, ap_pass):	
 	_ap_user = ap_user
@@ -455,7 +424,7 @@ func sendDeath(cause: String):
 					"cmd": "Bounce",
 					"tags": ["DeathLink"],
 					"data": {
-						"time": OS.get_unix_time(),
+						"time": Time.get_unix_time_from_system(),
 						"cause": cause,
 						"source": _ap_user
 					}
@@ -474,7 +443,7 @@ func colorForItemType(flags):
 	else:  # filler
 		return "#14de9e"
 
-class NetworkItem:
+class NetworkItemAP:
 	var playerId: int
 	var flag: int
 	var itemId: int

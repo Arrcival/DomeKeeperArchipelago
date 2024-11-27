@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://v8qbl8qmi6ff"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTrack.gd" id="1_kvpon"]
+
+[node name="TechTrack" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_kvpon")
+
+[node name="Lines" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Tiers" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 80
+
+[connection signal="sort_children" from="." to="." method="_on_TechTrack_sort_children"]

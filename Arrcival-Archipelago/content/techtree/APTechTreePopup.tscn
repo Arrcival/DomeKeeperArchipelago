@@ -1,0 +1,262 @@
+[gd_scene load_steps=15 format=3 uid="uid://chquk138ibgk2"]
+
+[ext_resource type="Theme" path="res://gui/theme.tres" id="1_gvrmm"]
+[ext_resource type="Script" path="res://content/techtree/TechTreePopup.gd" id="2_8euaf"]
+[ext_resource type="StyleBox" path="res://gui/panels/panel_outside.tres" id="3_2mpe2"]
+[ext_resource type="LabelSettings" path="res://gui/fontsettings/VeryLargeFontSettings.tres" id="4_oout3"]
+[ext_resource type="LabelSettings" path="res://gui/fontsettings/NormalFontSettings.tres" id="5_fxu0o"]
+[ext_resource type="Texture2D" uid="uid://djoy6voi70xo6" path="res://content/icons/icon_iron.png" id="6_mql6m"]
+[ext_resource type="FontVariation" path="res://gui/fonts/FontNumbers.tres" id="7_ih3gt"]
+[ext_resource type="LabelSettings" path="res://gui/fontsettings/NumbersFontSettings.tres" id="8_hxn72"]
+[ext_resource type="Texture2D" uid="uid://b6jc1mfc22tag" path="res://content/icons/icon_water.png" id="9_xnis7"]
+[ext_resource type="Texture2D" uid="uid://dydoifbl5v1ww" path="res://content/icons/icon_sand.png" id="10_usrbs"]
+[ext_resource type="Script" path="res://content/techtree/ScrollContainer.gd" id="11_xpi6p"]
+[ext_resource type="PackedScene" uid="uid://bq0ih7dysnf61" path="res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTree.tscn" id="12_sg8ty"]
+[ext_resource type="PackedScene" path="res://gui/buttons/Action.tscn" id="13_07m1m"]
+[ext_resource type="PackedScene" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="14_va7hd"]
+
+[node name="TechtreePopup" type="MarginContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(200, 200)
+layout_direction = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_gvrmm")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("2_8euaf")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("3_2mpe2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="BoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="TechInfo" type="VBoxContainer" parent="PanelContainer/VBoxContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+mouse_filter = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TechTitle" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/VBoxContainer"]
+texture_filter = 4
+layout_mode = 2
+label_settings = ExtResource("4_oout3")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="TechDescription" type="RichTextLabel" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/VBoxContainer"]
+custom_minimum_size = Vector2(400, 75)
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(1, 0.92549, 0.839216, 1)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/VBoxContainer"]
+custom_minimum_size = Vector2(510, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="BonusSection" type="GridContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+columns = 5
+
+[node name="Separator" type="Control" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Inventory" type="MarginContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="Control" type="Control" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LabelInventoryHeading" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "level.station.upgrademenu.inventory"
+label_settings = ExtResource("5_fxu0o")
+horizontal_alignment = 1
+
+[node name="LabelCostsHeading" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "level.station.upgrademenu.cost"
+label_settings = ExtResource("5_fxu0o")
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 2
+texture = ExtResource("6_mql6m")
+stretch_mode = 2
+
+[node name="LabelIron" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="LabelIronCost" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 2
+texture = ExtResource("9_xnis7")
+stretch_mode = 2
+
+[node name="LabelWater" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="LabelWaterCost" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 2
+texture = ExtResource("10_usrbs")
+stretch_mode = 2
+
+[node name="LabelSand" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="LabelSandCost" type="Label" parent="PanelContainer/VBoxContainer/BoxContainer/TechInfo/Inventory/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_ih3gt")
+text = "0"
+label_settings = ExtResource("8_hxn72")
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("11_xpi6p")
+
+[node name="TechTree" parent="PanelContainer/VBoxContainer/BoxContainer/ScrollContainer" instance=ExtResource("12_sg8ty")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Controls" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ActionBack" parent="PanelContainer/VBoxContainer/Controls" instance=ExtResource("13_07m1m")]
+layout_mode = 2
+action = "ui_cancel"
+
+[node name="closeLabel" type="Label" parent="PanelContainer/VBoxContainer/Controls"]
+layout_mode = 2
+text = "level.station.upgrademenu.close"
+label_settings = ExtResource("5_fxu0o")
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/VBoxContainer/Controls"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ActionUse" parent="PanelContainer/VBoxContainer/Controls" instance=ExtResource("13_07m1m")]
+layout_mode = 2
+action = "ui_select"
+
+[node name="buyLabel" type="Label" parent="PanelContainer/VBoxContainer/Controls"]
+layout_mode = 2
+text = "level.station.upgrademenu.buy"
+label_settings = ExtResource("5_fxu0o")
+
+[node name="Tween" parent="." instance=ExtResource("14_va7hd")]
+
+[connection signal="techFocussed" from="PanelContainer/VBoxContainer/BoxContainer/ScrollContainer/TechTree" to="." method="_on_TechTree_techFocussed"]

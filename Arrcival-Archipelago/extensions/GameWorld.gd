@@ -2,12 +2,12 @@ extends "res://game/GameWorld.gd"
 
 var chat # used for logging stuff from AP
 
-var archipelago = load("res://mods-unpacked/Arrcival-Archipelago/content/Archipelago.gd").new()
+var archipelago = load("res://mods-unpacked/Arrcival-Archipelago/content/ArchipelagoData.gd").new()
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 func init():
-	.init()
+	super.init()
 	# prevent randomizer to be on something the user hasn't unlocked
 	# bruteforce unlock everything :/
 	GameWorld.unlockElement("keeper1")
@@ -24,18 +24,27 @@ func init():
 	GameWorld.unlockElement("shield")
 	GameWorld.unlockElement("shield-battle2")
 	GameWorld.unlockElement("shield-battle3")
-	archipelago.client.connect("item_received", archipelago, "item_found")
+	GameWorld.unlockElement("droneyard")
+	GameWorld.unlockElement("droneyard-battle2")
+	GameWorld.unlockElement("droneyard-battle3")
+	archipelago.client.item_received.connect(archipelago.item_found)
 
+func handleGameLost(backendData:Dictionary = {}):
+	super.handleGameLost(backendData)
+	if not won:
+		archipelago.client.sendDeath("The dome was destroyed...")
+	
 func levelInitialized():
-	.levelInitialized()
+	super.levelInitialized()
 	archipelago.generateUpgrades()
 	archipelago.cobaltGiven = 0
 
 func prepareCleanData():
-	.prepareCleanData()
+	super.prepareCleanData()
 	Data.apply("map.totaltiles", 0)
 
-func buyUpgrade(id: String):
+
+func buyUpgrade(id:String):
 	# preventing any crash from empty upgrades
 	if id == "":
 		return
@@ -43,18 +52,9 @@ func buyUpgrade(id: String):
 	# Archipelago upgrades, default behavior
 	if id.begins_with("archipelago"):
 		archipelago.submitUpgrade(id)
-		return .buyUpgrade(id)
 
 	# Usual upgrades
-	if CONSTARRC.isUpgradePurchasable(id):
-		return .buyUpgrade(id)
+	if not CONSTARRC.isUpgradePurchasable(id.to_lower()):
+		return
 
-	# Other upgrades (not default, not archipelago) should not spend cost but neither make sound
-	var upgrade = GameWorld.upgrades.get(id)
-	Backend.event("upgrade", {"id":id})
-	unlockUpgrade(id)
-	var shouldPlayMax = upgrade.get("tier", 0) >= 3 and upgrade.get("successors", []).empty()
-	if upgrade.has("repeatable"):
-		for propertyChange in upgrade.get("repeatable"):
-			if propertyChange.keyClass == "times" and propertyChange.value == 0:
-				shouldPlayMax = true
+	super.buyUpgrade(id)

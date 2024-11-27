@@ -1,0 +1,194 @@
+[gd_scene load_steps=15 format=3 uid="uid://bjtnbcsiijh6"]
+
+[ext_resource type="Theme" path="res://gui/theme.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://cidqeotwur4ye" path="res://content/techtree/panels/one_reload_extra_dark.png" id="2"]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTech2.gd" id="3_5scen"]
+[ext_resource type="Shader" path="res://content/techtree/highlight.gdshader" id="4"]
+[ext_resource type="Texture2D" uid="uid://16xvob3kettt" path="res://content/techtree/panels/one_focus.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://eqjdgcrlfot1" path="res://content/techtree/panels/lock_bright.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cmnyitowitaah" path="res://content/techtree/panels/lock_icon.png" id="7"]
+[ext_resource type="LabelSettings" path="res://gui/fontsettings/NormalFontSettings.tres" id="8"]
+[ext_resource type="PackedScene" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="9"]
+
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("4")
+
+[sub_resource type="Animation" id="2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lockIcon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="3"]
+resource_name = "afraid"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lockIcon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, -2),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="Animation" id="4"]
+resource_name = "calm"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lockIcon:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="5"]
+_data = {
+"RESET": SubResource("2"),
+"afraid": SubResource("3"),
+"calm": SubResource("4")
+}
+
+[node name="Tech" type="TextureRect" groups=["techpanel"]]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1760.0
+offset_bottom = -992.0
+pivot_offset = Vector2(42, 45)
+size_flags_horizontal = 0
+focus_mode = 2
+theme = ExtResource("1")
+texture = ExtResource("2")
+stretch_mode = 2
+script = ExtResource("3_5scen")
+
+[node name="SelectedPanel" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+material = SubResource("1")
+layout_mode = 0
+offset_right = 194.0
+offset_bottom = 114.0
+texture = ExtResource("5")
+stretch_mode = 2
+
+[node name="AnyAll" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = -46.0
+offset_top = -2.0
+offset_right = 42.0
+offset_bottom = 112.0
+texture = ExtResource("6")
+stretch_mode = 2
+
+[node name="lockIcon2" type="TextureRect" parent="AnyAll"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 16.0
+offset_top = 28.0
+offset_right = 48.0
+offset_bottom = 64.0
+texture = ExtResource("7")
+stretch_mode = 5
+
+[node name="LockCountLabel" type="Label" parent="AnyAll"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 63.0
+offset_right = 38.0
+offset_bottom = 88.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 14.0
+offset_right = 100.0
+offset_bottom = 102.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 4
+
+[node name="IconUnlock" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 14.0
+offset_right = 100.0
+offset_bottom = 102.0
+pivot_offset = Vector2(44, 44)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+stretch_mode = 4
+
+[node name="lockIcon" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 40.0
+offset_top = 38.0
+offset_right = 72.0
+offset_bottom = 74.0
+texture = ExtResource("7")
+stretch_mode = 5
+
+[node name="Costs" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0483871
+anchor_top = 0.0681818
+anchor_right = 0.0483871
+anchor_bottom = 0.0681818
+offset_left = 168.613
+offset_top = 53.2273
+offset_right = 168.613
+offset_bottom = 53.2273
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = -4
+columns = 2
+
+[node name="RepetitionCountLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 81.0
+offset_right = 157.0
+offset_bottom = 114.0
+text = "99"
+label_settings = ExtResource("8")
+
+[node name="Tween" parent="." instance=ExtResource("9")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("5")
+}
+
+[connection signal="focus_entered" from="." to="." method="_on_Tech_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_Tech_focus_exited"]

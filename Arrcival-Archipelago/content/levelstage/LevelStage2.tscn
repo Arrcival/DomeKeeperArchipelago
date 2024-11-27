@@ -1,0 +1,237 @@
+[gd_scene load_steps=21 format=3 uid="uid://8g08our7jqlv"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/levelstage/LevelStage2.gd" id="1_bw5d3"]
+[ext_resource type="Script" path="res://stages/level/Viewports.gd" id="2_euv5c"]
+[ext_resource type="PackedScene" path="res://systems/camera/ViewportContainer.tscn" id="3_ga71i"]
+[ext_resource type="Shader" path="res://systems/camera/viewport_split_glow.gdshader" id="4_5fjdh"]
+[ext_resource type="PackedScene" path="res://content/map/Map.tscn" id="5_c5npr"]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/levelstage/Map2.gd" id="6_giqgb"]
+[ext_resource type="Material" path="res://stages/manager/vignette_material.tres" id="6_xojqa"]
+[ext_resource type="Script" path="res://stages/level/Vignette.gd" id="7_jdvvv"]
+[ext_resource type="PackedScene" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="8_meckd"]
+[ext_resource type="PackedScene" path="res://systems/camera/ViewportContainerTracker.tscn" id="9_fbc67"]
+[ext_resource type="Script" path="res://content/monster/Monsters.gd" id="10_x25ki"]
+[ext_resource type="PackedScene" path="res://content/monster/WaveGenerator.tscn" id="11_hpwxo"]
+[ext_resource type="PackedScene" path="res://content/sounds/monster/ambience/BattleAmbience.tscn" id="12_c3jgg"]
+[ext_resource type="PackedScene" path="res://systems/audio/EffectHandler.tscn" id="13_p3yoq"]
+[ext_resource type="PackedScene" path="res://stages/level/PlayerCanvas.tscn" id="14_1y1cu"]
+[ext_resource type="PackedScene" path="res://stages/level/Cheats.tscn" id="15_5daq8"]
+
+[sub_resource type="ShaderMaterial" id="1"]
+resource_local_to_scene = true
+shader = ExtResource("4_5fjdh")
+shader_parameter/blend_left = 1.0
+shader_parameter/blend_right = 0.0
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(1511, 18.5)
+
+[sub_resource type="Curve2D" id="3"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -521, -378, 0, 0, 0, 0, -520, -505, 0, 0, 0, 0, -365, -505)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="4"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 515, -406, 0, 0, 0, 0, 514, -505, 0, 0, 0, 0, 386, -505)
+}
+point_count = 3
+
+[node name="LevelStage" type="Node" groups=["effectL", "lostL"]]
+process_mode = 3
+script = ExtResource("1_bw5d3")
+
+[node name="Viewports" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+script = ExtResource("2_euv5c")
+
+[node name="Top" type="HBoxContainer" parent="Viewports"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Player1" parent="Viewports/Top" instance=ExtResource("3_ga71i")]
+layout_mode = 2
+size_flags_stretch_ratio = 5.0
+mouse_filter = 1
+
+[node name="SubViewportContainer" parent="Viewports/Top/Player1" index="0"]
+material = SubResource("1")
+layout_mode = 1
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Root" type="Node2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport" index="0"]
+
+[node name="Map" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root" instance=ExtResource("5_c5npr")]
+script = ExtResource("6_giqgb")
+
+[node name="Monsters" type="Node2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+z_index = 50
+y_sort_enabled = true
+
+[node name="DomePosition" type="Marker2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+position = Vector2(0, -14)
+
+[node name="KeeperPosition" type="Marker2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+position = Vector2(-22, -35)
+
+[node name="Ground" type="StaticBody2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+collision_layer = 262144
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/Ground"]
+position = Vector2(0, -2.75)
+shape = SubResource("2")
+
+[node name="BlackBorder" type="Node2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+z_index = 1000
+
+[node name="Left" type="ColorRect" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/BlackBorder"]
+offset_left = -1772.0
+offset_top = -539.0
+offset_right = -490.0
+offset_bottom = 45.0
+mouse_filter = 2
+color = Color(0, 0.027451, 0.784314, 1)
+
+[node name="Right" type="ColorRect" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/BlackBorder"]
+offset_left = 490.0
+offset_top = -539.0
+offset_right = 1928.0
+offset_bottom = 43.0
+mouse_filter = 2
+color = Color(0, 0.027451, 0.784314, 1)
+
+[node name="Top" type="ColorRect" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/BlackBorder"]
+offset_left = -1774.0
+offset_top = -1015.0
+offset_right = 1928.0
+offset_bottom = -476.0
+mouse_filter = 2
+color = Color(0, 0.027451, 0.784314, 1)
+
+[node name="VignetteLayer" type="CanvasLayer" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
+
+[node name="Vignette" type="ColorRect" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/VignetteLayer" groups=["lostL"]]
+process_priority = -1
+material = ExtResource("6_xojqa")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(960, 540)
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("7_jdvvv")
+
+[node name="Overlay" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/PlayerCanvas" index="1"]
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SplitGlow" parent="Viewports/Top/Player1" index="1"]
+anchor_right = 0.0
+anchor_bottom = 0.0
+
+[node name="ViewportBorder" parent="Viewports/Top/Player1" index="2"]
+anchor_right = 0.0
+anchor_bottom = 0.0
+
+[node name="Bottom" type="HBoxContainer" parent="Viewports"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Tween" parent="Viewports" instance=ExtResource("8_meckd")]
+
+[node name="ViewportsTracker" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="HBoxContainer" parent="ViewportsTracker"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="PlayerTracker1" parent="ViewportsTracker/Top" instance=ExtResource("9_fbc67")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_stretch_ratio = 5.0
+
+[node name="Bottom" type="HBoxContainer" parent="ViewportsTracker"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="MonsterManager" type="Node2D" parent="." groups=["lostL", "pauseL"]]
+process_mode = 1
+z_index = 40
+script = ExtResource("10_x25ki")
+
+[node name="DiverPaths" type="Node2D" parent="MonsterManager"]
+
+[node name="RetreatLeft" type="Marker2D" parent="MonsterManager/DiverPaths"]
+position = Vector2(-520, -168)
+
+[node name="RetreatRight" type="Marker2D" parent="MonsterManager/DiverPaths"]
+position = Vector2(516, -182)
+
+[node name="StartLeft" type="Path2D" parent="MonsterManager/DiverPaths"]
+curve = SubResource("3")
+
+[node name="StartRight" type="Path2D" parent="MonsterManager/DiverPaths"]
+curve = SubResource("4")
+
+[node name="SpawnTween" parent="MonsterManager" instance=ExtResource("8_meckd")]
+
+[node name="WaveGenerator" parent="MonsterManager" instance=ExtResource("11_hpwxo")]
+
+[node name="BattleAmbience" parent="MonsterManager" instance=ExtResource("12_c3jgg")]
+
+[node name="EffectHandler" parent="." instance=ExtResource("13_p3yoq")]
+
+[node name="ReferenceVisibleArea" type="ReferenceRect" parent="."]
+visible = false
+offset_left = -479.0
+offset_top = -474.0
+offset_right = 480.0
+offset_bottom = 65.0
+editor_only = false
+
+[node name="Tween" parent="." instance=ExtResource("8_meckd")]
+
+[node name="StageTransitionTween" parent="." instance=ExtResource("8_meckd")]
+
+[node name="PlayerCanvas" parent="." instance=ExtResource("14_1y1cu")]
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Cheats" parent="Canvas" instance=ExtResource("15_5daq8")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1010.0
+offset_right = 1010.0
+offset_bottom = 821.0
+grow_horizontal = 2
+
+[editable path="Viewports/Top/Player1"]

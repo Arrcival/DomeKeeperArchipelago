@@ -12,7 +12,7 @@ func _ready():
 
 
 func deserialize(data:Dictionary):
-	.deserialize(data)
+	super.deserialize(data)
 	if currentState == State.OPEN or currentState == State.OPENING:
 		$Sprite.show()
 		$Sprite.play("opening")

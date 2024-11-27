@@ -56,18 +56,17 @@ domeHealthMeter:
   cost: iron=4
   predecessors: [dome1,dome2,dome3,dome4]
   predecessorsAny: true
-  hud: content/hud/healthmeter/HealthMeter.tscn
+  scenes:
+    hud: content/hud/healthmeter/HealthMeter.tscn
 
 dome1health1:
-  limit: [dome1, hostile]
+  limit: [dome1, hostile, domehealth]
   cost: iron=10
   propertyChanges: 
     - dome.maxhealth += 300
     - dome.health += 300
     - dome.healthbar += 1
-  predecessors: [domesandRepair, domeSandRepairStrong]
-  predecessorsAny: true
-
+  predecessors: [domesandrepair]
 dome1health2:
   cost: iron=20
   propertyChanges: 
@@ -77,15 +76,14 @@ dome1health2:
   predecessors: [dome1health1]
 
 dome2Health1:
-  limit: [dome2, hostile]
+  limit: [dome2, hostile, domehealth]
   cost: iron=12
   shadowing: dome1health1
   propertyChanges: 
     - dome.maxhealth += 400
     - dome.health += 400
     - dome.healthbar = 1
-  predecessors: [domesandRepair, domeSandRepairStrong]
-  predecessorsAny: true
+  predecessors: [domesandRepair]
 dome2Health2:
   cost: iron=24
   shadowing: dome1health2
@@ -95,16 +93,33 @@ dome2Health2:
     - dome.healthbar = 2
   predecessors: [dome2Health1]
 
+dome3health1:
+  limit: [dome3, hostile, domehealth]
+  cost: iron=12
+  shadowing: dome1health1
+  propertyChanges: 
+    - dome.maxhealth += 400
+    - dome.health += 400
+    - dome.healthbar = 1
+  predecessors: [domesandRepair]
+dome3health2:
+  cost: iron=28
+  shadowing: dome1health2
+  propertyChanges: 
+    - dome.maxhealth += 400
+    - dome.health += 400
+    - dome.healthbar = 2
+  predecessors: [dome3health1]
+
 dome4health1:
-  limit: [dome4, hostile]
+  limit: [dome4, hostile, domehealth]
   cost: iron=12
   shadowing: dome1health1
   propertyChanges: 
     - dome.maxhealth += 300
     - dome.health += 300
     - dome.healthbar = 1
-  predecessors: [domesandRepair, domeSandRepairStrong]
-  predecessorsAny: true
+  predecessors: [domesandRepair]
 dome4health2:
   cost: iron=28
   shadowing: dome1health2

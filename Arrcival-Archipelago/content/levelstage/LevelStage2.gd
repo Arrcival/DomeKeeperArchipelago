@@ -1,9 +1,11 @@
-extends "res://stages/level/LevelStage.gd"
+extends LevelStage
 
 func _ready():
-	GameWorld.archipelago.client.connect("onDeathFound", self, "makeUserLose")
+	super._ready()
+	GameWorld.archipelago.client.onDeathFound.connect(self.makeUserLose)
 
 func _process(deltaTime: float):
+	super._process(deltaTime)
 	# Process upgrade in frame per frame basis
 	# Unwinds the upgrades retrieved to avoid locks
 	var upgrades: Array = GameWorld.archipelago.checkUpgrades()
@@ -23,19 +25,21 @@ func _process(deltaTime: float):
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
-	Data.changeDomeHealth( - 999999)
+	Data.changeDomeHealth(-999999)
 
 func beforeStart():
-	.beforeStart()
-	# Listen to tiles destroyed if using the "mining everything" option
-	Data.listen(self, "map.tilesdestroyed")
+	super.beforeStart()
 	GameWorld.archipelago.scoutUpgrades()
-	
-func propertyChanged(property:String, oldValue, newValue):
-	.propertyChanged(property, oldValue, newValue)
-	if property == "map.tilesdestroyed":
-		var totalTiles = Data.of("map.totaltiles") + 1
-		var tilesDestroyed = Data.of("map.tilesdestroyed")
-		var tilesLeft = totalTiles - tilesDestroyed
-		
-		GameWorld.archipelago.tilesLeft = tilesLeft
+
+# copy paste but with new TechTreePopup
+func startUpgradesInput(keeper:Keeper):
+	var i = preload("res://stages/level/UpgradesInputProcessor.gd").new()
+	i.deviceId = Keepers.getDeviceId(keeper.playerId)
+	inputDeviceLimit = i.deviceId
+	var techTreePopup = preload("res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTreePopup.tscn").instantiate()
+	techTreePopup.addPrefixMapping(keeper.techId, keeper.playerId)
+	find_child("TechtreeContainer").add_child(techTreePopup)
+	i.popup = techTreePopup
+	i.connect("buyUpgrade", Callable(techTreePopup, "buyUpgrade"))
+	i.connect("onStop", Callable(self, "set").bind("inputDeviceLimit", -1))
+	i.integrate(self)

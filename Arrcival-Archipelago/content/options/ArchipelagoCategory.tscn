@@ -1,108 +1,72 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dkhrmupu5kbbr"]
 
-[ext_resource path="res://gui/fonts/FontLarge.tres" type="DynamicFont" id=1]
-[ext_resource path="res://gui/fonts/FontNormal.tres" type="DynamicFont" id=2]
-[ext_resource path="res://mods-unpacked/Arrcival-Archipelago/content/options/ArchipelagoCategory.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/options/ArchipelagoCategory.gd" id="3"]
 
 [node name="VBoxContainer" type="VBoxContainer"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 1920.0
-margin_bottom = 37.0
+layout_mode = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-margin_left = 766.0
-margin_right = 949.0
-margin_bottom = 37.0
-custom_fonts/font = ExtResource( 1 )
+layout_mode = 2
 text = "Slot name : "
 
 [node name="SlotName" type="LineEdit" parent="HBoxContainer"]
-margin_left = 953.0
-margin_right = 1153.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 200, 0 )
-custom_fonts/font = ExtResource( 2 )
-expand_to_text_length = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 placeholder_text = "slot name"
+expand_to_text_length = true
 caret_blink = true
-caret_blink_speed = 0.5
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
-margin_top = 41.0
-margin_right = 1920.0
-margin_bottom = 78.0
+layout_mode = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="HBoxContainer2"]
-margin_left = 623.0
-margin_right = 893.0
-margin_bottom = 37.0
-custom_fonts/font = ExtResource( 1 )
+layout_mode = 2
 text = "Server address : "
 
 [node name="ServerName" type="LineEdit" parent="HBoxContainer2"]
-margin_left = 897.0
-margin_right = 1297.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 400, 0 )
-custom_fonts/font = ExtResource( 2 )
-expand_to_text_length = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
 placeholder_text = "archipelago.gg"
+expand_to_text_length = true
 caret_blink = true
-caret_blink_speed = 0.5
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="."]
-margin_top = 82.0
-margin_right = 1920.0
-margin_bottom = 119.0
+layout_mode = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="HBoxContainer3"]
-margin_left = 767.0
-margin_right = 949.0
-margin_bottom = 37.0
-custom_fonts/font = ExtResource( 1 )
+layout_mode = 2
 text = "Password : "
 
 [node name="Password" type="LineEdit" parent="HBoxContainer3"]
-margin_left = 953.0
-margin_right = 1153.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 200, 0 )
-custom_fonts/font = ExtResource( 2 )
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 expand_to_text_length = true
 caret_blink = true
-caret_blink_speed = 0.5
 
 [node name="Version" type="Label" parent="."]
-margin_top = 123.0
-margin_right = 1920.0
-margin_bottom = 137.0
+layout_mode = 2
 text = "v0.0.0"
-align = 1
 
 [node name="ExtraInfos" type="Label" parent="."]
-margin_top = 141.0
-margin_right = 1920.0
-margin_bottom = 155.0
-align = 1
+layout_mode = 2
 
 [node name="Recommendations" type="Label" parent="."]
-margin_top = 159.0
-margin_right = 1920.0
-margin_bottom = 190.0
+layout_mode = 2
 text = "It is highly recommended to reboot the game if you played on a multiworld
 and you're switching to a different one."
-align = 1
 
 [node name="Credits" type="Label" parent="."]
-margin_top = 194.0
-margin_right = 1920.0
-margin_bottom = 208.0
+layout_mode = 2
 text = "Sound effects by NewSoupVi (@newsoupvi)"
-align = 1
+
+[connection signal="focus_entered" from="HBoxContainer/SlotName" to="." method="_on_slot_name_focus_entered"]
+[connection signal="focus_exited" from="HBoxContainer/SlotName" to="." method="_on_slot_name_focus_exited"]

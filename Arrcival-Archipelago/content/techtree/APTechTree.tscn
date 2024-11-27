@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://bq0ih7dysnf61"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTree.gd" id="1_l1jka"]
+[ext_resource type="Theme" path="res://gui/theme.tres" id="2"]
+[ext_resource type="FontVariation" path="res://gui/fonts/FontSmall.tres" id="3"]
+[ext_resource type="PackedScene" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="4"]
+
+[sub_resource type="Curve2D" id="1"]
+
+[node name="TechTree" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_l1jka")
+
+[node name="Tracks" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+
+[node name="Control" type="Control" parent="."]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Explanation" type="PanelContainer" parent="Control"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 35.0
+mouse_filter = 2
+
+[node name="ExplanationLabel" type="RichTextLabel" parent="Control/Explanation"]
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2")
+theme_type_variation = &"FontSmallType"
+theme_override_fonts/normal_font = ExtResource("3")
+scroll_active = false
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("1")
+
+[node name="Tween" parent="." instance=ExtResource("4")]
