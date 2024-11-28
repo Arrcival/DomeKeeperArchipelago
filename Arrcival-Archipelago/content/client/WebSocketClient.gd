@@ -6,11 +6,18 @@ signal connection_closed(message: String)
 signal data_received(packet: PackedByteArray)
 signal server_close_request
 
-var socket = WebSocketPeer.new()
+var socket: WebSocketPeer = WebSocketPeer.new()
 
 var should_process = false
 
 var is_connected = false
+
+func _init():
+	createNewSocket()
+
+func createNewSocket():
+	socket = WebSocketPeer.new()
+	socket.inbound_buffer_size = 65536 * 128
 
 func connect_to_url(url: String) -> Error:
 	should_process = true
@@ -44,7 +51,7 @@ func poll():
 
 func close():
 	socket.close()
-	socket = WebSocketPeer.new()
+	createNewSocket()
 
 func send_text(text: String):
 	var error : Error= socket.send_text(text)
