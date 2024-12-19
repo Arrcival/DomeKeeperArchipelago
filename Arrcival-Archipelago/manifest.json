@@ -7,9 +7,11 @@
 				"Arrcival"
 			],
 			"compatible_game_version": [
-				"4.2.0"
+				"4.2.1"
 			],
 			"compatible_mod_loader_version": [
+				"7.0.0",
+				"6.2.0",
 				"3.0.0"
 			],
 			"config_schema": {
@@ -25,6 +27,6 @@
 	},
 	"name": "Archipelago",
 	"namespace": "Arrcival",
-	"version_number": "1.0.0",
+	"version_number": "1.0.2",
 	"website_url": "https://github.com/Arrcival/DomeKeeperArchipelago"
 }
