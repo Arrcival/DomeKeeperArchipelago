@@ -2,7 +2,7 @@ class_name WebSocketClient extends Node
 
 signal connected
 signal disconnected_without_connection
-signal connection_closed(message: String)
+signal connection_closed(shouldRetry: bool, message: String)
 signal data_received(packet: PackedByteArray)
 signal server_close_request
 
@@ -46,7 +46,9 @@ func poll():
 		var code = socket.get_close_code()
 		var reason = socket.get_close_reason()
 		if code == -1:
-			connection_closed.emit("Closure wasn't clear, code %d, reason %s. Clean: %s" % [code, reason])
+			connection_closed.emit(false, "Closure wasn't clear, code %d, reason %s. Clean: %s" % [code, reason])
+		else:
+			connection_closed.emit(true, "Connection closed, code %d" % [code])
 		should_process = false
 
 func close():

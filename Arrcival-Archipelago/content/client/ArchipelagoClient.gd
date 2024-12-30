@@ -80,7 +80,12 @@ func _reset_state():
 	_authenticated = false
 	_try_wss = false
 
-func _closed():
+func _closed(shouldRetry: bool, message: String):
+	logInformations.emit(message)
+	if not shouldRetry:
+		_try_wss = false
+		return
+	
 	# retry wss
 	if _try_wss:
 		print("Retrying with wss")

@@ -22,6 +22,18 @@ func _process(deltaTime: float):
 	if GameWorld.archipelago.cobaltGiven < GameWorld.archipelago.cobaltRetrieved:
 		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrieved - GameWorld.archipelago.cobaltGiven)
 		GameWorld.archipelago.cobaltGiven = GameWorld.archipelago.cobaltRetrieved
+	
+	if GameWorld.archipelago.cobaltGivenGA < GameWorld.archipelago.cobaltRetrievedGA:
+		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrievedGA - GameWorld.archipelago.cobaltGivenGA)
+		GameWorld.archipelago.cobaltGivenGA = GameWorld.archipelago.cobaltRetrievedGA
+	
+	if GameWorld.archipelago.waterGivenGA < GameWorld.archipelago.waterRetrievedGA:
+		Data.changeByInt("inventory.water", GameWorld.archipelago.waterRetrievedGA - GameWorld.archipelago.waterGivenGA)
+		GameWorld.archipelago.waterGivenGA = GameWorld.archipelago.waterRetrievedGA
+	
+	if GameWorld.archipelago.ironGivenGA < GameWorld.archipelago.ironRetrievedGA:
+		Data.changeByInt("inventory.iron", GameWorld.archipelago.ironRetrievedGA - GameWorld.archipelago.ironGivenGA)
+		GameWorld.archipelago.ironGivenGA = GameWorld.archipelago.ironRetrievedGA
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
@@ -29,7 +41,32 @@ func makeUserLose():
 
 func beforeStart():
 	super.beforeStart()
-	GameWorld.archipelago.scoutUpgrades()
+	if GameWorld.archipelago.isRHMode():
+		GameWorld.archipelago.scoutUpgrades()
+
+# copy paste but with new GadgetOptions
+func startGadgetChoiceInput(type:String):
+	var i = preload("res://stages/level/GadgetChoiceInputProcessor.gd").new()
+	i.popup = preload("res://mods-unpacked/Arrcival-Archipelago/content/gadgetSelect/APGadgetChoicePopup.tscn").instantiate()
+	showPopup(i.popup)
+	
+	match type:
+		CONST.GADGET:
+			i.popup.loadGadgets()
+		CONST.POWERCORE:
+			i.popup.loadSupplements()
+		_:
+			Logger.error("unknown gadget type", "LevelStage.startGadgetChoiceInput", {"type": type})
+			i.popup.queue_free()
+			return
+	
+	i.connect("onStop", unpause)
+	i.connect("onStop", set.bind("inputDeviceLimit", -1))
+	i.connect("deviceLocked", set)
+	i.connect("dropsSelected", addDropsToDome)
+	i.connect("gadgetSelected", GameWorld.addUpgrade)
+	i.integrate(self)
+	pause()
 
 # copy paste but with new TechTreePopup
 func startUpgradesInput(keeper:Keeper):

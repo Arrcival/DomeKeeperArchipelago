@@ -7,6 +7,11 @@ var isArchipelagoLocked: bool = false
 var crossIcon: TextureRect
 
 func build(id:String, tier: = - 1):
+	
+	if not GameWorld.archipelago.isRHMode():
+		super.build(id, tier)
+		return
+	
 	crossIcon = TextureRect.new()
 	crossIcon.texture = preload("res://mods-unpacked/Arrcival-Archipelago/content/icons/cross/archipelagocross.png")
 	crossIcon.position = Vector2.ONE * 27

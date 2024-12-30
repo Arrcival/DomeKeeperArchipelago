@@ -3,8 +3,15 @@ class_name ArchipelagoData
 # To compute back on new game
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
-var itemsIdFound: Array = []
-var itemsFoundToProcess: Array = []
+var itemsIdFound: Array[int] = []
+var itemsFoundToProcess: Array[int] = []
+
+var cobaltRetrievedGA: int = 0
+var cobaltGivenGA: int = 0
+var waterRetrievedGA: int = 0
+var waterGivenGA: int = 0
+var ironRetrievedGA: int = 0
+var ironGivenGA: int = 0
 
 var switchesFoundIndexes: Array[int] = [] 
 
@@ -32,6 +39,9 @@ var locationIds: Dictionary = {
 }
 
 var locationIdCave: int = 4243020
+const LOCATION_FIRST_ASSIGNMENT_ID: int = 4243030
+const LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID: int = 4243050
+const ITEM_FIRST_ASSIGNMENT_ID := 4242200
 
 var locationScouts: Dictionary = {
 	4243001: "",
@@ -47,6 +57,10 @@ var locationScouts: Dictionary = {
 	4243011: "",
 	4243012: "",
 }
+
+# Async <ga_id, bool>
+var assignmentsUnlocked : Dictionary
+var assignmentsChecked : Dictionary
 
 const FIRST_SWITCH_ID := 4243101
 const LAYER_OFFSET := 30
@@ -111,9 +125,7 @@ var slotName: String = ""
 var serverName: String = "archipelago.gg"
 var password: String = ""
 
-signal signal_item
-
-# slot data
+#region slot data
 var seedNumber: int = 0
 var keeperSlot: int
 var domeSlot: int
@@ -124,24 +136,29 @@ var drillUpgrades: int
 var kineticSphereUpgrades: int
 var sphereLifetime: int
 var dronesAmount: int
-var coloredLayersProgression: bool
+var progressionType: int
 var switchesPerLayers: Array = []
 var miningEverything: bool
+var startingGuildAssignment: int
+var challengeMode: bool
 var death_link = false
+#endregion
 
 var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
-signal logInformations(text)
+signal logInformations(text: String)
+signal ga_unlocked(id: int)
 
 func connectClient():
+	reset()
+	resetClient()
 	client.slot_data_retrieved.connect(self.retrieveSlotData)
 	client.location_scout_retrieved.connect(self.retrieveScout)
+	client.packetConnected.connect(self.connected)
 	client.connectToServer(serverName, slotName, password)
-	#client.all_scout_cached.connect(self.retrieveScout)
-	#client.disconnected.connect(self.resetClient)
 
 func resetClient():
 	upgradesBought.clear()
@@ -169,25 +186,30 @@ func retrieveSlotData(slot_data):
 		sphereLifetime = slot_data["sphereLifetime"]
 	if slot_data.has("dronesAmount"):
 		dronesAmount = slot_data["dronesAmount"]
-	if slot_data.has("coloredLayersProgression"):
-		coloredLayersProgression = bool(slot_data["coloredLayersProgression"])
+	if slot_data.has("progressionType"):
+		progressionType = slot_data["progressionType"]
 	if slot_data.has("miningEverything"):
 		miningEverything = bool(slot_data["miningEverything"])
+	if slot_data.has("startingGA"):
+		startingGuildAssignment = slot_data["startingGA"]
+		_received_unlock(ITEM_FIRST_ASSIGNMENT_ID + startingGuildAssignment)
+	if slot_data.has("challengeMode"):
+		challengeMode = bool(slot_data["challengeMode"])
 
-func submitSwitch(switchPos: Vector2i):
+func submitSwitch(switchPos: Vector2i) -> void:
 	for i in range(len(switchesLocation)):
 		var layerSwitches: Array[Vector2i]
 		layerSwitches.assign(switchesLocation[i])
 		var index = layerSwitches.find(switchPos)
 		if index != -1:
-			var switchId = FIRST_SWITCH_ID + (i * LAYER_OFFSET) + index
+			var switchId: int = FIRST_SWITCH_ID + (i * LAYER_OFFSET) + index
 			switchesFoundIndexes.append(switchId)
-			client.sendLocation(switchId)
+			sendCheck(switchId)
 
-func submitUpgrade(upgradeName):
+func submitUpgrade(upgradeName) -> void:
 	var locationId = locationIds.get(upgradeName)
 	if locationId != null:
-		client.sendLocation(locationId)
+		sendCheck(locationId)
 		
 func sendCheck(locationId: int):
 	client.sendLocation(locationId)
@@ -195,9 +217,20 @@ func sendCheck(locationId: int):
 func reset():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
+	cobaltRetrievedGA = 0
+	cobaltGivenGA = 0
+	waterRetrievedGA = 0
+	waterGivenGA = 0
+	ironRetrievedGA = 0
+	ironGivenGA = 0
+	
 	coloredLayersUnlocked = 0
 	locationIdCave = 4243020
+	
+	assignmentsUnlocked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
+	assignmentsChecked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
 
+#region generate upgrades
 func generateUpgrades():
 	reset()
 	itemsFoundToProcess = itemsIdFound.duplicate()
@@ -276,18 +309,35 @@ func getDroneyardDrones() -> Array[String]:
 	for i in range(kineticSphereUpgrades):
 		rtr.append(CONSTARRC.DRONEYARD_DRONES_NAME)
 	return rtr
-	
+#endregion
+
 func item_found(itemId: int):
 	itemsFoundToProcess.append(itemId)
+	processUnlocks()
 
 func processItem(itemId: int) -> String:
 	var itemName: String = ""
-	
-	if itemId == 4242090:
-		cobaltRetrieved += 1
+
+	#region GA items
+	if itemId == 4242220:
+		ironRetrievedGA += 1
+		return ""
+	if itemId == 4242221:
+		waterRetrievedGA += 1
+		return ""
+	if itemId == 4242222:
+		cobaltRetrievedGA += 1
 		return ""
 
+	if itemId >= 4242200 and itemId <= 4242215:
+		_received_unlock(itemId)
+		return ""
+	#endregion
+
 	match itemId:
+		4242090:
+			cobaltRetrieved += 1
+			return ""
 		4242000:
 			itemName = _getItemNameAndRemove(upgrades_keeper1_drill)
 		4242001:
@@ -372,6 +422,31 @@ func processItem(itemId: int) -> String:
 	GameWorld.addUpgrade(itemName)
 	return itemName
 
+func connected() -> void:
+	if isRHMode():
+		return
+	for item in client._checked_locations:
+		var assignmentId = item - LOCATION_FIRST_ASSIGNMENT_ID
+		if assignmentId >= 0 and assignmentId <= 35:
+			if not challengeMode and assignmentId <= 15:
+				var key = assignmentsChecked.keys()[assignmentId]
+				assignmentsChecked[key] = true
+			elif challengeMode and assignmentId >= 20 and assignmentId <= 35:
+				var newId = assignmentId - 20
+				var key = assignmentsChecked.keys()[newId]
+				assignmentsChecked[key] = true
+				
+
+
+func _received_unlock(itemId: int) -> void:
+	var id_unlock = itemId - ITEM_FIRST_ASSIGNMENT_ID
+	var key = assignmentsUnlocked.keys()[id_unlock]
+	assignmentsUnlocked[key] = true
+	ga_unlocked.emit(id_unlock)
+
+func get_starting_assignment_name() -> String:
+	return assignmentsUnlocked.keys()[startingGuildAssignment]
+
 func _updateColoredLayers() -> void:
 	coloredLayersUnlocked += 1
 	if mapSize == 0 and coloredLayersUnlocked == 2:
@@ -393,6 +468,14 @@ func _getItemNameAndRemove(array: Array) -> String:
 		array.remove_at(0)
 		return returnedValue
 	return ""
+
+func processUnlocks() -> void:
+	var itemsToProcess: Array[int] = itemsFoundToProcess.duplicate()
+	for i in len(itemsToProcess):
+		var item = itemsToProcess[i]
+		if item >= 4242200 and item <= 4242215:
+			itemsFoundToProcess.erase(item)
+			processItem(item)
 
 func checkUpgrades() -> Array:
 	var rtr: Array = []
@@ -424,12 +507,15 @@ func pickRandom(arrayOfArray: Array) -> Array[String]:
 	return assignedArray
 
 func hasLayerUnlocked(layerId: int) -> bool:
-	if not coloredLayersProgression:
+	if progressionType != 1:
 		return true
 
 	if everyLayersUnlockFound:
 		return true
 	return layerId <= coloredLayersUnlocked
+
+func isRHMode() -> bool:
+	return progressionType == 0 or progressionType == 1
 
 func hasLocationChecked(locationId: int, upgradeName: String) -> bool:
 	var hasUpgrade: bool = upgradesBought.has(upgradeName)
@@ -444,8 +530,38 @@ func retrieveScout(networkItems: Array) -> void:
 func scoutUpgrades():
 	client.sendScout(locationScouts.keys(), 0)
 
+func isGAUnlocked(assignment_name: String) -> bool:
+	if assignmentsUnlocked.has(assignment_name):
+		return assignmentsUnlocked[assignment_name]
+	return false
+
+func isGADone(assignment_name: String) -> bool:
+	if assignmentsChecked.has(assignment_name):
+		return assignmentsChecked[assignment_name]
+	return false
+	
 func getLocationCaveId():
 	var rtr: int = locationIdCave
 	locationIdCave += 1
 	return rtr
+	
+func is_async_won():
+	for value in assignmentsChecked.values():
+		if value == false:
+			return false
+	return true
+	
+func ga_completion(assignment_name: String, isChallengeMode: bool) -> void:
+	var assignmentId: int = assignmentsChecked.keys().find(assignment_name)
+	if assignmentId != -1:
+		var locationId: int = LOCATION_FIRST_ASSIGNMENT_ID + assignmentId
+		sendCheck(locationId)
+		if isChallengeMode:
+			var locationChallengeId: int = LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID + assignmentId
+			sendCheck(locationChallengeId)
+		if not challengeMode:
+			assignmentsChecked[assignment_name] = true
+		if challengeMode and isChallengeMode:
+			assignmentsChecked[assignment_name] = true
+		
 

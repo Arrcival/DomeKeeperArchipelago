@@ -11,10 +11,13 @@ func _init(modLoader = ModLoader):
 	var ext_dir = dir + EXTENSIONS_DIR
 	
 	# Add extensions
+	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
+	loadExtension(ext_dir, "RunFinishedPopup.gd")
+	loadExtension(ext_dir, "SaveGame.gd")
 	loadExtension(ext_dir, "StageManager.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")

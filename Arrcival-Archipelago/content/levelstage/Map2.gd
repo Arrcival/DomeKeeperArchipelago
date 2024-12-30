@@ -80,6 +80,9 @@ func getBiomeValueByCoord(_coord:Vector2):
 func generateCaves(minDistanceToCenter: = 10):
 	super.generateCaves()
 
+	if not GameWorld.archipelago.isRHMode():
+		return
+
 	addArchipelagoCave(0)
 	addArchipelagoCave(1)
 	addArchipelagoCave(2)

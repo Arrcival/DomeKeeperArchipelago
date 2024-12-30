@@ -1,6 +1,6 @@
 {
 	"dependencies": [],
-	"description": "Adds an Archipelago integration, this mod is meant to play with an Archipelago world.",
+	"description": "Adds an Archipelago integration. This mod is meant to play with an Archipelago world and not as a standalone mod.",
 	"extra": {
 		"godot": {
 			"authors": [
@@ -27,6 +27,6 @@
 	},
 	"name": "Archipelago",
 	"namespace": "Arrcival",
-	"version_number": "1.0.2",
+	"version_number": "1.1.0",
 	"website_url": "https://github.com/Arrcival/DomeKeeperArchipelago"
 }

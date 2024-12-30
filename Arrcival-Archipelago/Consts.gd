@@ -1,6 +1,6 @@
 extends RefCounted
 
-const ADDITIONNAL_INFOS: String = "Please use the v0.7.1 apworld for bug fixes !"
+const ADDITIONNAL_INFOS: String = "Please use the latest apworld in the AP discord !"
 
 const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options_v2.json"
 
@@ -154,6 +154,27 @@ static func isUpgradePurchasable(upgradeName: String) -> bool:
 	or upgradeName.begins_with("player1")):
 		return false
 	return true
+
+const ASSIGNMENTS_DEFAULT_EMPTY: Dictionary = {
+	"showdown": false,
+	"ironcontribution": false,
+	"inversegravity": false,
+	"maze": false,
+	"projectilehell": false,
+	"denseiron": false,
+	"bigmapsparseresources": false,
+	"weapondefect": false,
+	"heavyhitters": false,
+	"superhardrockwithholes": false,
+	"weakcarry": false,
+	"weakwalls": false,
+	"monstermasses": false,
+	"rareiron": false,
+	"weakmining": false,
+	"cobaltcontribution": false
+}
+
+
 
 # Recupère l'index du prochain array à récupérer la valeur, en se basant sur le nombre d'elements total dans tous les arrays
 static func make_array_choice(arrays: Array, total_elements: int, rng: RandomNumberGenerator) -> int:

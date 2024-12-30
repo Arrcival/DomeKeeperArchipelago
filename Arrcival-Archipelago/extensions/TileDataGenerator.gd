@@ -7,6 +7,9 @@ const FIRSTLAYERID = 0
 func generate_relics():
 	super.generate_relics()
 
+	if not GameWorld.archipelago.isRHMode():
+		return
+
 	var firstBiomeCells: Array = $MapData.get_biome_cells_by_index(FIRSTLAYERID)
 	if firstBiomeCells.size() > 0:
 		var biomeCellsShuffled = Data.seedShuffle(firstBiomeCells, gen_seed)

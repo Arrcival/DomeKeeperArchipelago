@@ -4,6 +4,8 @@ const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 var json = JSON.new()
 
+var loadoutStage: Node
+
 # godot v3 port
 func find_node(value: String) -> Node:
 	var children: Array[Node] = find_children(value)
@@ -31,7 +33,6 @@ func loadDictionary(path: String) -> Dictionary:
 	var theDict = json.parse_string(file.get_as_text())
 	file.close()
 	return theDict
-	
 
 func setArchipelagoOptions(options: Dictionary):
 	if options.has("slotName"):
@@ -59,11 +60,11 @@ func _startNewStage():
 	
 	
 	var landingSequence: Node = get_node("CurrentStage/LandingSequence")
-	if landingSequence:
+	if landingSequence and GameWorld.archipelago.isRHMode():
 		Level.levelSeed = GameWorld.archipelago.seedNumber
 		return
 	
-	var loadoutStage: Node = get_node("CurrentStage/MultiplayerLoadoutStage")
+	loadoutStage = get_node("CurrentStage/MultiplayerLoadoutStage")
 	if not loadoutStage:
 		return
 	
@@ -71,44 +72,70 @@ func _startNewStage():
 	loadoutStage.keeperSelected(
 		"keeper" + str(GameWorld.archipelago.keeperSlot + 1) + "-skin0",
 		moveableDevice)
-		
 	
+	if not GameWorld.archipelago.isRHMode():
+		GameWorld.archipelago.processUnlocks()
+	GameWorld.archipelago.ga_unlocked.connect(activate_assignment)
+	
+	fillGameModes()
 	loadoutStage.domeSelected(Data.loadoutDomes[GameWorld.archipelago.domeSlot])
 	loadoutStage.primaryGadgetSelected(Data.loadoutGadgets[GameWorld.archipelago.domeGadgetSlot])
 	loadoutStage.difficultySelected([-2, -1, 0, 2][GameWorld.archipelago.difficulty])
 	loadoutStage.mapSizeSelected(getMapSizeName(GameWorld.archipelago.mapSize))
-	desactivateKeeper(loadoutStage)
-	desactivateDomes(loadoutStage)
-	desactivateGadgets(loadoutStage)
-	desactivateMapsizes(loadoutStage)
-	desactivateDifficulties(loadoutStage)
-	desactivateModifiers(loadoutStage)
-	fillGameModes(loadoutStage)
+	manageAssignments()
+	desactivateKeeper()
+	desactivateDomes()
+	desactivateGadgets()
+	desactivateMapsizes()
+	desactivateDifficulties()
+	desactivateModifiers()
 
-func desactivateKeeper(loadoutStage: Node):
+func activate_assignment(assignment_id: int) -> void:
+	if loadoutStage != null:
+		var assignments = loadoutStage.find_child("AssignmentsContainer")
+		var assignment: Node = assignments.get_children()[assignment_id]
+		assignment.set_enabled(true)
+
+func manageAssignments():
+	if GameWorld.archipelago.isRHMode():
+		return
+	loadoutStage.assignmentSelected(GameWorld.archipelago.get_starting_assignment_name())
+	var assignments = loadoutStage.find_child("AssignmentsContainer")
+	for assignment in assignments.get_children():
+		assignment.set_enabled(GameWorld.archipelago.isGAUnlocked(assignment.id))
+		if GameWorld.archipelago.isGADone(assignment.id):
+			assignment.makeVisibleAP()
+
+func desactivateKeeper():
+	if not GameWorld.archipelago.isRHMode():
+		return
 	var keeperContainers = loadoutStage.find_child("KeeperContainers")
 	var i = 1 if GameWorld.archipelago.keeperSlot == 0 else 0
 	var skinToRemoves = keeperContainers.get_children()[i]
 	var gridCointainer = skinToRemoves.get_children()[2]
 	findAndDesactivateChildrenLoadoutChoices(gridCointainer)
 
-func desactivateDomes(loadoutStage: Node):
+func desactivateDomes():
+	if not GameWorld.archipelago.isRHMode():
+		return
 	var container = loadoutStage.find_child("DomeContainers")
 	findAndDesactivateChildrenLoadoutChoices(container)
 
-func desactivateGadgets(loadoutStage: Node):
+func desactivateGadgets():
+	if not GameWorld.archipelago.isRHMode():
+		return
 	var container = loadoutStage.find_child("PrimaryGadgetContainers")
 	findAndDesactivateChildrenLoadoutChoices(container)
 
-func desactivateMapsizes(loadoutStage: Node):
+func desactivateMapsizes():
 	var container = loadoutStage.find_child("MapsizeContainers")
 	findAndDesactivateChildrenLoadoutChoices(container)
 
-func desactivateDifficulties(loadoutStage: Node):
+func desactivateDifficulties():
 	var container = loadoutStage.find_child("DifficultyContainers")
 	findAndDesactivateChildrenLoadoutChoices(container)
-		
-func desactivateModifiers(loadoutStage: Node):
+
+func desactivateModifiers():
 	var container = loadoutStage.find_child("Modifiers")
 	findAndDesactivateChildrenLoadoutChoices(container)
 
@@ -122,13 +149,17 @@ func desactivateLoadoutChoices(loadoutChoices: Array[Node]):
 			child.set_enabled(false)
 			child.selected = false
 
-func fillGameModes(loadoutStage: Node):
+func fillGameModes():
 	var node: VBoxContainer = loadoutStage.find_child("GameModeContainers")
-	if node.get_child_count() > 2:
-		node.get_child(2).visible = false
-	if node.get_child_count() > 1:
-		node.get_child(1).visible = false
-		
+	node.get_child(0).set_enabled(GameWorld.archipelago.isRHMode())
+	node.get_child(1).set_enabled(!GameWorld.archipelago.isRHMode())
+	node.get_child(2).set_enabled(false)
+	
+	if GameWorld.archipelago.isRHMode():
+		node.get_child(0).useHit(null)
+	else:
+		node.get_child(1).useHit(null)
+
 func getMapSizeName(id: int) -> String:
 	match id:
 		0:

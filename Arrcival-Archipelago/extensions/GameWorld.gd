@@ -10,23 +10,7 @@ func init():
 	super.init()
 	# prevent randomizer to be on something the user hasn't unlocked
 	# bruteforce unlock everything :/
-	GameWorld.unlockElement("keeper1")
-	GameWorld.unlockElement("keeper2")
-	GameWorld.unlockElement("dome1")
-	GameWorld.unlockElement("dome2")
-	GameWorld.unlockElement("dome3")
-	GameWorld.unlockElement("dome4")
-	GameWorld.unlockElement("repellent")
-	GameWorld.unlockElement("repellent-battle2")
-	GameWorld.unlockElement("repellent-battle3")
-	GameWorld.unlockElement("orchard")
-	GameWorld.unlockElement("orchard-battle2")
-	GameWorld.unlockElement("shield")
-	GameWorld.unlockElement("shield-battle2")
-	GameWorld.unlockElement("shield-battle3")
-	GameWorld.unlockElement("droneyard")
-	GameWorld.unlockElement("droneyard-battle2")
-	GameWorld.unlockElement("droneyard-battle3")
+	unlockEverything()
 	archipelago.client.item_received.connect(archipelago.item_found)
 
 func handleGameLost(backendData:Dictionary = {}):
@@ -36,8 +20,12 @@ func handleGameLost(backendData:Dictionary = {}):
 	
 func levelInitialized():
 	super.levelInitialized()
-	archipelago.generateUpgrades()
+	if GameWorld.archipelago.isRHMode():
+		archipelago.generateUpgrades()
 	archipelago.cobaltGiven = 0
+	archipelago.cobaltGivenGA = 0
+	archipelago.waterGivenGA = 0
+	archipelago.ironGivenGA = 0
 
 func prepareCleanData():
 	super.prepareCleanData()
@@ -45,6 +33,9 @@ func prepareCleanData():
 
 
 func buyUpgrade(id:String):
+	if not GameWorld.archipelago.isRHMode():
+		return super.buyUpgrade(id)
+	
 	# preventing any crash from empty upgrades
 	if id == "":
 		return
