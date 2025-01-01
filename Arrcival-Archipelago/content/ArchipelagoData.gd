@@ -141,6 +141,7 @@ var switchesPerLayers: Array = []
 var miningEverything: bool
 var startingGuildAssignment: int
 var challengeMode: bool
+var assignmentsAmount: int
 var death_link = false
 #endregion
 
@@ -195,6 +196,10 @@ func retrieveSlotData(slot_data):
 		_received_unlock(ITEM_FIRST_ASSIGNMENT_ID + startingGuildAssignment)
 	if slot_data.has("challengeMode"):
 		challengeMode = bool(slot_data["challengeMode"])
+	if slot_data.has("assignmentsAmount"):
+		assignmentsAmount = slot_data["assignmentsAmount"] 
+	else:
+		assignmentsAmount = 16 #backwards compatibility
 
 func submitSwitch(switchPos: Vector2i) -> void:
 	for i in range(len(switchesLocation)):
@@ -210,7 +215,7 @@ func submitUpgrade(upgradeName) -> void:
 	var locationId = locationIds.get(upgradeName)
 	if locationId != null:
 		sendCheck(locationId)
-		
+
 func sendCheck(locationId: int):
 	client.sendLocation(locationId)
 
@@ -546,11 +551,13 @@ func getLocationCaveId():
 	return rtr
 	
 func is_async_won():
+	var wonAssignments = 0
 	for value in assignmentsChecked.values():
-		if value == false:
-			return false
-	return true
-	
+		if value == true:
+			wonAssignments += 1
+
+	return wonAssignments >= assignmentsAmount
+
 func ga_completion(assignment_name: String, isChallengeMode: bool) -> void:
 	var assignmentId: int = assignmentsChecked.keys().find(assignment_name)
 	if assignmentId != -1:
