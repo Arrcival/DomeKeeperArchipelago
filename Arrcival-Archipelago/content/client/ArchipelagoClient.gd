@@ -56,16 +56,17 @@ signal location_scout_retrieved(scout_data)
 
 func _init():
 	ProjectSettings.set_setting("network/limits/websocket_client/max_in_buffer_kb", 8192)
+	_newClient()
+
+func _newClient():
 	_client = load("res://mods-unpacked/Arrcival-Archipelago/content/client/WebSocketClient.gd").new()
 	print("Instantiated APClient")
-	GameWorld.archipelago.client = self
-
-func _ready():
 	_client.connection_closed.connect(self._closed)
 	_client.data_received.connect(self._on_data)
 	_client.disconnected_without_connection.connect(self._closed)
 	_client.connected.connect(self._connected)
-	print("AP client ready")
+	GameWorld.archipelago.client = self
+	print("Ready client")
 
 func is_client_connected() -> bool:
 	return _client.is_connected
@@ -80,25 +81,24 @@ func _reset_state():
 	_authenticated = false
 	_try_wss = false
 
-func _closed(shouldRetry: bool, message: String):
-	logInformations.emit(message)
-	if not shouldRetry:
-		_try_wss = false
+func _closed(should_retry: bool, message: String):
+	if message != "":
+		logInformations.emit(message)
+
+	if not should_retry:
+		client_disconnected.emit()
+		could_not_connect.emit("Disconnected/not connected from AP")
 		return
 	
 	# retry wss
-	if _try_wss:
-		print("Retrying with wss")
-		connectToServer(_ap_server, _ap_user, _ap_pass)
-	else:
-		client_disconnected.emit()
-		could_not_connect.emit("Disconnected/not connected from AP")
+	print("Retrying with wss")
+	connectToServer(_ap_server, _ap_user, _ap_pass)
 
 func _connected():
 	print("Connected!")
 	client_connected.emit("Connected !")
 
-func _on_data(packet: PackedByteArray):	
+func _on_data(packet: PackedByteArray):
 	print("Got data from server: " + packet.get_string_from_utf8())
 
 	var json = JSON.new()
@@ -281,6 +281,7 @@ func disconnect_from_ap():
 	_reset_state()
 
 func connectToServer(ap_server, ap_name, ap_pass):
+	_newClient()
 	_initiated_disconnect = false
 	_ap_server = ap_server
 	_ap_user = ap_name
