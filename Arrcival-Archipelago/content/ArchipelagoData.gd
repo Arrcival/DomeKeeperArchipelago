@@ -152,16 +152,33 @@ var died_to_death_link: bool = false
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
+
+enum CONNECTION_STATUS { DISCONNECTED = 0, IN_PROGRESS = 1, CONNECTED = 2 }
+
+var connection: CONNECTION_STATUS = CONNECTION_STATUS.DISCONNECTED
+
 signal logInformations(text: String)
 signal ga_unlocked(id: int)
+signal slot_data_have_been_retrieved
+signal client_disconnected
 
 func connectClient():
 	reset()
 	resetClient()
 	client.slot_data_retrieved.connect(self.retrieveSlotData)
 	client.location_scout_retrieved.connect(self.retrieveScout)
+	client.could_not_connect.connect(self.connection_failed)
 	client.packetConnected.connect(self.connected)
 	client.connectToServer(serverName, slotName, password)
+	connection = CONNECTION_STATUS.IN_PROGRESS
+
+func disconnect_client():
+	connection = CONNECTION_STATUS.DISCONNECTED
+	client.disconnect_from_ap()
+
+func connection_failed():
+	client_disconnected.emit()
+	connection = CONNECTION_STATUS.DISCONNECTED
 
 func resetClient():
 	upgradesBought.clear()
@@ -202,6 +219,8 @@ func retrieveSlotData(slot_data):
 		assignmentsAmount = slot_data["assignmentsAmount"] 
 	else:
 		assignmentsAmount = 16 #backwards compatibility
+	slot_data_have_been_retrieved.emit()
+	connection = CONNECTION_STATUS.CONNECTED
 
 func submitSwitch(switchPos: Vector2i) -> void:
 	for i in range(len(switchesLocation)):

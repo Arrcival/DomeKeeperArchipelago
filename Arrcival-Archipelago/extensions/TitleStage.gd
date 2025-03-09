@@ -7,6 +7,7 @@ var newGameButton: Button
 
 var shouldDisconnect = false
 
+
 func build(data: Array):
 	newGameButton = find_child("NewGameButton")
 	newGameButton.disabled = true
@@ -29,8 +30,8 @@ func build(data: Array):
 	var prestigeButton = find_child("ToggleBoardButton")
 	connectButton.set_focus_neighbor(Side.SIDE_TOP, NodePath(prestigeButton.get_path()))
 	
-	GameWorld.archipelago.client.slot_data_have_been_retrieved.connect(self.onArchipelagoConnected)
-	GameWorld.archipelago.client.could_not_connect.connect(self.onArchipelagoFailure)
+	GameWorld.archipelago.slot_data_have_been_retrieved.connect(self.onArchipelagoConnected)
+	GameWorld.archipelago.client_disconnected.connect(self.onArchipelagoFailure)
 
 	# so hovering prestige from connect goes back to connect when pressing down
 	if GameWorld.isUnlocked(CONST.MODE_PRESTIGE):
@@ -89,20 +90,17 @@ func add_child_first(node: Node, child: Node):
 
 func connect_archipelago():
 	connectButton.text = "Connecting..."
-	if !shouldDisconnect:
+	if GameWorld.archipelago.connection == GameWorld.archipelago.CONNECTION_STATUS.DISCONNECTED:
 		GameWorld.archipelago.connectClient()
 	else:
-		GameWorld.archipelago.client.disconnect_from_ap()
+		GameWorld.archipelago.disconnect_client()
 		connectButton.text = "Connect"
-		shouldDisconnect = false
 		newGameButton.disabled = true
 
 func onArchipelagoFailure(errorMessage) -> void:
 	connectButton.text = "Connect"
-	shouldDisconnect = false
 
 func onArchipelagoConnected():
 	connectButton.text = "Disconnect"
-	shouldDisconnect = true
 	newGameButton.disabled = false
 	newGameButton.grab_focus()

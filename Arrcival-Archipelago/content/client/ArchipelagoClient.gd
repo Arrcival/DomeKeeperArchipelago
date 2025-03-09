@@ -51,7 +51,6 @@ signal packetRoomInfo
 signal packetConnected
 signal logInformations(informations)
 signal slot_data_retrieved(slot_data)
-signal slot_data_have_been_retrieved
 signal location_scout_retrieved(scout_data)
 
 func _init():
@@ -152,7 +151,6 @@ func _on_data(packet: PackedByteArray):
 
 			
 			slot_data_retrieved.emit(_slot_data)
-			slot_data_have_been_retrieved.emit()
 			_requestSync()
 
 			packetConnected.emit()
