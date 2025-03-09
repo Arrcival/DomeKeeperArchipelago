@@ -148,6 +148,8 @@ var death_link = false
 var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
 
+var died_to_death_link: bool = false
+
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 signal logInformations(text: String)
@@ -570,5 +572,7 @@ func ga_completion(assignment_name: String, isChallengeMode: bool) -> void:
 			assignmentsChecked[assignment_name] = true
 		if challengeMode and isChallengeMode:
 			assignmentsChecked[assignment_name] = true
-		
+	
+	if is_async_won():
+		client.completedGoal()
 

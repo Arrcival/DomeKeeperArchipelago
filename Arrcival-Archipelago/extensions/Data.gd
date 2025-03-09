@@ -7,7 +7,3 @@ func storeUpgradeData(key:String, currentData:Dictionary):
 			orderedUpgradeKeys.insert(0, key)
 	else:
 		super.storeUpgradeData(key, currentData)
-
-func parseUpgradesYaml(upgradesPath:String):
-	super.parseUpgradesYaml(upgradesPath)
-	var i = 1

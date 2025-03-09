@@ -1,25 +1,24 @@
-[gd_scene load_steps=21 format=3 uid="uid://8g08our7jqlv"]
+[gd_scene load_steps=20 format=3 uid="uid://8g08our7jqlv"]
 
-[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/levelstage/LevelStage2.gd" id="1_bw5d3"]
-[ext_resource type="Script" path="res://stages/level/Viewports.gd" id="2_euv5c"]
-[ext_resource type="PackedScene" path="res://systems/camera/ViewportContainer.tscn" id="3_ga71i"]
-[ext_resource type="Shader" path="res://systems/camera/viewport_split_glow.gdshader" id="4_5fjdh"]
-[ext_resource type="PackedScene" path="res://content/map/Map.tscn" id="5_c5npr"]
-[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/levelstage/Map2.gd" id="6_giqgb"]
-[ext_resource type="Material" path="res://stages/manager/vignette_material.tres" id="6_xojqa"]
-[ext_resource type="Script" path="res://stages/level/Vignette.gd" id="7_jdvvv"]
-[ext_resource type="PackedScene" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="8_meckd"]
-[ext_resource type="PackedScene" path="res://systems/camera/ViewportContainerTracker.tscn" id="9_fbc67"]
-[ext_resource type="Script" path="res://content/monster/Monsters.gd" id="10_x25ki"]
-[ext_resource type="PackedScene" path="res://content/monster/WaveGenerator.tscn" id="11_hpwxo"]
-[ext_resource type="PackedScene" path="res://content/sounds/monster/ambience/BattleAmbience.tscn" id="12_c3jgg"]
-[ext_resource type="PackedScene" path="res://systems/audio/EffectHandler.tscn" id="13_p3yoq"]
-[ext_resource type="PackedScene" path="res://stages/level/PlayerCanvas.tscn" id="14_1y1cu"]
-[ext_resource type="PackedScene" path="res://stages/level/Cheats.tscn" id="15_5daq8"]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/levelstage/APLevelStage.gd" id="1_ocwgb"]
+[ext_resource type="Script" path="res://stages/level/Viewports.gd" id="2_njlxc"]
+[ext_resource type="PackedScene" uid="uid://5ysdfech0to4" path="res://systems/camera/ViewportContainer.tscn" id="3_ph742"]
+[ext_resource type="Shader" path="res://systems/camera/viewport_split_glow.gdshader" id="4_hqtyi"]
+[ext_resource type="PackedScene" uid="uid://dutjgavl8amrn" path="res://content/map/Map.tscn" id="5_tjlep"]
+[ext_resource type="Material" uid="uid://cjyx824tokjtf" path="res://stages/manager/vignette_material.tres" id="7_pexfc"]
+[ext_resource type="Script" path="res://stages/level/Vignette.gd" id="8_1x2nt"]
+[ext_resource type="PackedScene" uid="uid://cal1wf2f0kx7b" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="9_jpnlx"]
+[ext_resource type="PackedScene" uid="uid://dbvepiwqgidoc" path="res://systems/camera/ViewportContainerTracker.tscn" id="10_rt2jf"]
+[ext_resource type="Script" path="res://content/monster/Monsters.gd" id="11_3dgs8"]
+[ext_resource type="PackedScene" uid="uid://co1irxig5hyod" path="res://content/monster/WaveGenerator.tscn" id="12_1wcw5"]
+[ext_resource type="PackedScene" uid="uid://qxxy345jrvm5" path="res://content/sounds/monster/ambience/BattleAmbience.tscn" id="13_1mo8p"]
+[ext_resource type="PackedScene" uid="uid://xa00w6tjyd4g" path="res://systems/audio/EffectHandler.tscn" id="14_rvbj1"]
+[ext_resource type="PackedScene" uid="uid://dcyqcpom2ng22" path="res://stages/level/PlayerCanvas.tscn" id="15_luerk"]
+[ext_resource type="PackedScene" uid="uid://btvn5du3drkoa" path="res://stages/level/Cheats.tscn" id="16_ka2o4"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 resource_local_to_scene = true
-shader = ExtResource("4_5fjdh")
+shader = ExtResource("4_hqtyi")
 shader_parameter/blend_left = 1.0
 shader_parameter/blend_right = 0.0
 
@@ -40,7 +39,7 @@ point_count = 3
 
 [node name="LevelStage" type="Node" groups=["effectL", "lostL"]]
 process_mode = 3
-script = ExtResource("1_bw5d3")
+script = ExtResource("1_ocwgb")
 
 [node name="Viewports" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -51,7 +50,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
-script = ExtResource("2_euv5c")
+script = ExtResource("2_njlxc")
 
 [node name="Top" type="HBoxContainer" parent="Viewports"]
 layout_mode = 2
@@ -59,7 +58,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Player1" parent="Viewports/Top" instance=ExtResource("3_ga71i")]
+[node name="Player1" parent="Viewports/Top" instance=ExtResource("3_ph742")]
 layout_mode = 2
 size_flags_stretch_ratio = 5.0
 mouse_filter = 1
@@ -74,8 +73,7 @@ mouse_filter = 1
 
 [node name="Root" type="Node2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport" index="0"]
 
-[node name="Map" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root" instance=ExtResource("5_c5npr")]
-script = ExtResource("6_giqgb")
+[node name="Map" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root" instance=ExtResource("5_tjlep")]
 
 [node name="Monsters" type="Node2D" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root"]
 z_index = 50
@@ -126,14 +124,14 @@ color = Color(0, 0.027451, 0.784314, 1)
 
 [node name="Vignette" type="ColorRect" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/Root/VignetteLayer" groups=["lostL"]]
 process_priority = -1
-material = ExtResource("6_xojqa")
+material = ExtResource("7_pexfc")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
-script = ExtResource("7_jdvvv")
+script = ExtResource("8_1x2nt")
 
 [node name="Overlay" parent="Viewports/Top/Player1/SubViewportContainer/SubViewport/PlayerCanvas" index="1"]
 anchors_preset = 15
@@ -153,7 +151,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Tween" parent="Viewports" instance=ExtResource("8_meckd")]
+[node name="Tween" parent="Viewports" instance=ExtResource("9_jpnlx")]
 
 [node name="ViewportsTracker" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -170,7 +168,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="PlayerTracker1" parent="ViewportsTracker/Top" instance=ExtResource("9_fbc67")]
+[node name="PlayerTracker1" parent="ViewportsTracker/Top" instance=ExtResource("10_rt2jf")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_stretch_ratio = 5.0
@@ -184,7 +182,7 @@ theme_override_constants/separation = 0
 [node name="MonsterManager" type="Node2D" parent="." groups=["lostL", "pauseL"]]
 process_mode = 1
 z_index = 40
-script = ExtResource("10_x25ki")
+script = ExtResource("11_3dgs8")
 
 [node name="DiverPaths" type="Node2D" parent="MonsterManager"]
 
@@ -200,13 +198,13 @@ curve = SubResource("3")
 [node name="StartRight" type="Path2D" parent="MonsterManager/DiverPaths"]
 curve = SubResource("4")
 
-[node name="SpawnTween" parent="MonsterManager" instance=ExtResource("8_meckd")]
+[node name="SpawnTween" parent="MonsterManager" instance=ExtResource("9_jpnlx")]
 
-[node name="WaveGenerator" parent="MonsterManager" instance=ExtResource("11_hpwxo")]
+[node name="WaveGenerator" parent="MonsterManager" instance=ExtResource("12_1wcw5")]
 
-[node name="BattleAmbience" parent="MonsterManager" instance=ExtResource("12_c3jgg")]
+[node name="BattleAmbience" parent="MonsterManager" instance=ExtResource("13_1mo8p")]
 
-[node name="EffectHandler" parent="." instance=ExtResource("13_p3yoq")]
+[node name="EffectHandler" parent="." instance=ExtResource("14_rvbj1")]
 
 [node name="ReferenceVisibleArea" type="ReferenceRect" parent="."]
 visible = false
@@ -216,16 +214,16 @@ offset_right = 480.0
 offset_bottom = 65.0
 editor_only = false
 
-[node name="Tween" parent="." instance=ExtResource("8_meckd")]
+[node name="Tween" parent="." instance=ExtResource("9_jpnlx")]
 
-[node name="StageTransitionTween" parent="." instance=ExtResource("8_meckd")]
+[node name="StageTransitionTween" parent="." instance=ExtResource("9_jpnlx")]
 
-[node name="PlayerCanvas" parent="." instance=ExtResource("14_1y1cu")]
+[node name="PlayerCanvas" parent="." instance=ExtResource("15_luerk")]
 
 [node name="Canvas" type="CanvasLayer" parent="."]
 layer = 3
 
-[node name="Cheats" parent="Canvas" instance=ExtResource("15_5daq8")]
+[node name="Cheats" parent="Canvas" instance=ExtResource("16_ka2o4")]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

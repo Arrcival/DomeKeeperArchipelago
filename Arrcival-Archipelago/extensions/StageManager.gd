@@ -151,9 +151,9 @@ func desactivateLoadoutChoices(loadoutChoices: Array[Node]):
 
 func fillGameModes():
 	var node: VBoxContainer = loadoutStage.find_child("GameModeContainers")
-	node.get_child(0).set_enabled(GameWorld.archipelago.isRHMode())
-	node.get_child(1).set_enabled(!GameWorld.archipelago.isRHMode())
-	node.get_child(2).set_enabled(false)
+	node.get_child(0).set_enabled(GameWorld.archipelago.isRHMode()) # RH
+	node.get_child(1).set_enabled(!GameWorld.archipelago.isRHMode()) # GA
+	node.get_child(2).set_enabled(false) # Prestige
 	
 	if GameWorld.archipelago.isRHMode():
 		node.get_child(0).useHit(null)

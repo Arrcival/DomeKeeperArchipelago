@@ -37,6 +37,7 @@ func _process(deltaTime: float):
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
+	GameWorld.archipelago.died_to_death_link = true
 	Data.changeDomeHealth(-999999)
 
 func beforeStart():

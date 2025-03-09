@@ -13,11 +13,16 @@ func init():
 	unlockEverything()
 	archipelago.client.item_received.connect(archipelago.item_found)
 
+# Deathlink
 func handleGameLost(backendData:Dictionary = {}):
 	super.handleGameLost(backendData)
-	if not won:
+	if not won and archipelago.died_to_death_link:
+		archipelago.died_to_death_link = false
 		archipelago.client.sendDeath("The dome was destroyed...")
-	
+
+
+# Restart items given from AP
+# They are given back in LevelStage
 func levelInitialized():
 	super.levelInitialized()
 	if GameWorld.archipelago.isRHMode():
@@ -26,11 +31,6 @@ func levelInitialized():
 	archipelago.cobaltGivenGA = 0
 	archipelago.waterGivenGA = 0
 	archipelago.ironGivenGA = 0
-
-func prepareCleanData():
-	super.prepareCleanData()
-	Data.apply("map.totaltiles", 0)
-
 
 func buyUpgrade(id:String):
 	if not GameWorld.archipelago.isRHMode():

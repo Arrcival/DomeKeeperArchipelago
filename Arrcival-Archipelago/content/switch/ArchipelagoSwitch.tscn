@@ -1,15 +1,15 @@
 [gd_scene load_steps=14 format=3 uid="uid://dic0ecjby53v1"]
 
 [ext_resource type="SpriteFrames" uid="uid://co2qvehec72er" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitchFrames.tres" id="1"]
-[ext_resource type="PackedScene" path="res://content/map/TileCover.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="2"]
 [ext_resource type="AudioStream" uid="uid://bjcqbmr71uhct" path="res://content/sounds/Amb/giraffe.wav" id="3"]
 [ext_resource type="AudioStream" uid="uid://cxolv2c5th51j" path="res://content/sounds/Locations/RelicSwitchChamber/switchChamberAppear.wav" id="4"]
 [ext_resource type="Texture2D" uid="uid://cdu5hq113b5ii" path="res://content/map/chamber/relicswitch/icon_selector.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="7"]
-[ext_resource type="PackedScene" path="res://systems/audio/Sound.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://fl5e4x7lb4px" path="res://systems/audio/Sound.tscn" id="8"]
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.gd" id="9"]
-[ext_resource type="AudioStream" uid="uid://db1slcn0j8rjn" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_6ovop"]
-[ext_resource type="PackedScene" path="res://content/shared/Usable.tscn" id="11"]
+[ext_resource type="AudioStream" uid="uid://c34cm37at0xl5" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_6ovop"]
+[ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="11"]
 [ext_resource type="Script" path="res://systems/deprecatedtween/DeprecatedTween.gd" id="11_t72dc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_81wpq"]
@@ -28,7 +28,6 @@ script = ExtResource("9")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(12, 12)
 sprite_frames = ExtResource("1")
-animation = &"running"
 
 [node name="Usable" parent="." instance=ExtResource("11")]
 position = Vector2(12, 12)

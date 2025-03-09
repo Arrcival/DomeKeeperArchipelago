@@ -4,13 +4,16 @@ const MYMODNAME_MOD_DIR = "Arrcival-Archipelago/"
 const MYMODNAME_LOG = "Arrcival-Archipelago"
 
 const EXTENSIONS_DIR = "extensions/"
+const HOOKS_DIR = "hooks/"
 
 func _init(modLoader = ModLoader):
 	ModLoaderLog.info("init starting", MYMODNAME_LOG)
 	var dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
 	var ext_dir = dir + EXTENSIONS_DIR
+	var hooks_dir = dir + HOOKS_DIR
 	
 	# Add extensions
+	# loadExtension(ext_dir, "AdditionalGadgetPopup.gd") # broken
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
@@ -21,6 +24,9 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "StageManager.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")
+	
+	loadHook("res://content/map/tile/Tile.gd", hooks_dir, "Tile.hooks.gd")
+	loadHook("res://content/map/Map.gd", hooks_dir, "Map.hooks.gd")
 	
 	ModLoaderMod.add_translation(dir + "localization/archipelago.en.translation")
 	
@@ -34,8 +40,11 @@ func _ready():
 func loadExtension(ext_dir, fileName):
 	ModLoaderMod.install_script_extension(ext_dir + fileName)
 
+func loadHook(vanilla_class, hooks_dir, fileName):
+	ModLoaderMod.install_script_hooks(vanilla_class, hooks_dir + fileName)
+
 func modInit():
-	var levelStage = preload("res://mods-unpacked/Arrcival-Archipelago/content/levelstage/LevelStage2.tscn")
+	var levelStage = preload("res://mods-unpacked/Arrcival-Archipelago/content/levelstage/APLevelStage.tscn")
 	levelStage.take_over_path("res://stages/level/LevelStage.tscn")
 	var techTree = preload("res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTreePopup.tscn")
 	techTree.take_over_path("res://content/techtree/TechTreePopup.tscn")

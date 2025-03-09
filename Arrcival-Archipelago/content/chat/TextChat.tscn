@@ -7,6 +7,7 @@
 custom_minimum_size = Vector2(600, 400)
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 script = ExtResource("2")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
@@ -14,6 +15,7 @@ custom_minimum_size = Vector2(600, 400)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 bbcode_enabled = true
 scroll_active = false
 
