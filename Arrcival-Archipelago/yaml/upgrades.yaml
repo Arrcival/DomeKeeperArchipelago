@@ -1,7 +1,5 @@
 archipelago:
-  takeslots: []
-  type: gadget
-  slot: none
+  type: gamemode
 
 archipelagoupgradeiron1:
   cost: iron=4

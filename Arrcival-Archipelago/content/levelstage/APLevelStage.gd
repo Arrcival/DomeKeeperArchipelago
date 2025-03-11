@@ -45,30 +45,6 @@ func beforeStart():
 	if GameWorld.archipelago.isRHMode():
 		GameWorld.archipelago.scoutUpgrades()
 
-# copy paste but with new GadgetOptions
-func startGadgetChoiceInput(type:String):
-	var i = preload("res://stages/level/GadgetChoiceInputProcessor.gd").new()
-	i.popup = preload("res://mods-unpacked/Arrcival-Archipelago/content/gadgetSelect/APGadgetChoicePopup.tscn").instantiate()
-	showPopup(i.popup)
-	
-	match type:
-		CONST.GADGET:
-			i.popup.loadGadgets()
-		CONST.POWERCORE:
-			i.popup.loadSupplements()
-		_:
-			Logger.error("unknown gadget type", "LevelStage.startGadgetChoiceInput", {"type": type})
-			i.popup.queue_free()
-			return
-	
-	i.connect("onStop", unpause)
-	i.connect("onStop", set.bind("inputDeviceLimit", -1))
-	i.connect("deviceLocked", set)
-	i.connect("dropsSelected", addDropsToDome)
-	i.connect("gadgetSelected", GameWorld.addUpgrade)
-	i.integrate(self)
-	pause()
-
 # copy paste but with new TechTreePopup
 func startUpgradesInput(keeper:Keeper):
 	var i = preload("res://stages/level/UpgradesInputProcessor.gd").new()

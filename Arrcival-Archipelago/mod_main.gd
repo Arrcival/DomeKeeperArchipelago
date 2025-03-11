@@ -13,7 +13,6 @@ func _init(modLoader = ModLoader):
 	var hooks_dir = dir + HOOKS_DIR
 	
 	# Add extensions
-	# loadExtension(ext_dir, "AdditionalGadgetPopup.gd") # broken
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
