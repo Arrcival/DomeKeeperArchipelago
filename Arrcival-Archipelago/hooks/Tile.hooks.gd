@@ -24,6 +24,20 @@ func setType(chain: ModLoaderHookChain, type:String):
 		
 		main_node.max_health = max(1, round(healthMultiplier * baseHealth))
 		main_node.health = main_node.max_health
+	
+	if type == CONSTARRC.CHAMBER:
+		var baseHealth:float = Data.of("map.tileBaseHealth")
+	
+		main_node.set_meta("destructable", true)
+		main_node.initResourceSprite(Vector2(5, 2))
+		baseHealth += Data.of("map.relicAdditionalHealth")
+	
+		var healthMultiplier:float = Data.of("map.tileHealthBaseMultiplier")
+
+		healthMultiplier *= (pow(Data.of("map.tileHealthMultiplierPerLayer"), main_node.layer))
+		
+		main_node.max_health = max(1, round(healthMultiplier * baseHealth))
+		main_node.health = main_node.max_health
 
 
 # Protect tile from being hit if the layer hasn't been accessed yet

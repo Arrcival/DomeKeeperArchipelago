@@ -3,6 +3,10 @@ class_name ArchipelagoData
 # To compute back on new game
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
+var waterRetrieved: int = 0
+var waterGiven: int = 0
+var ironRetrieved: int = 0
+var ironGiven: int = 0
 var itemsIdFound: Array[int] = []
 var itemsFoundToProcess: Array[int] = []
 
@@ -38,10 +42,19 @@ var locationIds: Dictionary = {
 	"archipelagoupgradeironwater4": 4243012
 }
 
-var locationIdCave: int = 4243020
+const LOCATION_FIRST_CAVE_ID: int = 4243020
 const LOCATION_FIRST_ASSIGNMENT_ID: int = 4243030
 const LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID: int = 4243050
+const LOCATION_FIRST_CHAMBER_SYNC_ID: int = 4243070
+const LOCATION_FIRST_CHAMBER_ASYNC_ID: int = 4243080
+
 const ITEM_FIRST_ASSIGNMENT_ID := 4242200
+
+var locationIdCave: int = LOCATION_FIRST_CAVE_ID
+var locationIdChamberAsync: int = LOCATION_FIRST_CHAMBER_ASYNC_ID
+var locationIdChamberSync: int = LOCATION_FIRST_CHAMBER_SYNC_ID
+
+var chambers_generated = 0
 
 var locationScouts: Dictionary = {
 	4243001: "",
@@ -62,8 +75,10 @@ var locationScouts: Dictionary = {
 var assignmentsUnlocked : Dictionary
 var assignmentsChecked : Dictionary
 
-const FIRST_SWITCH_ID := 4243101
-const LAYER_OFFSET := 30
+const FIRST_SWITCH_ID := 4243201
+const LAYER_OFFSET := 100
+
+const ASSIGNMENTS_AMOUNT := 16
 
 #region upgrades arrays
 var upgrades_keeper1_drill: Array[String] = []
@@ -147,11 +162,11 @@ var death_link = false
 
 var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
+var current_assignment: String = ""
 
 var died_to_death_link: bool = false
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
-
 
 enum CONNECTION_STATUS { DISCONNECTED = 0, IN_PROGRESS = 1, CONNECTED = 2 }
 
@@ -160,7 +175,10 @@ var connection: CONNECTION_STATUS = CONNECTION_STATUS.DISCONNECTED
 signal logInformations(text: String)
 signal ga_unlocked(id: int)
 signal slot_data_have_been_retrieved
+signal client_connected
 signal client_disconnected
+
+signal trap_received
 
 func connectClient():
 	reset()
@@ -169,17 +187,30 @@ func connectClient():
 	client.location_scout_retrieved.connect(self.retrieveScout)
 	client.could_not_connect.connect(self.connection_failed)
 	client.packetConnected.connect(self.connected)
+	client.client_connected.connect(self.on_client_connected)
+	client.client_disconnected.connect(self.on_client_disconnected)
 	client.connectToServer(serverName, slotName, password)
 	connection = CONNECTION_STATUS.IN_PROGRESS
 
 func disconnect_client():
 	connection = CONNECTION_STATUS.DISCONNECTED
 	client.disconnect_from_ap()
+	client = null
+	
+func is_client_connected() -> bool:
+	return connection == CONNECTION_STATUS.CONNECTED
 
-func connection_failed():
+func connection_failed(message: String):
 	client_disconnected.emit()
 	connection = CONNECTION_STATUS.DISCONNECTED
 
+func on_client_connected(message: String):
+	client_connected.emit()
+
+func on_client_disconnected():
+	connection = CONNECTION_STATUS.DISCONNECTED
+	client_disconnected.emit()
+	
 func resetClient():
 	upgradesBought.clear()
 
@@ -243,6 +274,10 @@ func sendCheck(locationId: int):
 func reset():
 	cobaltRetrieved = 0
 	cobaltGiven = 0
+	waterRetrieved = 0
+	waterGiven = 0
+	ironRetrieved = 0
+	ironGiven = 0
 	cobaltRetrievedGA = 0
 	cobaltGivenGA = 0
 	waterRetrievedGA = 0
@@ -251,7 +286,10 @@ func reset():
 	ironGivenGA = 0
 	
 	coloredLayersUnlocked = 0
-	locationIdCave = 4243020
+	locationIdCave = LOCATION_FIRST_CAVE_ID
+	locationIdChamberAsync = LOCATION_FIRST_CHAMBER_ASYNC_ID
+	locationIdChamberSync = LOCATION_FIRST_CHAMBER_SYNC_ID
+	chambers_generated = 0
 	
 	assignmentsUnlocked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
 	assignmentsChecked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
@@ -363,6 +401,15 @@ func processItem(itemId: int) -> String:
 	match itemId:
 		4242090:
 			cobaltRetrieved += 1
+			return ""
+		4242091:
+			waterRetrieved += 1
+			return ""
+		4242092:
+			ironRetrieved += 1
+			return ""
+		4242095:
+			trap_received.emit()
 			return ""
 		4242000:
 			itemName = _getItemNameAndRemove(upgrades_keeper1_drill)
@@ -570,7 +617,18 @@ func getLocationCaveId():
 	var rtr: int = locationIdCave
 	locationIdCave += 1
 	return rtr
-	
+
+func getLocationChamberId(assignment: String = "showdown"):
+	if isRHMode():
+		var rtr: int = locationIdChamberSync
+		locationIdChamberSync += 1
+		return rtr
+	else:
+		locationIdChamberAsync = LOCATION_FIRST_CHAMBER_ASYNC_ID + get_assignment_id(assignment) * 2
+		var rtr = locationIdChamberAsync + chambers_generated * ASSIGNMENTS_AMOUNT
+		chambers_generated += 1
+		return rtr
+
 func is_async_won():
 	var wonAssignments = 0
 	for value in assignmentsChecked.values():
@@ -595,3 +653,14 @@ func ga_completion(assignment_name: String, isChallengeMode: bool) -> void:
 	if is_async_won():
 		client.completedGoal()
 
+func get_seed(assignment: String = "showdown") -> int:
+	if isRHMode():
+		return seedNumber
+	else:
+		return seedNumber + get_assignment_id(assignment)
+
+func get_assignment_id(assignment) -> int:
+	var index = CONSTARRC.ASSIGMENTS_LIST.find(assignment)
+	if index == -1:
+		index = 0
+	return index

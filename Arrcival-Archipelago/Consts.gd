@@ -7,6 +7,13 @@ const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options_v2.json"
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
 
+const SECONDS_LOST_PER_TRAP: int = 15
+
+const TILE_CHAMBER = 77
+const CHAMBER = "charm_chamber"
+
+const CHARM = "charm"
+
 const PROTECTED_SPAWNS : Array = [
 	Vector2(0, 0),
 	Vector2(0, 1),
@@ -173,6 +180,8 @@ const ASSIGNMENTS_DEFAULT_EMPTY: Dictionary = {
 	"weakmining": false,
 	"cobaltcontribution": false
 }
+
+const ASSIGMENTS_LIST : Array = ["showdown", "ironcontribution", "inversegravity", "maze", "projectilehell", "denseiron", "bigmapsparseresources", "weapondefect", "heavyhitters", "superhardrockwithholes", "weakcarry", "weakwalls", "monstermasses", "rareiron", "weakmining", "cobaltcontribution"]
 
 
 

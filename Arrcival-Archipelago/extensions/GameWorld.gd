@@ -16,9 +16,11 @@ func init():
 # Deathlink
 func handleGameLost(backendData:Dictionary = {}):
 	super.handleGameLost(backendData)
-	if not won and archipelago.died_to_death_link:
-		archipelago.died_to_death_link = false
-		archipelago.client.sendDeath("The dome was destroyed...")
+	if not won:
+		if archipelago.died_to_death_link:
+			archipelago.died_to_death_link = false
+		else:
+			archipelago.client.sendDeath("The dome was destroyed...")
 
 
 # Restart items given from AP
@@ -28,6 +30,8 @@ func levelInitialized():
 	if GameWorld.archipelago.isRHMode():
 		archipelago.generateUpgrades()
 	archipelago.cobaltGiven = 0
+	archipelago.waterGiven = 0
+	archipelago.ironGiven = 0
 	archipelago.cobaltGivenGA = 0
 	archipelago.waterGivenGA = 0
 	archipelago.ironGivenGA = 0
@@ -49,3 +53,11 @@ func buyUpgrade(id:String):
 		return
 
 	super.buyUpgrade(id)
+
+func prepareLevelStart(levelStartData:LevelStartData):
+	if levelStartData.loadout.modeId == CONST.MODE_ASSIGNMENTS:
+		var assignment_name = levelStartData.loadout.modeConfig.get(CONST.MODE_CONFIG_ASSIGNMENT, "projectilehell")
+		Level.levelSeed = GameWorld.archipelago.get_seed(assignment_name)
+	elif levelStartData.loadout.modeId == CONST.MODE_RELICHUNT:
+		Level.levelSeed = GameWorld.archipelago.get_seed()
+	super.prepareLevelStart(levelStartData)

@@ -41,7 +41,7 @@ func build(data: Array):
 	
 
 	# in case of coming back from new game to the main menu
-	if GameWorld.archipelago.client.is_client_connected():
+	if GameWorld.archipelago.is_client_connected():
 		onArchipelagoConnected()
 		
 	InputSystem.grabFocus(connectButton)

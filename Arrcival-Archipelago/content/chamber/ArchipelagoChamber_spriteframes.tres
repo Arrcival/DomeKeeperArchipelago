@@ -1,0 +1,77 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://cg485mmy07d7g"]
+
+[ext_resource type="Texture2D" uid="uid://blgjaojyagjcf" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/archipelago_chamber_sheet.png" id="1_4qai3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rwp8a"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(0, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aigfb"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(280, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ti5bi"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(40, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmbjx"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(80, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bi2mr"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(120, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhhrn"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(160, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_roxs0"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(200, 40, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0jj3"]
+atlas = ExtResource("1_4qai3")
+region = Rect2(240, 40, 40, 40)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rwp8a")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aigfb")
+}],
+"loop": false,
+"name": &"empty",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ti5bi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cmbjx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bi2mr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhhrn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_roxs0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0jj3")
+}],
+"loop": false,
+"name": &"opening",
+"speed": 5.0
+}]

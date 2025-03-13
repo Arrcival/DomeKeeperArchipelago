@@ -4,24 +4,37 @@ extends Object
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 const ARCHIPELAGO_CAVE_SCENE: Resource = preload("res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.tscn")
+const ARCHIPELAGO_CHAMBER_SCENE: Resource = preload("res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.tscn")
 
 func init(chain: ModLoaderHookChain, fromDeserialize: = false, defaultState := true):
 	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_ARCHIPELAGO_SWITCH:CONSTARRC.ARCHIPELAGOSWITCH})
+	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHAMBER:CONSTARRC.CHAMBER})
 	chain.execute_next([fromDeserialize, defaultState])
 	var main_node : Node = chain.reference_object
 	
 	if not fromDeserialize:
 		var clusterCenters = Level.map.tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
 		if GameWorld.devMode or OS.is_debug_build():
+			print("Tile AP switches :")
 			print(clusterCenters)
 		for tile in clusterCenters:
 			main_node.addChamber(tile, main_node.getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
+		
+		clusterCenters = Level.map.tileData.get_resource_cells_by_id(CONSTARRC.TILE_CHAMBER)
+		if GameWorld.devMode or OS.is_debug_build():
+			print("Tile AP chambers :")
+			print(clusterCenters)
+		for tile in clusterCenters:
+			main_node.addChamber(tile, main_node.getSceneForTileType(CONSTARRC.TILE_CHAMBER))
+		
 		if GameWorld.devMode:
 			main_node.addChamber(Vector2(0, 2), main_node.getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 
 func getSceneForTileType(chain: ModLoaderHookChain, tileType:int)->PackedScene:
 	if tileType == CONSTARRC.TILE_ARCHIPELAGO_SWITCH:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.tscn")
+	if tileType == CONSTARRC.TILE_CHAMBER:
+		return preload("res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.tscn")
 	return chain.execute_next([tileType])
 
 # Add one archipelago cave per accessible layer

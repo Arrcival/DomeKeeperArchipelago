@@ -13,9 +13,12 @@ func _init(modLoader = ModLoader):
 	var hooks_dir = dir + HOOKS_DIR
 	
 	# Add extensions
+	loadExtension(ext_dir, "Audio.gd")
+	loadExtension(ext_dir, "ArtifactDropPoint.gd")
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
+	loadExtension(ext_dir, "PauseMenu.gd")
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
 	loadExtension(ext_dir, "RunFinishedPopup.gd")
@@ -26,6 +29,7 @@ func _init(modLoader = ModLoader):
 	
 	loadHook("res://content/map/tile/Tile.gd", hooks_dir, "Tile.hooks.gd")
 	loadHook("res://content/map/Map.gd", hooks_dir, "Map.hooks.gd")
+	loadHook("res://content/monster/Monsters.gd", hooks_dir, "Monsters.hooks.gd")
 	
 	ModLoaderMod.add_translation(dir + "localization/archipelago.en.translation")
 	
@@ -34,6 +38,7 @@ func _init(modLoader = ModLoader):
 func _ready():
 	ModLoaderLog.info("_ready starting", MYMODNAME_LOG)
 	add_to_group("mod_init")
+	archipelagoInit()
 	ModLoaderLog.info("_ready done", MYMODNAME_LOG)
 
 func loadExtension(ext_dir, fileName):
@@ -50,3 +55,7 @@ func modInit():
 	var pathToModYaml : String = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR + "yaml/"
 	Data.parseUpgradesYaml(pathToModYaml + "upgrades.yaml")
 	
+
+func archipelagoInit():
+	# Magic strings cause magic godot
+	Data.DROP_SCENES["archipelago"] = preload("res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn")

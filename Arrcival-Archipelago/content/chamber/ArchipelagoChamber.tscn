@@ -1,0 +1,121 @@
+[gd_scene load_steps=15 format=3 uid="uid://cu4ct4grm7nvl"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.gd" id="1_7jtju"]
+[ext_resource type="PackedScene" uid="uid://4y0hcl1ykn5c" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn" id="2_2qbek"]
+[ext_resource type="SpriteFrames" uid="uid://cg485mmy07d7g" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber_spriteframes.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://im3jfjm5n6kd" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="3_4qk6v"]
+[ext_resource type="AudioStream" uid="uid://c2hpxhgvrwf5y" path="res://content/sounds/Locations/ChamberRelic/NoiseFloor09.wav" id="5"]
+[ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="7"]
+[ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="8"]
+[ext_resource type="AudioStream" uid="uid://cxolv2c5th51j" path="res://content/sounds/Locations/RelicSwitchChamber/switchChamberAppear.wav" id="9"]
+[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/focussed.png" id="10"]
+[ext_resource type="PackedScene" path="res://content/shared/drops/ResourceGrabber.tscn" id="11_kuhbv"]
+[ext_resource type="Texture2D" uid="uid://rasmosh8h0qm" path="res://content/drop/iron/iron_smol.png" id="12_3loia"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_suwgp"]
+texture = ExtResource("8")
+texture_region_size = Vector2i(24, 24)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ci7vr"]
+tile_size = Vector2i(24, 24)
+sources/0 = SubResource("TileSetAtlasSource_suwgp")
+
+[node name="ArchipelagoChamber" type="Node2D" groups=["chamber", "saveable"]]
+z_index = -10
+texture_filter = 1
+script = ExtResource("1_7jtju")
+GIZMO_SCENE = ExtResource("2_2qbek")
+type = "charm_chamber"
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(24, 24)
+sprite_frames = ExtResource("3")
+
+[node name="SocketedGizmo" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(24, 24)
+texture = ExtResource("3_4qk6v")
+
+[node name="GizmoSpawn" type="Marker2D" parent="."]
+z_index = 50
+position = Vector2(24, 23)
+
+[node name="ChamberAmb" type="AudioStreamPlayer" parent="GizmoSpawn"]
+stream = ExtResource("5")
+volume_db = -8.739
+pitch_scale = 0.8
+bus = &"Mine"
+
+[node name="Usable" parent="." instance=ExtResource("6")]
+position = Vector2(24, 23)
+visibleOnFocus = NodePath("../FocusMarker")
+
+[node name="TileCover" parent="." instance=ExtResource("7")]
+visible = false
+tile_set = SubResource("TileSet_ci7vr")
+layer_0/tile_data = PackedInt32Array(1, 0, 0, 65536, 0, 0, 65537, 0, 0, 0, 0, 0)
+
+[node name="DoorOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9")
+volume_db = 12.0
+bus = &"Mine"
+
+[node name="FocusMarker" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(24, 24)
+texture = ExtResource("10")
+
+[node name="Slots" type="Node2D" parent="."]
+
+[node name="Slot1" type="Node2D" parent="Slots"]
+position = Vector2(14, 34)
+
+[node name="ResourceGrabber1" parent="Slots/Slot1" instance=ExtResource("11_kuhbv")]
+visible = false
+dropType = "iron"
+
+[node name="Resource" type="Sprite2D" parent="Slots/Slot1"]
+visible = false
+texture = ExtResource("12_3loia")
+
+[node name="Slot2" type="Node2D" parent="Slots"]
+position = Vector2(34, 34)
+
+[node name="ResourceGrabber2" parent="Slots/Slot2" instance=ExtResource("11_kuhbv")]
+visible = false
+dropType = "iron"
+
+[node name="Resource" type="Sprite2D" parent="Slots/Slot2"]
+visible = false
+texture = ExtResource("12_3loia")
+
+[node name="Slot3" type="Node2D" parent="Slots"]
+position = Vector2(14, 14)
+
+[node name="ResourceGrabber3" parent="Slots/Slot3" instance=ExtResource("11_kuhbv")]
+visible = false
+dropType = "iron"
+
+[node name="Resource" type="Sprite2D" parent="Slots/Slot3"]
+visible = false
+texture = ExtResource("12_3loia")
+
+[node name="Slot4" type="Node2D" parent="Slots"]
+position = Vector2(34, 14)
+
+[node name="ResourceGrabber4" parent="Slots/Slot4" instance=ExtResource("11_kuhbv")]
+visible = false
+dropType = "iron"
+
+[node name="Resource" type="Sprite2D" parent="Slots/Slot4"]
+visible = false
+texture = ExtResource("12_3loia")
+
+[connection signal="animation_finished" from="Sprite2D" to="." method="_on_Sprite_animation_finished"]
+[connection signal="grabbed_resource" from="Slots/Slot1/ResourceGrabber1" to="." method="_on_ResourceGrabber1_grabbed_resource"]
+[connection signal="grabbed_resource" from="Slots/Slot2/ResourceGrabber2" to="." method="_on_ResourceGrabber2_grabbed_resource"]
+[connection signal="grabbed_resource" from="Slots/Slot3/ResourceGrabber3" to="." method="_on_ResourceGrabber3_grabbed_resource"]
+[connection signal="grabbed_resource" from="Slots/Slot4/ResourceGrabber4" to="." method="_on_ResourceGrabber4_grabbed_resource"]

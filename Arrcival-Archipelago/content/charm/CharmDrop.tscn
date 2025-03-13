@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://4y0hcl1ykn5c"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.gd" id="1_1apvw"]
+[ext_resource type="Texture2D" uid="uid://im3jfjm5n6kd" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="2_3uv0d"]
+[ext_resource type="Texture2D" uid="uid://bm0ju5bijlx2v" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/carried.png" id="3"]
+[ext_resource type="Material" uid="uid://c4rg5bvijyfin" path="res://content/shared/HighlightShader.tres" id="4"]
+[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/focussed.png" id="5"]
+[ext_resource type="PackedScene" path="res://content/shared/drops/DropEnterTrigger.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://cal1wf2f0kx7b" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="7"]
+
+[sub_resource type="PhysicsMaterial" id="1"]
+friction = 0.1
+
+[node name="CharmDrop" type="RigidBody2D" groups=["carryable", "saveable"]]
+z_index = 21
+texture_filter = 1
+collision_layer = 34
+collision_mask = 522
+mass = 3.0
+physics_material_override = SubResource("1")
+gravity_scale = 0.5
+can_sleep = false
+script = ExtResource("1_1apvw")
+type = "charm"
+hasInterDropCollisionSound = true
+floatUncarried = true
+additionalSlowdown = 0.4
+carryableType = "charm"
+carryInfluenceSize = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_3uv0d")
+
+[node name="CarrySprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+texture = ExtResource("3")
+
+[node name="FocusSprite" type="Sprite2D" parent="."]
+visible = false
+z_index = 30
+texture_filter = 1
+material = ExtResource("4")
+texture = ExtResource("5")
+
+[node name="DropEnterTrigger" parent="." instance=ExtResource("6")]
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-0.396847, -0.595274)
+polygon = PackedVector2Array(-8.60315, -1.40473, -5.60315, -8.40473, 6.39685, -8.40473, 9.39685, -1.40473, 9.39685, 2.59527, 6.39685, 9.59527, -5.60315, 9.59527, -8.60315, 2.59527)
+
+[node name="Tween" parent="." instance=ExtResource("7")]

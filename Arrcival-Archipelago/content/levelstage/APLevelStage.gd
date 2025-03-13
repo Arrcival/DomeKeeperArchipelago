@@ -18,10 +18,18 @@ func _process(deltaTime: float):
 					if upgrades.has(node.techId):
 						node.reactivate()
 
-	# Unwinds cobalt received to add in inventory
+	# Unwinds ressources received to add in inventory
 	if GameWorld.archipelago.cobaltGiven < GameWorld.archipelago.cobaltRetrieved:
 		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrieved - GameWorld.archipelago.cobaltGiven)
 		GameWorld.archipelago.cobaltGiven = GameWorld.archipelago.cobaltRetrieved
+	
+	if GameWorld.archipelago.waterGiven < GameWorld.archipelago.waterRetrieved:
+		Data.changeByInt("inventory.water", GameWorld.archipelago.waterRetrieved - GameWorld.archipelago.waterGiven)
+		GameWorld.archipelago.waterGiven = GameWorld.archipelago.waterRetrieved
+		
+	if GameWorld.archipelago.ironGiven < GameWorld.archipelago.ironRetrieved:
+		Data.changeByInt("inventory.iron", GameWorld.archipelago.ironRetrieved - GameWorld.archipelago.ironGiven)
+		GameWorld.archipelago.ironGiven = GameWorld.archipelago.ironRetrieved
 	
 	if GameWorld.archipelago.cobaltGivenGA < GameWorld.archipelago.cobaltRetrievedGA:
 		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrievedGA - GameWorld.archipelago.cobaltGivenGA)

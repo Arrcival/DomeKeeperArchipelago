@@ -49,20 +49,14 @@ func add_child_first(node: Node, child: Node):
 	node.add_child(child)
 	node.move_child(child, 0)
 
-func startStage(stageName:String, data:Array=[], tabula:bool = true):
-	if stageName == "stages/landing/landing":
-		Level.levelSeed = GameWorld.archipelago.seedNumber
-	
-	super.startStage(stageName, data, tabula)
-
 func _startNewStage():
 	super._startNewStage()
 	
 	
-	var landingSequence: Node = get_node("CurrentStage/LandingSequence")
-	if landingSequence and GameWorld.archipelago.isRHMode():
-		Level.levelSeed = GameWorld.archipelago.seedNumber
-		return
+	#var landingSequence: Node = get_node("CurrentStage/LandingSequence")
+	#if landingSequence and GameWorld.archipelago.isRHMode():
+	#	Level.levelSeed = GameWorld.archipelago.get_seed(get_assignment_name())
+	#	return
 	
 	loadoutStage = get_node("CurrentStage/MultiplayerLoadoutStage")
 	if not loadoutStage:
@@ -151,14 +145,14 @@ func desactivateLoadoutChoices(loadoutChoices: Array[Node]):
 
 func fillGameModes():
 	var node: VBoxContainer = loadoutStage.find_child("GameModeContainers")
-	node.get_child(0).set_enabled(GameWorld.archipelago.isRHMode()) # RH
-	node.get_child(1).set_enabled(!GameWorld.archipelago.isRHMode()) # GA
-	node.get_child(2).set_enabled(false) # Prestige
-	
 	if GameWorld.archipelago.isRHMode():
 		node.get_child(0).useHit(null)
 	else:
 		node.get_child(1).useHit(null)
+
+	node.get_child(0).set_enabled(false) # RH
+	node.get_child(1).set_enabled(false) # GA
+	node.get_child(2).set_enabled(false) # Prestige
 
 func getMapSizeName(id: int) -> String:
 	match id:
