@@ -19,17 +19,27 @@ func deleteMetaState():
 		Logger.info("deleted savegame")
 	else:
 		Logger.info("failed to delete savegame")
-		
-func loadMetaStateFile() -> Array:
 
+
+func loadMetaStateFile(slot:int = 0) -> Array:
 	var metastate := {}
 	var fallback := false
-
-	var saveFile = SAVE_META4_FILE_TEMPLATE_AP % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
-
-	if !FileAccess.file_exists(saveFile):
-		saveFile = SAVE_META4_FILE_TEMPLATE % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
+	var saveFile
 	
+	if slot == -1:
+		saveFile = SAVE_META4_FILE_TEMPLATE_AP % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
+		if !FileAccess.file_exists(saveFile):
+			saveFile = SAVE_META4_FILE_TEMPLATE % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
+	else:
+		var file_str : String = str(CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower(), str(slot))
+		saveFile = SAVE_META4_FILE_TEMPLATE_AP % file_str
+		if !FileAccess.file_exists(saveFile):
+			saveFile = SAVE_META4_FILE_TEMPLATE % file_str
+
+	#no GD4 version of the file, check if old v3 progression exists
+	if !FileAccess.file_exists(saveFile):
+		saveFile = SAVE_META3_FILE_TEMPLATE % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
+		fallback = true
 	
 	var save
 	if UNENCRYPTED_META_FILES:
@@ -40,11 +50,19 @@ func loadMetaStateFile() -> Array:
 		var err = FileAccess.get_open_error()
 		if err != 0:
 			Logger.error("failed to read meta state", "SaveGame.loadMetaState", err)
-			if err == ERR_FILE_CORRUPT:
+			if err == ERR_FILE_CORRUPT: # err 16
 				var txt = parse_godot3_encrypted_file(saveFile)
 				var result = JSON.parse_string(txt)
 				if result:
 					metastate = result
+				else: 
+					GameWorld.notifyDamagedMetaFile = true
+			elif err == ERR_FILE_NOT_FOUND: #err 7 
+				pass 
+			else:
+				GameWorld.notifyDamagedMetaFile = true
+				Logger.error("Failed to load meta save in slot " + str(slot))
+				return [{  }, false]
 		else:
 			# Try to load unencrypted file
 			save = FileAccess.open(saveFile, FileAccess.ModeFlags.READ)
@@ -57,9 +75,12 @@ func loadMetaStateFile() -> Array:
 		save.close()
 	
 	return [metastate, fallback]
+
+# Saves meta state between runs
+func persistMetaState(slot:int = 0):
+	var file_str : String = str(CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower(), str(slot))
+	var saveFile = SAVE_META4_FILE_TEMPLATE_AP % file_str
 	
-func persistMetaState():
-	var saveFile = SAVE_META4_FILE_TEMPLATE_AP % CONST.BUILD_TYPE.keys()[GameWorld.buildType].to_lower()
 	var save
 	if UNENCRYPTED_META_FILES:
 		save = FileAccess.open(saveFile, FileAccess.WRITE)

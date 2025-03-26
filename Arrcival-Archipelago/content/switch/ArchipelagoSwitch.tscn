@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="7"]
 [ext_resource type="PackedScene" uid="uid://fl5e4x7lb4px" path="res://systems/audio/Sound.tscn" id="8"]
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.gd" id="9"]
-[ext_resource type="AudioStream" uid="uid://c34cm37at0xl5" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_6ovop"]
+[ext_resource type="AudioStream" uid="uid://c34cm37at0xl5" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_k2wbi"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="11"]
 [ext_resource type="Script" path="res://systems/deprecatedtween/DeprecatedTween.gd" id="11_t72dc"]
 
@@ -56,7 +56,7 @@ fadeOutTime = 2.0
 loop = true
 
 [node name="ChamberSwitchHit" parent="." instance=ExtResource("8")]
-stream = ExtResource("9_6ovop")
+stream = ExtResource("9_k2wbi")
 bus = &"Mine"
 randomVolume = 0.0
 randomPitch = 0.0

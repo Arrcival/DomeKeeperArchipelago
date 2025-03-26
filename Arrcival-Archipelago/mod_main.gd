@@ -18,11 +18,12 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
+	loadExtension(ext_dir, "Keeper2.gd")
 	loadExtension(ext_dir, "PauseMenu.gd")
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
 	loadExtension(ext_dir, "RunFinishedPopup.gd")
-	loadExtension(ext_dir, "SaveGame.gd")
+	#loadExtension(ext_dir, "SaveGame.gd")
 	loadExtension(ext_dir, "StageManager.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")
@@ -58,4 +59,4 @@ func modInit():
 
 func archipelagoInit():
 	# Magic strings cause magic godot
-	Data.DROP_SCENES["archipelago"] = preload("res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn")
+	Data.DROP_SCENES["charm"] = preload("res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn")

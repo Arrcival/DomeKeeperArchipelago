@@ -28,7 +28,7 @@ func generate_gadget_chambers():
 	super.generate_gadget_chambers()
 	
 	if GameWorld.archipelago.isRHMode():
-		var biomes = 3 + GameWorld.archipelago.mapSize
+		var biomes = 3 if GameWorld.devMode else len(GameWorld.archipelago.switchesPerLayers)
 		for i in range(biomes):
 			var biomeCells: Array = $MapData.get_biome_cells_by_index(FIRSTLAYERID + i)
 			var biomeCellsShuffled = Data.seedShuffle(biomeCells, gen_seed)
