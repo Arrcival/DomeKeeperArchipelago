@@ -23,7 +23,6 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "RelicHunt.gd")
 	loadExtension(ext_dir, "RunFinishedPopup.gd")
-	#loadExtension(ext_dir, "SaveGame.gd")
 	loadExtension(ext_dir, "StageManager.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")

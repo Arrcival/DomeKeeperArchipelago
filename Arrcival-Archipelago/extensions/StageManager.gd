@@ -130,6 +130,7 @@ func desactivateDifficulties():
 	findAndDesactivateChildrenLoadoutChoices(container)
 
 func desactivateModifiers():
+	Level.loadout.modeConfig.erase(CONST.MODE_CONFIG_WORLDMODIFIERS)
 	var container = loadoutStage.find_child("Modifiers")
 	findAndDesactivateChildrenLoadoutChoices(container)
 

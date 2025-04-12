@@ -1,4 +1,4 @@
-extends  "res://content/map/chamber/Chamber.gd"
+extends "res://content/map/chamber/Chamber.gd"
 
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")

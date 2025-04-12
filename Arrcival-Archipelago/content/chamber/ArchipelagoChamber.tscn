@@ -1,17 +1,90 @@
-[gd_scene load_steps=15 format=3 uid="uid://cu4ct4grm7nvl"]
+[gd_scene load_steps=23 format=3 uid="uid://cu4ct4grm7nvl"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.gd" id="1_7jtju"]
 [ext_resource type="PackedScene" uid="uid://4y0hcl1ykn5c" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn" id="2_2qbek"]
-[ext_resource type="SpriteFrames" uid="uid://cg485mmy07d7g" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber_spriteframes.tres" id="3"]
-[ext_resource type="Texture2D" uid="uid://im3jfjm5n6kd" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="4_7tumb"]
+[ext_resource type="Texture2D" uid="uid://blgjaojyagjcf" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/archipelago_chamber_sheet.png" id="3_82pbn"]
 [ext_resource type="AudioStream" uid="uid://c2hpxhgvrwf5y" path="res://content/sounds/Locations/ChamberRelic/NoiseFloor09.wav" id="5"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="8"]
 [ext_resource type="AudioStream" uid="uid://cxolv2c5th51j" path="res://content/sounds/Locations/RelicSwitchChamber/switchChamberAppear.wav" id="9"]
-[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/focussed.png" id="9_8qjau"]
+[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/focussed.png" id="9_olaqh"]
 [ext_resource type="PackedScene" path="res://content/shared/drops/ResourceGrabber.tscn" id="11_kuhbv"]
 [ext_resource type="Texture2D" uid="uid://rasmosh8h0qm" path="res://content/drop/iron/iron_smol.png" id="12_3loia"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6d84r"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvh5i"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(280, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uola1"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ntgys"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4t8br"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgwyw"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iyyyv"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6in80"]
+atlas = ExtResource("3_82pbn")
+region = Rect2(240, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wq4pb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6d84r")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvh5i")
+}],
+"loop": false,
+"name": &"empty",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uola1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ntgys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4t8br")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rgwyw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iyyyv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6in80")
+}],
+"loop": false,
+"name": &"opening",
+"speed": 5.0
+}]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_suwgp"]
 texture = ExtResource("8")
@@ -27,17 +100,17 @@ z_index = -10
 texture_filter = 1
 script = ExtResource("1_7jtju")
 GIZMO_SCENE = ExtResource("2_2qbek")
-type = "charm_chamber"
+type = "charmber"
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(24, 24)
-sprite_frames = ExtResource("3")
+sprite_frames = SubResource("SpriteFrames_wq4pb")
+animation = &"opening"
 
 [node name="SocketedGizmo" type="Sprite2D" parent="."]
 visible = false
 texture_filter = 1
 position = Vector2(24, 24)
-texture = ExtResource("4_7tumb")
 
 [node name="GizmoSpawn" type="Marker2D" parent="."]
 z_index = 50
@@ -66,7 +139,7 @@ bus = &"Mine"
 [node name="FocusMarker" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(24, 24)
-texture = ExtResource("9_8qjau")
+texture = ExtResource("9_olaqh")
 
 [node name="Slots" type="Node2D" parent="."]
 

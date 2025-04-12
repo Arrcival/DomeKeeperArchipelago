@@ -1,10 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://4y0hcl1ykn5c"]
+[gd_scene load_steps=7 format=3 uid="uid://4y0hcl1ykn5c"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.gd" id="1_1apvw"]
-[ext_resource type="Texture2D" uid="uid://im3jfjm5n6kd" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="2_3uv0d"]
-[ext_resource type="Texture2D" uid="uid://bm0ju5bijlx2v" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/carried.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://im3jfjm5n6kd" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="2_lifpg"]
 [ext_resource type="Material" uid="uid://c4rg5bvijyfin" path="res://content/shared/HighlightShader.tres" id="4"]
-[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/focussed.png" id="5"]
 [ext_resource type="PackedScene" path="res://content/shared/drops/DropEnterTrigger.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://cal1wf2f0kx7b" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="7"]
 
@@ -30,19 +28,17 @@ carryInfluenceSize = 2.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-texture = ExtResource("2_3uv0d")
+texture = ExtResource("2_lifpg")
 
 [node name="CarrySprite" type="Sprite2D" parent="."]
 visible = false
 texture_filter = 1
-texture = ExtResource("3")
 
 [node name="FocusSprite" type="Sprite2D" parent="."]
 visible = false
 z_index = 30
 texture_filter = 1
 material = ExtResource("4")
-texture = ExtResource("5")
 
 [node name="DropEnterTrigger" parent="." instance=ExtResource("6")]
 

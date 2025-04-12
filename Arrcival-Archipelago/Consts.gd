@@ -10,7 +10,7 @@ const TILE_ARCHIPELAGO_SWITCH: int = 4242
 const SECONDS_LOST_PER_TRAP: int = 15
 
 const TILE_CHAMBER = 77
-const CHAMBER = "charm_chamber"
+const CHAMBER = "charmber"
 
 const CHARM = "charm"
 
@@ -144,7 +144,8 @@ static func isUpgradePurchasable(upgradeName: String) -> bool:
 	 or upgradeName == "laser"
 	 or upgradeName == "drillbot"
 	 or upgradeName == "player1.keeper1"
-	 or upgradeName == "player1.keeper2"):
+	 or upgradeName == "player1.keeper2"
+	 or upgradeName == "drill"):
 		return true
 	
 	if (upgradeName.begins_with("laser")
@@ -157,7 +158,10 @@ static func isUpgradePurchasable(upgradeName: String) -> bool:
 	or upgradeName.begins_with("orchard")
 	or upgradeName.begins_with("droneyard")
 	or upgradeName.begins_with("jetpack")
-	or upgradeName.begins_with("drill")
+	or upgradeName == "drill1"
+	or upgradeName == "drill2"
+	or upgradeName == "drill3"
+	or upgradeName == "drill4"
 	or upgradeName.begins_with("player1")):
 		return false
 	return true

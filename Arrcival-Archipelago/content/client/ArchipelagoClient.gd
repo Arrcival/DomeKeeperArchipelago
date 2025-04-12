@@ -5,7 +5,7 @@ var _ap_user: String = ""
 var _ap_pass: String = ""
 
 const my_version = "1.0.0"
-const ap_version = {"major": 0, "minor": 6, "build": 0, "class": "Version"}
+const ap_version = {"major": 0, "minor": 6, "build": 1, "class": "Version"}
 const GAME_NAME = "Dome Keeper"
 
 var _client

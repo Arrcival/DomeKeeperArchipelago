@@ -2,55 +2,55 @@
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://u63jbkdc0pur" path="res://content/caves/scannercave/alpha.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://bi6xysdt0kbe0" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet-export.png" id="3_w44t1"]
+[ext_resource type="Texture2D" uid="uid://btr5tm7qwwxe4" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet.png" id="3_h1jk3"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://bi8fw3hrhlkgs" path="res://content/gadgets/blastMining/focussed.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://cnli5sew6h3i5" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" id="6_rp8s0"]
+[ext_resource type="Texture2D" uid="uid://cnli5sew6h3i5" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" id="6_f4gqv"]
 [ext_resource type="PackedScene" uid="uid://fl5e4x7lb4px" path="res://systems/audio/Sound.tscn" id="7"]
 [ext_resource type="Script" path="res://content/map/Parallaxer.gd" id="8"]
-[ext_resource type="AudioStream" uid="uid://onkl46qrrlx4" path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" id="9_2544e"]
 [ext_resource type="AudioStream" uid="uid://b20ugclvmjrs5" path="res://content/sounds/UI/UI_spice_o1.wav" id="10"]
+[ext_resource type="AudioStream" uid="uid://onkl46qrrlx4" path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" id="10_e18ha"]
 [ext_resource type="Texture2D" uid="uid://rasmosh8h0qm" path="res://content/drop/iron/iron_smol.png" id="12"]
 [ext_resource type="PackedScene" path="res://content/shared/drops/ResourceGrabber.tscn" id="13"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_835oc"]
-atlas = ExtResource("6_rp8s0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_aulgy"]
+atlas = ExtResource("6_f4gqv")
 region = Rect2(0, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8itvh"]
-atlas = ExtResource("6_rp8s0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3jia"]
+atlas = ExtResource("6_f4gqv")
 region = Rect2(14, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qsswc"]
-atlas = ExtResource("6_rp8s0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5bsu"]
+atlas = ExtResource("6_f4gqv")
 region = Rect2(28, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5vjq5"]
-atlas = ExtResource("6_rp8s0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_al3sl"]
+atlas = ExtResource("6_f4gqv")
 region = Rect2(42, 0, 14, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gjwwf"]
-atlas = ExtResource("6_rp8s0")
-region = Rect2(42, 0, 14, 14)
+[sub_resource type="AtlasTexture" id="AtlasTexture_db7f8"]
+atlas = ExtResource("6_f4gqv")
+region = Rect2(0, 14, 14, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nuj7y"]
-atlas = ExtResource("6_rp8s0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_4huxe"]
+atlas = ExtResource("6_f4gqv")
 region = Rect2(0, 0, 14, 14)
 
 [sub_resource type="SpriteFrames" id="7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_835oc")
+"texture": SubResource("AtlasTexture_aulgy")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8itvh")
+"texture": SubResource("AtlasTexture_l3jia")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qsswc")
+"texture": SubResource("AtlasTexture_c5bsu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5vjq5")
+"texture": SubResource("AtlasTexture_al3sl")
 }],
 "loop": false,
 "name": &"activating",
@@ -58,7 +58,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gjwwf")
+"texture": SubResource("AtlasTexture_db7f8")
 }],
 "loop": true,
 "name": &"active",
@@ -66,7 +66,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_nuj7y")
+"texture": SubResource("AtlasTexture_4huxe")
 }],
 "loop": false,
 "name": &"inactive",
@@ -100,7 +100,7 @@ scaling = 0.8
 
 [node name="Sprite" type="Sprite2D" parent="Sprites"]
 position = Vector2(50, 45)
-texture = ExtResource("3_w44t1")
+texture = ExtResource("3_h1jk3")
 hframes = 3
 
 [node name="ColorRect" type="ColorRect" parent="Sprites/Sprite"]
@@ -113,20 +113,20 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Sprite2" type="Sprite2D" parent="Sprites"]
 position = Vector2(6, 8)
-texture = ExtResource("3_w44t1")
+texture = ExtResource("3_h1jk3")
 centered = false
 hframes = 3
 frame = 2
 
 [node name="Sprite3" type="Sprite2D" parent="Sprites"]
 position = Vector2(48, 48)
-texture = ExtResource("3_w44t1")
+texture = ExtResource("3_h1jk3")
 hframes = 3
 frame = 1
 
 [node name="Sprite4" type="Sprite2D" parent="Sprites"]
 position = Vector2(24, 33)
-texture = ExtResource("3_w44t1")
+texture = ExtResource("3_h1jk3")
 offset = Vector2(22, 22)
 hframes = 3
 
@@ -193,7 +193,7 @@ texture = ExtResource("12")
 [node name="Checker" type="AnimatedSprite2D" parent="Background/Check"]
 position = Vector2(2, 1)
 sprite_frames = SubResource("7")
-animation = &"activating"
+animation = &"inactive"
 
 [node name="ActiveAmbSound" parent="Background/Check/Checker" instance=ExtResource("7")]
 stream = ExtResource("10")
@@ -209,7 +209,7 @@ position = Vector2(2, 1)
 texture = ExtResource("5")
 
 [node name="ItemTakenSound" parent="." instance=ExtResource("7")]
-stream = ExtResource("9_2544e")
+stream = ExtResource("10_e18ha")
 bus = &"Mine"
 randomVolume = 0.0
 randomPitch = 0.0
