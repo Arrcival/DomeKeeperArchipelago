@@ -624,7 +624,7 @@ func getLocationChamberId(assignment: String = "showdown"):
 		locationIdChamberSync += 1
 		return rtr
 	else:
-		locationIdChamberAsync = LOCATION_FIRST_CHAMBER_ASYNC_ID + get_assignment_id(assignment) * 2
+		locationIdChamberAsync = LOCATION_FIRST_CHAMBER_ASYNC_ID + get_assignment_id(assignment)
 		var rtr = locationIdChamberAsync + chambers_generated * ASSIGNMENTS_AMOUNT
 		chambers_generated += 1
 		return rtr
