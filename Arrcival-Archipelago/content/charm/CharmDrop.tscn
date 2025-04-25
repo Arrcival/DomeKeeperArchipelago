@@ -1,6 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://4y0hcl1ykn5c"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.gd" id="1_1apvw"]
+[ext_resource type="Texture2D" uid="uid://cqcm4skiq0tkc" path="res://mods-unpacked/Arrcival-Archipelago/content/charm/charm.png" id="2_xcuy2"]
 [ext_resource type="Material" uid="uid://c4rg5bvijyfin" path="res://content/shared/HighlightShader.tres" id="4"]
 [ext_resource type="PackedScene" path="res://content/shared/drops/DropEnterTrigger.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://cal1wf2f0kx7b" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="7"]
@@ -8,14 +9,11 @@
 [sub_resource type="PhysicsMaterial" id="1"]
 friction = 0.1
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7i4io"]
-load_path = "res://.godot/imported/charm.png-7ca0028a4e83894ac9948ff2e0919a3a.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1mdcf"]
+load_path = "res://.godot/imported/carried.png-4f77d1b82f5d21a96bd0ff1067f851cf.ctex"
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hryl4"]
-load_path = "res://.godot/imported/carried.png-a2486cad09479cb22d268dc237c78552.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_knb4v"]
-load_path = "res://.godot/imported/focussed.png-65efdaffe0d59413f09911e1e35c0a8d.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6v5ed"]
+load_path = "res://.godot/imported/focussed.png-fdfe65abf920901a363a168de83306a9.ctex"
 
 [node name="CharmDrop" type="RigidBody2D" groups=["carryable", "saveable"]]
 z_index = 21
@@ -36,19 +34,19 @@ carryInfluenceSize = 2.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-texture = SubResource("CompressedTexture2D_7i4io")
+texture = ExtResource("2_xcuy2")
 
 [node name="CarrySprite" type="Sprite2D" parent="."]
 visible = false
 texture_filter = 1
-texture = SubResource("CompressedTexture2D_hryl4")
+texture = SubResource("CompressedTexture2D_1mdcf")
 
 [node name="FocusSprite" type="Sprite2D" parent="."]
 visible = false
 z_index = 30
 texture_filter = 1
 material = ExtResource("4")
-texture = SubResource("CompressedTexture2D_knb4v")
+texture = SubResource("CompressedTexture2D_6v5ed")
 
 [node name="DropEnterTrigger" parent="." instance=ExtResource("6")]
 
