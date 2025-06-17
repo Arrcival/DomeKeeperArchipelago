@@ -522,17 +522,8 @@ func get_starting_assignment_name() -> String:
 
 func _updateColoredLayers() -> void:
 	coloredLayersUnlocked += 1
-	if mapSize == 0 and coloredLayersUnlocked == 2:
-		emit_signal("logInformations", "You also unlocked every layers after the third layer.")
-		everyLayersUnlockFound = true
-	if mapSize == 1 and coloredLayersUnlocked == 3:
-		emit_signal("logInformations", "You also unlocked every layers after the fourth layer.")
-		everyLayersUnlockFound = true
-	if mapSize == 2 and coloredLayersUnlocked == 5:
-		emit_signal("logInformations", "You also unlocked every layers after the sixth layer.")
-		everyLayersUnlockFound = true
-	if mapSize == 3 and coloredLayersUnlocked == 6:
-		emit_signal("logInformations", "You also unlocked every layers after the seventh layer.")
+	if coloredLayersUnlocked >= get_layer_unlock_count():
+		logInformations.emit("You unlocked every layers.")
 		everyLayersUnlockFound = true
 
 func _getItemNameAndRemove(array: Array) -> String:
@@ -664,3 +655,12 @@ func get_assignment_id(assignment) -> int:
 	if index == -1:
 		index = 0
 	return index
+
+func get_layer_unlock_count() -> int:
+	if mapSize == 1:
+		return 3
+	if mapSize == 2:
+		return 5
+	if mapSize == 3:
+		return 6
+	return 2

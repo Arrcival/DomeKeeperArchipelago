@@ -25,6 +25,9 @@ func build(id:String, tier: = - 1):
 	
 	if id.begins_with("archipelagoupgrade"):
 		explanationBb = getArchipelagoDescription(visualTechId)
+	
+	if id == "archipelago":
+		explanationBb += getRelicHuntStats()
 
 	# Adding visuals for archipelago upgrades
 	if id.begins_with("archipelago"):
@@ -52,6 +55,22 @@ func getArchipelagoDescription(techId: String) -> String:
 		return ""
 	
 	return GameWorld.archipelago.locationScouts[techNumber]
+
+func getRelicHuntStats() -> String:
+	if not GameWorld.archipelago.isRHMode(): #GA has no ap gadget
+		return ""
+	var text = "\n\n"
+	if GameWorld.archipelago.progressionType == 1: # RH with colors
+		if GameWorld.archipelago.everyLayersUnlockFound:
+			text += "You unlocked every layers\n"
+		else:
+			text += "Layers : " + str(GameWorld.archipelago.coloredLayersUnlocked) + "/" + str(GameWorld.archipelago.get_layer_unlock_count()) + "\n"
 	
+		text += "Total iron received : " + str(GameWorld.archipelago.ironRetrieved) + "\n"
+		text += "Total water received : " + str(GameWorld.archipelago.waterRetrieved) + "\n"
+		text += "Total cobalt received : " + str(GameWorld.archipelago.cobaltRetrieved) + "\n"
+	return text
+
+
 func reactivate():
 	crossIcon.visible = false
