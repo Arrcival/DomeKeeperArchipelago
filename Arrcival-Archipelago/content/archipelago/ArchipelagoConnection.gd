@@ -16,7 +16,7 @@ signal packet_connected
 signal client_connected(message: String)
 signal client_disconnected
 signal connection_failed(message: String)
-signal item_received(item_id: int)
+signal item_received(item_id: int, received_index: int)
 signal death_link_received
 signal connect_status(message: String)
 signal connected_with_room_info
@@ -47,6 +47,10 @@ func disconnect_client() -> void:
 	_set_disconnected()
 	if client != null:
 		client.disconnect_from_ap()
+
+func reset_received_item_history() -> void:
+	if client != null:
+		client.reset_received_item_history()
 
 func has_connection() -> bool:
 	return status == STATUS.CONNECTED
@@ -121,8 +125,8 @@ func _on_slot_data_retrieved(raw_slot_data: Dictionary) -> void:
 func _on_location_scout_retrieved(network_items: Array) -> void:
 	scout_received.emit(network_items)
 
-func _on_item_received(item_id: int) -> void:
-	item_received.emit(item_id)
+func _on_item_received(item_id: int, received_index: int) -> void:
+	item_received.emit(item_id, received_index)
 
 func _on_death_link_received() -> void:
 	death_link_received.emit()

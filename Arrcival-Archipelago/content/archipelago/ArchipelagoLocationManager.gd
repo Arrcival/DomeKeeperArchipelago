@@ -53,6 +53,13 @@ func reset() -> void:
 	chamber_async_location_id = LOCATION_FIRST_CHAMBER_ASYNC_ID
 	chambers_generated = 0
 
+# Clears generated counters and map/session-specific location data.
+func reset_all() -> void:
+	reset()
+	switches_location.clear()
+	for location_id: int in location_scouts:
+		location_scouts[location_id] = ""
+
 func next_cave_location() -> int:
 	var location_id := cave_location_id
 	cave_location_id += 1

@@ -4,6 +4,7 @@ var progression: ArchipelagoProgression
 var slot_data: ArchipelagoSlotData
 var pending_items: Array[int] = []
 var received_items: Array[int] = []
+var received_item_indexes: Dictionary = {}
 var upgrade_pools: Dictionary = {}
 var upgrades_bought: Array[String] = []
 
@@ -24,7 +25,26 @@ func reset_pending() -> void:
 func reset_upgrades() -> void:
 	upgrades_bought.clear()
 
-func receive_item(item_id: int) -> void:
+# Clears state generated for the current run while preserving received item history.
+func reset_for_new_run() -> void:
+	pending_items.clear()
+	upgrade_pools.clear()
+	upgrades_bought.clear()
+
+# Clears all item state, including the history received from Archipelago.
+func reset_all() -> void:
+	reset_for_new_run()
+	received_items.clear()
+	received_item_indexes.clear()
+
+func receive_item(item_id: int, received_index: int = -1) -> void:
+	# Archipelago resends the complete item history after reconnecting.
+	# The index, rather than the item ID, identifies a unique received item.
+	if received_index >= 0:
+		if received_item_indexes.has(received_index):
+			return
+		received_item_indexes[received_index] = true
+
 	received_items.append(item_id)
 	pending_items.append(item_id)
 	process_unlocks()

@@ -1,63 +1,63 @@
 class_name ArchipelagoData
 
-var progression: ArchipelagoProgression = ArchipelagoProgression.new()
-var item_processor: ArchipelagoItemProcessor = ArchipelagoItemProcessor.new()
-var connection_manager: ArchipelagoConnection = ArchipelagoConnection.new()
-var upgrade_generator: ArchipelagoUpgradeGenerator = ArchipelagoUpgradeGenerator.new()
-var assignment_manager: ArchipelagoAssignmentManager = ArchipelagoAssignmentManager.new()
+var _progression: ArchipelagoProgression = ArchipelagoProgression.new()
+var _item_processor: ArchipelagoItemProcessor = ArchipelagoItemProcessor.new()
+var _connection_manager: ArchipelagoConnection = ArchipelagoConnection.new()
+var _upgrade_generator: ArchipelagoUpgradeGenerator = ArchipelagoUpgradeGenerator.new()
+var _assignment_manager: ArchipelagoAssignmentManager = ArchipelagoAssignmentManager.new()
 
-var slotData = ArchipelagoSlotData.new()
-var locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
+var _slot_data: ArchipelagoSlotData = ArchipelagoSlotData.new()
+var _locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
 
 #region slot data
 
 var keeperSlot: int:
-	get: return slotData.keeperSlot
+	get: return _slot_data.keeperSlot
 var domeSlot: int:
-	get: return slotData.domeSlot
+	get: return _slot_data.domeSlot
 var domeGadgetSlot: int:
-	get: return slotData.domeGadgetSlot
+	get: return _slot_data.domeGadgetSlot
 var mapSize: int:
-	get: return slotData.mapSize
+	get: return _slot_data.mapSize
 var difficulty: int:
-	get: return slotData.difficulty
+	get: return _slot_data.difficulty
 var switchesPerLayer: Array:
-	get: return slotData.switchesPerLayer
+	get: return _slot_data.switchesPerLayer
 var miningEverything: bool:
-	get: return slotData.miningEverything
+	get: return _slot_data.miningEverything
 var challengeMode: bool:
-	get: return slotData.challengeMode
+	get: return _slot_data.challengeMode
 var assignmentsAmount: int:
-	get: return slotData.assignmentsAmount
+	get: return _slot_data.assignmentsAmount
 #endregion
 
 var coloredLayersUnlocked: int:
-	get: return progression.relic.coloredLayersUnlocked
-	set(value): progression.relic.coloredLayersUnlocked = value
+	get: return _progression.relic.coloredLayersUnlocked
+	set(value): _progression.relic.coloredLayersUnlocked = value
 var everyLayersUnlockFound: bool:
-	get: return progression.relic.everyLayersUnlockFound
-	set(value): progression.relic.everyLayersUnlockFound = value
+	get: return _progression.relic.everyLayersUnlockFound
+	set(value): _progression.relic.everyLayersUnlockFound = value
 
 func _init() -> void:
-	connection_manager.slot_data_received.connect(retrieveSlotData)
-	connection_manager.scout_received.connect(retrieveScout)
-	connection_manager.packet_connected.connect(connected)
-	connection_manager.client_connected.connect(on_client_connected)
-	connection_manager.client_disconnected.connect(on_client_disconnected)
-	connection_manager.item_received.connect(_on_item_received)
-	connection_manager.death_link_received.connect(_on_death_link_received)
-	connection_manager.connect_status.connect(_on_connect_status)
-	connection_manager.connected_with_room_info.connect(_on_connected_with_room_info)
-	connection_manager.log_informations.connect(_on_connection_log)
-	connection_manager.connection_failed.connect(connection_failed)
+	_connection_manager.slot_data_received.connect(retrieveSlotData)
+	_connection_manager.scout_received.connect(retrieveScout)
+	_connection_manager.packet_connected.connect(connected)
+	_connection_manager.client_connected.connect(on_client_connected)
+	_connection_manager.client_disconnected.connect(on_client_disconnected)
+	_connection_manager.item_received.connect(_on_item_received)
+	_connection_manager.death_link_received.connect(_on_death_link_received)
+	_connection_manager.connect_status.connect(_on_connect_status)
+	_connection_manager.connected_with_room_info.connect(_on_connected_with_room_info)
+	_connection_manager.log_informations.connect(_on_connection_log)
+	_connection_manager.connection_failed.connect(connection_failed)
 
-	progression.setup(slotData)
-	progression.log_informations.connect(_on_progression_log)
-	assignment_manager.setup(progression.guild, slotData, Callable(self, "sendCheck"))
-	upgrade_generator.setup(slotData)
-	item_processor.setup(progression, slotData)
-	item_processor.trap_received.connect(_on_item_trap_received)
-	item_processor.upgrade_received.connect(_on_upgrade_received)
+	_progression.setup(_slot_data)
+	_progression.log_informations.connect(_on_progression_log)
+	_assignment_manager.setup(_progression.guild, _slot_data, Callable(self, "sendCheck"))
+	_upgrade_generator.setup(_slot_data)
+	_item_processor.setup(_progression, _slot_data)
+	_item_processor.trap_received.connect(_on_item_trap_received)
+	_item_processor.upgrade_received.connect(_on_upgrade_received)
 
 signal logInformations(text: String)
 
@@ -74,26 +74,42 @@ signal upgrade_received(item_name: String)
 signal trap_received
 
 func set_client(value: Variant) -> void:
-	connection_manager.client = value
+	_connection_manager.client = value
 
+# Starts a connection without changing the current run state.
+# This is used by the pause menu after a transient disconnection.
 func connect_client() -> void:
-	reset_progression()
-	reset_location_generation()
-	reset_item_processing()
-	reset_client()
-	connection_manager.connect_client()
+	_connection_manager.connect_client()
 
+# Disconnects while preserving _progression, received items, and _locations.
 func disconnect_client() -> void:
-	connection_manager.disconnect_client()
+	_connection_manager.disconnect_client()
+
+# Starts a completely new Archipelago session from the title screen.
+func connect_new_session() -> void:
+	reset_all_state()
+	_connection_manager.reset_received_item_history()
+	_connection_manager.connect_client()
+
+# Disconnects and removes all Archipelago state from the previous session.
+func disconnect_client_and_reset() -> void:
+	_connection_manager.disconnect_client()
+	reset_all_state()
+
+func reset_all_state() -> void:
+	_slot_data.reset()
+	_progression.reset()
+	_locations.reset_all()
+	_item_processor.reset_all()
 
 func is_client_connected() -> bool:
-	return connection_manager.has_connection()
+	return _connection_manager.has_connection()
 
 func is_connection_disconnected() -> bool:
-	return connection_manager.is_disconnected()
+	return _connection_manager.is_disconnected()
 
 func get_server_name() -> String:
-	return connection_manager.get_server_name()
+	return _connection_manager.get_server_name()
 
 func connection_failed(message: String) -> void:
 	could_not_connect.emit(message)
@@ -104,8 +120,8 @@ func on_client_connected(message: String) -> void:
 func on_client_disconnected() -> void:
 	client_disconnected.emit()
 	
-func _on_item_received(item_id: int) -> void:
-	item_found(item_id)
+func _on_item_received(item_id: int, received_index: int) -> void:
+	_item_processor.receive_item(item_id, received_index)
 	item_received.emit(item_id)
 
 func _on_death_link_received() -> void:
@@ -121,67 +137,79 @@ func _on_connection_log(text: String) -> void:
 	logInformations.emit(text)
 
 func reset_client() -> void:
-	item_processor.reset_upgrades()
+	_item_processor.reset_upgrades()
 
 func retrieveSlotData(raw_slot_data: Dictionary) -> void:
-	slotData.apply(raw_slot_data)
+	_slot_data.apply(raw_slot_data)
 	if raw_slot_data.has("startingGA"):
-		assignment_manager.receive_starting_assignment(slotData.startingGuildAssignment)
+		_assignment_manager.receive_starting_assignment(_slot_data.startingGuildAssignment)
 	slot_data_have_been_retrieved.emit()
 
 func submitSwitch(switchPos: Vector2i) -> void:
-	var switch_id :int = locations.get_switch_location(switchPos)
+	var switch_id :int = _locations.get_switch_location(switchPos)
 	if switch_id != -1:
 		sendCheck(switch_id)
 
 func submitUpgrade(upgradeName: String) -> void:
-	var location_id :int = locations.get_upgrade_location(upgradeName)
+	var location_id :int = _locations.get_upgrade_location(upgradeName)
 	if location_id != -1:
 		sendCheck(location_id)
 
 func sendCheck(locationId: int) -> void:
-	connection_manager.send_check(locationId)
+	_connection_manager.send_check(locationId)
 
 func send_death(reason: String) -> void:
-	connection_manager.send_death(reason)
+	_connection_manager.send_death(reason)
 
 func mark_death_link_death() -> void:
-	progression.mark_death_link_death()
+	_progression.mark_death_link_death()
 
 func consume_death_link_death() -> bool:
-	return progression.consume_death_link_death()
+	return _progression.consume_death_link_death()
 
 func reset_given_resources() -> void:
-	progression.reset_given_resources()
+	_progression.reset_given_resources()
+
+func consume_resource_deltas() -> Dictionary:
+	return _progression.consume_resource_deltas()
+
+func get_switches_per_layer() -> Array:
+	return _slot_data.switchesPerLayer.duplicate()
+
+func clear_switch_locations() -> void:
+	_locations.switches_location.clear()
+
+func add_switch_locations(layer_locations: Array) -> void:
+	_locations.switches_location.append(layer_locations)
 
 func prepare_level() -> void:
 	generateUpgrades()
 	reset_given_resources()
 
-# Resets resource and progression state for a new game.
+# Resets resource and _progression state for a new game.
 func reset_progression() -> void:
-	progression.reset()
+	_progression.reset()
 
 # Resets generated location state without changing received item data.
 func reset_location_generation() -> void:
-	locations.reset()
+	_locations.reset()
 
 # Clears items that have not yet been applied to the game.
 func reset_item_processing() -> void:
-	item_processor.reset_pending()
+	_item_processor.reset_pending()
 
 # Resets all transient game state while preserving the received item history.
 # This keeps the old reset() API available to existing callers.
 func reset() -> void:
 	reset_progression()
 	reset_location_generation()
-	reset_item_processing()
+	_item_processor.reset_for_new_run()
 
 # Generate deterministic upgrade pools and give them to the item processor.
 func generateUpgrades() -> void:
 	reset()
-	item_processor.prepare_received_items()
-	item_processor.set_upgrade_pools(upgrade_generator.generate())
+	_item_processor.prepare_received_items()
+	_item_processor.set_upgrade_pools(_upgrade_generator.generate())
 
 func _on_item_trap_received() -> void:
 	trap_received.emit()
@@ -190,7 +218,7 @@ func _on_upgrade_received(item_name: String) -> void:
 	upgrade_received.emit(item_name)
 
 func receive_item(item_id: int) -> void:
-	item_processor.receive_item(item_id)
+	_item_processor.receive_item(item_id)
 
 # Compatibility wrapper for existing callers.
 func item_found(itemId: int) -> void:
@@ -199,7 +227,7 @@ func item_found(itemId: int) -> void:
 func connected() -> void:
 	if isRHMode():
 		return
-	assignment_manager.process_checked_locations(connection_manager.get_checked_locations())
+	_assignment_manager.process_checked_locations(_connection_manager.get_checked_locations())
 
 
 
@@ -208,7 +236,7 @@ func _on_progression_log(text: String) -> void:
 	logInformations.emit(text)
 
 func checkUpgrades() -> Array[String]:
-	return item_processor.check_upgrades()
+	return _item_processor.check_upgrades()
 
 func hasLayerUnlocked(layerId: int) -> bool:
 	if not is_relic_hunt_with_colored_layers():
@@ -219,43 +247,43 @@ func hasLayerUnlocked(layerId: int) -> bool:
 	return layerId <= coloredLayersUnlocked
 
 func is_relic_hunt() -> bool:
-	return slotData.is_relic_hunt()
+	return _slot_data.is_relic_hunt()
 
 func is_relic_hunt_with_colored_layers() -> bool:
-	return slotData.is_relic_hunt_with_colored_layers()
+	return _slot_data.is_relic_hunt_with_colored_layers()
 
 # Compatibility wrapper for existing extensions.
 func isRHMode() -> bool:
 	return is_relic_hunt() or is_relic_hunt_with_colored_layers()
 
 func retrieveScout(networkItems: Array) -> void:
-	locations.receive_scouts(networkItems)
+	_locations.receive_scouts(networkItems)
 
 func scoutUpgrades() -> void:
-	connection_manager.send_scout(locations.get_scout_location_ids())
+	_connection_manager.send_scout(_locations.get_scout_location_ids())
 
 func isGAUnlocked(assignment_name: String) -> bool:
-	return assignment_manager.is_unlocked(assignment_name)
+	return _assignment_manager.is_unlocked(assignment_name)
 
 func isGADone(assignment_name: String) -> bool:
-	return assignment_manager.is_done(assignment_name)
+	return _assignment_manager.is_done(assignment_name)
 	
 func getLocationCaveId() -> int:
-	return locations.next_cave_location()
+	return _locations.next_cave_location()
 
 func getLocationChamberId(assignment: String = "showdown") -> int:
-	return locations.next_chamber_location(isRHMode(), get_assignment_id(assignment))
+	return _locations.next_chamber_location(isRHMode(), get_assignment_id(assignment))
 
 func is_async_won() -> bool:
-	return assignment_manager.is_async_won()
+	return _assignment_manager.is_async_won()
 
 func ga_completion(assignment_name: String, isChallengeMode: bool) -> void:
-	if assignment_manager.complete(assignment_name, isChallengeMode):
-		connection_manager.complete_goal()
+	if _assignment_manager.complete(assignment_name, isChallengeMode):
+		_connection_manager.complete_goal()
 
 func get_seed(assignment: String = "showdown") -> int:
-	return slotData.get_seed(assignment)
+	return _slot_data.get_seed(assignment)
 
 func get_assignment_id(assignment: String) -> int:
-	return assignment_manager.get_assignment_id(assignment)
+	return _assignment_manager.get_assignment_id(assignment)
 

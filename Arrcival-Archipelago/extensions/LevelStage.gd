@@ -19,7 +19,7 @@ func _process(deltaTime: float):
 						node.reactivate()
 
 	# Apply resources received since the previous frame.
-	var resources: Dictionary = GameWorld.archipelago.progression.consume_resource_deltas()
+	var resources: Dictionary = GameWorld.archipelago.consume_resource_deltas()
 	if resources["sand"] > 0:
 		Data.changeByInt("inventory.sand", resources["sand"])
 	if resources["water"] > 0:

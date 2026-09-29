@@ -47,7 +47,7 @@ signal evaluate_solvability
 
 signal client_disconnected
 signal onDeathFound
-signal item_received(itemId)
+signal item_received(itemId, receivedIndex)
 signal connected
 signal connectedWithRoomInfo
 signal packetRoomInfo
@@ -59,6 +59,9 @@ signal location_scout_retrieved(scout_data)
 func _init():
 	ProjectSettings.set_setting("network/limits/websocket_client/max_in_buffer_kb", 8192)
 	_newClient()
+
+func reset_received_item_history() -> void:
+	_received_indexes.clear()
 
 func connect_to_server(ap_server, ap_name, ap_pass):
 	_initiated_disconnect = false
@@ -370,7 +373,7 @@ func processItem(item, index, from, flags):
 			item_name = _item_id_to_name[item]
 
 		var item_color = colorForItemType(flags)
-		emit_signal("item_received", item)
+		emit_signal("item_received", item, index)
 		# means its our own game, yay !
 		if from == _slot:
 			emit_signal("logInformations", "Found [color=%s]%s[/color]" % [item_color, item_name])
