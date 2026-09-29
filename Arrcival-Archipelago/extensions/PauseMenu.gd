@@ -34,7 +34,7 @@ func onArchipelagoDisconnect():
 
 func connect_archipelago():
 	connectButton.text = "Connecting..."
-	if GameWorld.archipelago.connection == GameWorld.archipelago.CONNECTION_STATUS.DISCONNECTED:
+	if GameWorld.archipelago.is_connection_disconnected():
 		GameWorld.archipelago.connect_client()
 	else:
 		GameWorld.archipelago.disconnect_client()

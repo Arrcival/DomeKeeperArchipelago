@@ -1,8 +1,5 @@
 class_name ArchipelagoItemProcessor
 
-const ITEM_FIRST_ASSIGNMENT_ID: int = 4242200
-const ASSIGNMENT_UNLOCK_COUNT: int = 25
-
 var progression: ArchipelagoProgression
 var slot_data: ArchipelagoSlotData
 var pending_items: Array[int] = []
@@ -19,6 +16,7 @@ func setup(
 ) -> void:
 	progression = progression_manager
 	slot_data = slot_data_manager
+	progression.trap_received.connect(_on_progression_trap_received)
 
 func reset_pending() -> void:
 	pending_items.clear()
@@ -42,40 +40,7 @@ func item_found(item_id: int) -> void:
 	receive_item(item_id)
 
 func process_item(item_id: int) -> String:
-	match item_id:
-		4242230:
-			progression.ironRetrievedGA += 1
-			return ""
-		4242231:
-			progression.waterRetrievedGA += 1
-			return ""
-		4242232:
-			progression.cobaltRetrievedGA += 1
-			return ""
-		4242233:
-			progression.miningStrengthRetrievedGA += 1
-			return ""
-		4242234:
-			progression.movementSpeedRetrievedGA += 1
-			return ""
-		4242090:
-			progression.cobaltRetrieved += 1
-			return ""
-		4242091:
-			progression.waterRetrieved += 1
-			return ""
-		4242092:
-			progression.ironRetrieved += 1
-			return ""
-		4242095:
-			trap_received.emit()
-			return ""
-		4242100:
-			progression.update_colored_layers(slot_data.get_layer_unlock_count())
-			return ""
-
-	if item_id >= ITEM_FIRST_ASSIGNMENT_ID and item_id < ITEM_FIRST_ASSIGNMENT_ID + ASSIGNMENT_UNLOCK_COUNT:
-		progression.receive_unlock(item_id)
+	if progression.process_item(item_id):
 		return ""
 
 	var item_name: String = _take_upgrade(item_id)
@@ -89,7 +54,7 @@ func process_item(item_id: int) -> String:
 func process_unlocks() -> void:
 	var items_to_process: Array[int] = pending_items.duplicate()
 	for item_id: int in items_to_process:
-		if item_id >= ITEM_FIRST_ASSIGNMENT_ID and item_id < ITEM_FIRST_ASSIGNMENT_ID + ASSIGNMENT_UNLOCK_COUNT:
+		if progression.is_immediate_item(item_id):
 			pending_items.erase(item_id)
 			process_item(item_id)
 
@@ -99,6 +64,9 @@ func check_upgrades() -> Array[String]:
 		var processed_item: String = process_item(pending_items.pop_front())
 		processed_items.append(processed_item)
 	return processed_items
+
+func _on_progression_trap_received() -> void:
+	trap_received.emit()
 
 func _take_upgrade(item_id: int) -> String:
 	if not upgrade_pools.has(item_id):

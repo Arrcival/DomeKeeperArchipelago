@@ -68,9 +68,9 @@ func add_child_first(node: Node, child: Node):
 
 func connect_archipelago():
 	connectButton.text = "Connecting..."
-	if GameWorld.archipelago.connection == GameWorld.archipelago.CONNECTION_STATUS.DISCONNECTED:
+	if GameWorld.archipelago.is_connection_disconnected():
 		GameWorld.archipelago.connect_client()
-		GameWorld.archipelago.logInformations.emit("Connecting to " + GameWorld.archipelago.serverName)
+		GameWorld.archipelago.logInformations.emit("Connecting to " + GameWorld.archipelago.get_server_name())
 	else:
 		GameWorld.archipelago.disconnect_client()
 		connectButton.text = "Connect"

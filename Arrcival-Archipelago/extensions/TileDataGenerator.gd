@@ -23,9 +23,9 @@ func generate_resources(rand):
 				print("@@@@@@@@ Added water on " + str(cell.x) + ", " + str(cell.y))
 				break
 
-	GameWorld.archipelago.switchesLocation.clear()
+	GameWorld.archipelago.locations.switches_location.clear()
 	if not GameWorld.devMode:
-		generate_switches_coordinates(GameWorld.archipelago.switchesPerLayer)
+		generate_switches_coordinates(GameWorld.archipelago.slotData.switchesPerLayer)
 	print("@@@@ Done generating archipelago ressources")
 
 func generate_gadget_chambers():
@@ -33,7 +33,7 @@ func generate_gadget_chambers():
 	print("@@@@ Generating AP chambers")
 	
 	if GameWorld.archipelago.isRHMode():
-		var biomes = 3 if GameWorld.devMode else len(GameWorld.archipelago.switchesPerLayer)
+		var biomes = 3 if GameWorld.devMode else len(GameWorld.archipelago.slotData.switchesPerLayer)
 		for i in range(biomes):
 			var biomeCells: Array = _mapData.get_biome_cells_by_index(FIRSTLAYERID + i)
 			var biomeCellsShuffled = Data.seedShuffle(biomeCells, gen_seed)
@@ -80,7 +80,7 @@ func generate_switches_coordinates(switchesPerLayer: Array) -> void:
 				switchesGenerated += 1
 			if switchesGenerated >= switchesPerLayer[i]:
 				break
-		GameWorld.archipelago.switchesLocation.append(array)
+		GameWorld.archipelago.locations.switches_location.append(array)
 		if OS.is_debug_build():
 			print("@@@@@@@@ witches for layer " + str(i) + " : ")
 			print(array)

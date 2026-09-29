@@ -51,6 +51,20 @@ func disconnect_client() -> void:
 func has_connection() -> bool:
 	return status == STATUS.CONNECTED
 
+func is_disconnected() -> bool:
+	return status == STATUS.DISCONNECTED
+
+func is_connecting() -> bool:
+	return status == STATUS.IN_PROGRESS
+
+func get_server_name() -> String:
+	return server_name
+
+func get_checked_locations() -> Array:
+	if client == null:
+		return []
+	return client._checked_locations
+
 func send_check(location_id: int) -> void:
 	if client == null or not has_connection():
 		push_warning("Cannot send location check while Archipelago is disconnected.")

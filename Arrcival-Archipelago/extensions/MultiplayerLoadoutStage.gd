@@ -17,11 +17,6 @@ func build(data: Array):
 	#var player1keeper = find_child("player1")
 	#networkChangeKeeper(player1keeper, "keeper1-skin0")
 
-	#select_keeper("player1", "keeper3")
-	#if not GameWorld.archipelago.isRHMode():
-	#	GameWorld.archipelago.processUnlocks()
-	#GameWorld.archipelago.ga_unlocked.connect(activate_assignment)
-
 	domeSelected(Data.loadoutDomes[GameWorld.archipelago.domeSlot], "team1", false)
 	primaryGadgetSelected(Data.loadoutGadgets[GameWorld.archipelago.domeGadgetSlot], "team1", false)
 	difficultySelected([-2, -1, 0, 2][GameWorld.archipelago.difficulty], "team1", false)

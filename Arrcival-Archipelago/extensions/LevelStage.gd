@@ -18,30 +18,14 @@ func _process(deltaTime: float):
 					if upgrades.has(node.techId):
 						node.reactivate()
 
-	# Unwinds ressources received to add in inventory
-	if GameWorld.archipelago.cobaltGiven < GameWorld.archipelago.cobaltRetrieved:
-		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrieved - GameWorld.archipelago.cobaltGiven)
-		GameWorld.archipelago.cobaltGiven = GameWorld.archipelago.cobaltRetrieved
-	
-	if GameWorld.archipelago.waterGiven < GameWorld.archipelago.waterRetrieved:
-		Data.changeByInt("inventory.water", GameWorld.archipelago.waterRetrieved - GameWorld.archipelago.waterGiven)
-		GameWorld.archipelago.waterGiven = GameWorld.archipelago.waterRetrieved
-		
-	if GameWorld.archipelago.ironGiven < GameWorld.archipelago.ironRetrieved:
-		Data.changeByInt("inventory.iron", GameWorld.archipelago.ironRetrieved - GameWorld.archipelago.ironGiven)
-		GameWorld.archipelago.ironGiven = GameWorld.archipelago.ironRetrieved
-	
-	if GameWorld.archipelago.cobaltGivenGA < GameWorld.archipelago.cobaltRetrievedGA:
-		Data.changeByInt("inventory.sand", GameWorld.archipelago.cobaltRetrievedGA - GameWorld.archipelago.cobaltGivenGA)
-		GameWorld.archipelago.cobaltGivenGA = GameWorld.archipelago.cobaltRetrievedGA
-	
-	if GameWorld.archipelago.waterGivenGA < GameWorld.archipelago.waterRetrievedGA:
-		Data.changeByInt("inventory.water", GameWorld.archipelago.waterRetrievedGA - GameWorld.archipelago.waterGivenGA)
-		GameWorld.archipelago.waterGivenGA = GameWorld.archipelago.waterRetrievedGA
-	
-	if GameWorld.archipelago.ironGivenGA < GameWorld.archipelago.ironRetrievedGA:
-		Data.changeByInt("inventory.iron", GameWorld.archipelago.ironRetrievedGA - GameWorld.archipelago.ironGivenGA)
-		GameWorld.archipelago.ironGivenGA = GameWorld.archipelago.ironRetrievedGA
+	# Apply resources received since the previous frame.
+	var resources: Dictionary = GameWorld.archipelago.progression.consume_resource_deltas()
+	if resources["sand"] > 0:
+		Data.changeByInt("inventory.sand", resources["sand"])
+	if resources["water"] > 0:
+		Data.changeByInt("inventory.water", resources["water"])
+	if resources["iron"] > 0:
+		Data.changeByInt("inventory.iron", resources["iron"])
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
