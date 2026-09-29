@@ -24,7 +24,7 @@ func _ready():
 		
 	Style.init(connectButton)
 
-func onArchipelagoConnected():
+func onArchipelagoConnected(_message: String = "") -> void:
 	connectButton.text = "Connected"
 	connectButton.disabled = true
 
@@ -35,7 +35,7 @@ func onArchipelagoDisconnect():
 func connect_archipelago():
 	connectButton.text = "Connecting..."
 	if GameWorld.archipelago.connection == GameWorld.archipelago.CONNECTION_STATUS.DISCONNECTED:
-		GameWorld.archipelago.connectClient()
+		GameWorld.archipelago.connect_client()
 	else:
 		GameWorld.archipelago.disconnect_client()
 		connectButton.text = "Reconnect"

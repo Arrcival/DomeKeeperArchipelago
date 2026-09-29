@@ -3,8 +3,6 @@ extends Control
 
 var textBox: RichTextLabel
 
-var i = 1
-
 const MAX_LINE_COUNT = 7
 
 const MAX_TIMER := 10
@@ -25,13 +23,16 @@ func _ready():
 	textBox.set_use_bbcode(true)
 	
 	GameWorld.chat = self
-	GameWorld.archipelago.client.connect_status.connect(self.addText)
-	GameWorld.archipelago.client.client_connected.connect(self.addText)
-	GameWorld.archipelago.client.could_not_connect.connect(self.addText)
-	GameWorld.archipelago.client.connectedWithRoomInfo.connect(self.addText)
-	GameWorld.archipelago.client.logInformations.connect(self.addText)
+	GameWorld.archipelago.connect_status.connect(self.addText)
+	GameWorld.archipelago.client_connected.connect(self.addText)
+	GameWorld.archipelago.could_not_connect.connect(self.addText)
+	GameWorld.archipelago.connectedWithRoomInfo.connect(self._on_room_info)
+	GameWorld.archipelago.logInformations.connect(self.addText)
 	
 	addText("Press T to display again the text box at any time.")
+
+func _on_room_info() -> void:
+	addText("Connected to Archipelago")
 	
 	
 func _input(event):

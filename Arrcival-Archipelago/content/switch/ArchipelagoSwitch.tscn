@@ -1,16 +1,17 @@
-[gd_scene load_steps=53 format=3 uid="uid://dic0ecjby53v1"]
+[gd_scene load_steps=54 format=3 uid="uid://dic0ecjby53v1"]
 
 [ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bet3ocqola0p1" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/archipelago-switch-sheet.png" id="2_1815u"]
+[ext_resource type="Texture2D" uid="uid://r27ekstgk2pl" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/archipelago-switch-sheet.png" id="2_1815u"]
 [ext_resource type="AudioStream" uid="uid://bjcqbmr71uhct" path="res://content/sounds/Amb/giraffe.wav" id="3"]
 [ext_resource type="AudioStream" uid="uid://cxolv2c5th51j" path="res://content/sounds/Locations/RelicSwitchChamber/switchChamberAppear.wav" id="4"]
 [ext_resource type="Texture2D" uid="uid://cdu5hq113b5ii" path="res://content/map/chamber/relicswitch/icon_selector.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="7"]
 [ext_resource type="PackedScene" uid="uid://fl5e4x7lb4px" path="res://systems/audio/Sound.tscn" id="8"]
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.gd" id="9"]
-[ext_resource type="AudioStream" uid="uid://c34cm37at0xl5" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_no4of"]
+[ext_resource type="AudioStream" uid="uid://dibkuk5qchufy" path="res://mods-unpacked/Arrcival-Archipelago/sound/mashup_filler.wav" id="9_no4of"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="11"]
 [ext_resource type="Script" path="res://systems/deprecatedtween/DeprecatedTween.gd" id="11_t72dc"]
+[ext_resource type="Script" path="res://content/map/chamber/ChamberSynchronizer.gd" id="12_6gv80"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q272k"]
 atlas = ExtResource("2_1815u")
@@ -306,28 +307,30 @@ texture = ExtResource("7")
 texture_region_size = Vector2i(25, 24)
 
 [sub_resource type="TileSet" id="1"]
-tile_size = Vector2i(25, 24)
+tile_size = Vector2i(24, 24)
 sources/0 = SubResource("TileSetAtlasSource_81wpq")
 
-[node name="ArchipelagoSwitch" type="Node2D" groups=["saveable"]]
+[node name="ArchipelagoSwitch" type="Node2D" node_paths=PackedStringArray("tileCover") groups=["saveable"]]
 z_index = -10
 position = Vector2(0, 1)
 script = ExtResource("9")
+tileCover = NodePath("TileCover")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_bdhqy")
+animation = &"running"
 
 [node name="Usable" parent="." instance=ExtResource("11")]
 position = Vector2(12, 12)
 visibleOnFocus = NodePath("../FocusMarker")
 
 [node name="TileCover" parent="." instance=ExtResource("2")]
-visible = false
 tile_set = SubResource("1")
 layer_0/tile_data = PackedInt32Array(0, 0, 0)
 
 [node name="FocusMarker" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(12, 12)
 texture = ExtResource("5")
 
@@ -365,5 +368,8 @@ removeAfterPlaying = true
 
 [node name="Tween" type="Node" parent="."]
 script = ExtResource("11_t72dc")
+
+[node name="ChamberSynchronizer" type="Node" parent="."]
+script = ExtResource("12_6gv80")
 
 [connection signal="animation_finished" from="Sprite" to="." method="_on_Sprite_animation_finished"]

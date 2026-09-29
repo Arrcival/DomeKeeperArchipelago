@@ -4,13 +4,16 @@ var _ap_server: String = ""
 var _ap_user: String = ""
 var _ap_pass: String = ""
 
-const my_version = "1.0.0"
-const ap_version = {"major": 0, "minor": 6, "build": 1, "class": "Version"}
+const ap_version = {"major": 0, "minor": 6, "build": 8, "class": "Version"}
 const GAME_NAME = "Dome Keeper"
 
-var _client
+var _websocket_client
 var _initiated_disconnect = false
-var _try_wss = false
+
+const CONNECTION_ATTEMPT_WS = 0
+const CONNECTION_ATTEMPT_WSS = 1
+const CONNECTION_ATTEMPT_DONE = 2
+var _connection_attempt_state = CONNECTION_ATTEMPT_DONE
 
 var _datapackages = {}
 var _pending_packages = []
@@ -57,38 +60,82 @@ func _init():
 	ProjectSettings.set_setting("network/limits/websocket_client/max_in_buffer_kb", 8192)
 	_newClient()
 
+func connect_to_server(ap_server, ap_name, ap_pass):
+	_initiated_disconnect = false
+	_ap_server = ap_server
+	_ap_user = ap_name
+	_ap_pass = ap_pass
+
+	if ap_server.begins_with("ws://") or ap_server.begins_with("wss://"):
+		_connection_attempt_state = CONNECTION_ATTEMPT_DONE
+		_connect_to_url(ap_server)
+		return
+
+	_connection_attempt_state = CONNECTION_ATTEMPT_WS
+	_attempt_next_connection()
+
+func _connect_to_url(url: String):
+	_newClient()
+	print("Connecting to AP via %s" % url)
+	var err: Error = _websocket_client.connect_to_url(url)
+	if err != OK:
+		could_not_connect.emit("Could not connect to AP !")
+		print("Could not connect to AP: " + str(err))
+	# if it doesn't give an error it doesn't mean we're connected !
+
+func _attempt_next_connection() -> bool:
+	var url = ""
+	if _connection_attempt_state == CONNECTION_ATTEMPT_WS:
+		url = "ws://" + _ap_server
+		_connection_attempt_state = CONNECTION_ATTEMPT_WSS
+	elif _connection_attempt_state == CONNECTION_ATTEMPT_WSS:
+		url = "wss://" + _ap_server
+		_connection_attempt_state = CONNECTION_ATTEMPT_DONE
+		print("Retrying with wss")
+	else:
+		return false
+
+	_connect_to_url(url)
+	return true
+
+func _retry_connection_with_fallback() -> bool:
+	return _attempt_next_connection()
+
 func _newClient():
-	_client = load("res://mods-unpacked/Arrcival-Archipelago/content/client/WebSocketClient.gd").new()
+	_websocket_client = load("res://mods-unpacked/Arrcival-Archipelago/content/client/WebSocketClient.gd").new()
 	print("Instantiated APClient")
-	_client.connection_closed.connect(self._closed)
-	_client.data_received.connect(self._on_data)
-	_client.disconnected_without_connection.connect(self._closed)
-	_client.connected.connect(self._connected)
-	GameWorld.archipelago.client = self
+	_websocket_client.connection_closed.connect(self._closed)
+	_websocket_client.data_received.connect(self._on_data)
+	_websocket_client.disconnected_without_connection.connect(self._closed_without_connection)
+	_websocket_client.connected.connect(self._connected)
+	GameWorld.archipelago.set_client(self)
 	print("Ready client")
 
 # mandatory to receive/emit
 func _process(_delta):
-	_client.poll()
+	_websocket_client.poll()
 
 # signals received from the client
 func _reset_state():
-	_client.should_process = false
 	_authenticated = false
-	_try_wss = false
+	_connection_attempt_state = CONNECTION_ATTEMPT_DONE
+
+func _closed_without_connection():
+	_closed(true, "Could not establish connection")
 
 func _closed(should_retry: bool, message: String):
 	if message != "":
 		logInformations.emit(message)
 
-	if not should_retry:
+	if _initiated_disconnect:
 		client_disconnected.emit()
-		could_not_connect.emit("Disconnected/not connected from AP")
 		return
-	
-	# retry wss
-	print("Retrying with wss")
-	connectToServer(_ap_server, _ap_user, _ap_pass)
+
+	if should_retry and _retry_connection_with_fallback():
+		return
+
+	client_disconnected.emit()
+	could_not_connect.emit("Disconnected/not connected from AP")
 
 func _connected():
 	print("Connected!")
@@ -272,32 +319,8 @@ func _requestSync():
 func disconnect_from_ap():
 	logInformations.emit("Disconnecting...")
 	_initiated_disconnect = true
-	_client.close()
+	_websocket_client.close()
 	_reset_state()
-
-func connectToServer(ap_server, ap_name, ap_pass):
-	_newClient()
-	_initiated_disconnect = false
-	_ap_server = ap_server
-	_ap_user = ap_name
-	_ap_pass = ap_pass
-
-	var url = ""
-	if ap_server.begins_with("ws://") or ap_server.begins_with("wss://"):
-		url = ap_server
-		_try_wss = false
-	elif _try_wss:
-		url = "wss://" + ap_server
-		_try_wss = false
-	else:
-		url = "ws://" + ap_server
-		_try_wss = true
-
-	var err: Error = _client.connect_to_url(url)
-	if err != OK:
-		could_not_connect.emit("Could not connect to AP !")
-		print("Could not connect to AP: " + str(err))
-	# if it doesn't give an error it doesn't mean we're connected !
 
 func sendScout(loc_ids: Array, create_as_hint: int = 0):
 	sendMessage([{
@@ -395,7 +418,7 @@ func _getLocationName(locationId: int) -> String:
 func sendMessage(msg):
 	var json = JSON.new()
 	var payload = json.stringify(msg)
-	_client.send_text(payload)
+	_websocket_client.send_text(payload)
 
 func connectToRoom(ap_user, ap_pass):	
 	_ap_user = ap_user

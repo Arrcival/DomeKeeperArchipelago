@@ -5,6 +5,7 @@ var archipelagoCheckOff: TextureRect
 var archipelagoCheckOn: TextureRect
  
 func _ready():
+	super._ready()
 	controlNode = Control.new()
 	archipelagoCheckOff = TextureRect.new()
 	archipelagoCheckOn = TextureRect.new()
@@ -19,7 +20,7 @@ func _ready():
 	controlNode.add_child(archipelagoCheckOn)
 	self.add_child(controlNode)
 	
-	$SelectedPanel.modulate.a = 0.0
+	#$SelectedPanel.modulate.a = 0.0
 	
 	Style.init(self)
 

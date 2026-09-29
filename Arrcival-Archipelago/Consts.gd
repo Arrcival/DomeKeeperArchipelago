@@ -1,8 +1,8 @@
 extends RefCounted
 
-const ADDITIONNAL_INFOS: String = "Please use the latest apworld in the AP discord !"
+const MOD_ID: String = "Arrcival-Archipelago"
 
-const SAVE_OPTIONS_ARCHIPELAGO: String = "user://archipelago_options_v2.json"
+const ADDITIONNAL_INFOS: String = "Please use the latest apworld in the AP discord !"
 
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
 const TILE_ARCHIPELAGO_SWITCH: int = 4242
@@ -10,11 +10,11 @@ const TILE_ARCHIPELAGO_SWITCH: int = 4242
 const SECONDS_LOST_PER_TRAP: int = 15
 
 const TILE_CHAMBER = 77
-const CHAMBER = "charmber"
+const CHAMBER = "chamber"
 
-const CHARM = "charm"
+const ARTIFACT = "artifact"
 
-const PROTECTED_SPAWNS : Array = [
+const PROTECTED_SPAWNS : Array[Vector2] = [
 	Vector2(0, 0),
 	Vector2(0, 1),
 	Vector2(0, 2),
@@ -43,6 +43,31 @@ const KEEPER2_SPECIAL_CHOICES: Array = [
 	["player1.keeper2pinballexplode", "player1.keeper2pinballexplode2"],
 	["player1.keeper2pinballsplit", "player1.keeper2pinballsplit2"],
 ]
+
+const INFILTRATOR_CARRY: Array[String] = ["player1.keeper3carrylimit1", "player1.keeper3carrylimit2", "player1.keeper3carrylimit3"]
+const INFILTRATOR_AERIAL: Array[String] = ["player1.keeper3doublejump", "player1.keeper3slidecontrol", "player1.keeper3quadjump", "player1.keeper3aerialmastery"]
+const INFILTRATOR_MINING_NAME: String = "keeper3kunaidamage4"
+const INFILTRATOR_COOLDOWN: Array[String] = ["player1.keeper3kunaicooldown1", "player1.keeper3kunaicooldown2", "player1.keeper3kunaicooldown3"]
+const INFILTRATOR_ASSIST: Array[String] = ["player1.keeper3kunaibounce1", "player1.keeper3kunaibounce2"]
+const INFILTRATOR_SHURIKEN_CHOICES: Array = [
+	["player1.keeper3shuriken1", "player1.keeper3shuriken2", "player1.keeper3shurikencooldown1", "player1.keeper3shurikencooldown2"],
+	["player1.keeper3shuriken1", "player1.keeper3shuriken2", "player1.keeper3shurikenstrength1", "player1.keeper3shurikenstrength2"]
+	]
+
+const BEASTMASTER_SPEED: Array[String] = ["player1.keeper4speed1", "player1.keeper4speed2", "player1.keeper4speed3"]
+const BEASTMASTER_MINING_CHOICE: Array = [
+	["player1.keeper4ramping1", "player1.keeper4ramping2", "player1.keeper4ramping3"],
+	["player1.keeper4flexible1", "player1.keeper4flexible2", "player1.keeper4flexible3"],
+	["player1.keeper4punch1", "player1.keeper4punch2", "player1.keeper4punch3"],
+]
+const BEASTMASTER_MINING_RAMPING_NAME: String = "player1.keeper4ramping4"
+const BEASTMASTER_MINING_FLEXIBLE_NAME: String = "player1.keeper4flexible4"
+const BEASTMASTER_MINING_PUNCH_NAME: String = "player1.keeper4punch4"
+
+const BEASTMASTER_CATGOBLIN_AMOUNT_NAME: String = "keeper4catgoblinamount"
+const BEASTMASTER_CATGOBLIN_MINING: Array[String] = ["player1.keeper4catgoblindig1", "player1.keeper4catgoblindig2", "player1.keeper4catgoblinsleeptime"]
+const BEASTMASTER_SQUAD_AMOUNT: Array[String] = ["player1.keeper4squad1", "player1.keeper4squad1", "player1.keeper4squad1"]
+const BEASTMASTER_SQUAD_MINING: Array[String] = ["player1.keeper4autospawnminers", "player1.keeper4squad2", "player1.keeper4squad3"]
 
 const LASER_STRENGTH: Array[String] = ["laserstrength1", "laserstrength2"]
 const LASER_STRENGTH_ROLL: Array[String] = ["laserstrength3", "laserhitprojectiles"]
@@ -133,37 +158,33 @@ const DRONEYARD_SPECIAL_CHOICE: Array = [
 const DRONEYARD_OVERCHARGE: Array[String] = ["droneyardovercharge1", "droneyardovercharge2", "droneyardovercharge3"]
 #endregion
 
-static func isUpgradePurchasable(upgradeName: String) -> bool:
-	if (upgradeName == "orchard"
-	 or upgradeName == "shield"
-	 or upgradeName == "repellent"
-	 or upgradeName == "droneyard"
-	 or upgradeName == "tesla"
-	 or upgradeName == "artillery"
-	 or upgradeName == "sword"
-	 or upgradeName == "laser"
-	 or upgradeName == "drillbot"
-	 or upgradeName == "player1.keeper1"
-	 or upgradeName == "player1.keeper2"
-	 or upgradeName == "drill"):
+const PURCHASABLE_UPGRADES: Array[String] = [
+	"orchard", "shield", "repellent", "droneyard", 
+	"tesla", "artillery", "sword", "laser", "drillbot", 
+	"player1.keeper1", "player1.keeper2", "drill"
+]
+
+const UNPURCHASABLE_UPGRADES_STARTSWITH: Array[String] = [
+	"laser", "doublelaser", "sword", "artillery", "tesla", 
+	"shield", "repellent", "orchard", "droneyard", "jetpack",
+	"player1"
+]
+
+const UNPURCHASABLE_UPGRADES: Array[String] = [
+	"drill1", "drill2", "drill3", "drill4"
+]
+
+static func is_upgrade_purchasable(upgradeName: String) -> bool:
+	if PURCHASABLE_UPGRADES.has(upgradeName):
 		return true
-	
-	if (upgradeName.begins_with("laser")
-	or upgradeName.begins_with("doublelaser")
-	or upgradeName.begins_with("sword")
-	or upgradeName.begins_with("artillery")
-	or upgradeName.begins_with("tesla")
-	or upgradeName.begins_with("shield")
-	or upgradeName.begins_with("repellent")
-	or upgradeName.begins_with("orchard")
-	or upgradeName.begins_with("droneyard")
-	or upgradeName.begins_with("jetpack")
-	or upgradeName == "drill1"
-	or upgradeName == "drill2"
-	or upgradeName == "drill3"
-	or upgradeName == "drill4"
-	or upgradeName.begins_with("player1")):
+
+	if UNPURCHASABLE_UPGRADES.has(upgradeName):
 		return false
+
+	for prefix in UNPURCHASABLE_UPGRADES_STARTSWITH:
+		if upgradeName.begins_with(prefix):
+			return false
+
 	return true
 
 const ASSIGNMENTS_DEFAULT_EMPTY: Dictionary = {
@@ -182,12 +203,26 @@ const ASSIGNMENTS_DEFAULT_EMPTY: Dictionary = {
 	"monstermasses": false,
 	"rareiron": false,
 	"weakmining": false,
-	"cobaltcontribution": false
+	"cobaltcontribution": false,
+	"minorvision": false, # Darkness?
+	"acidrain": false,
+	"treefarm": false,
+	"megacreeps": false,
+	"instagip": false,
+	"harmfuliron" : false, # Hazardous Iron
+	"emergency" : false,
+	"logistics" : false,
+	"unpredictable": false
 }
 
-const ASSIGMENTS_LIST : Array = ["showdown", "ironcontribution", "inversegravity", "maze", "projectilehell", "denseiron", "bigmapsparseresources", "weapondefect", "heavyhitters", "superhardrockwithholes", "weakcarry", "weakwalls", "monstermasses", "rareiron", "weakmining", "cobaltcontribution"]
-
-
+const ASSIGNMENTS_LIST : Array[String] = [
+	"showdown", "ironcontribution", "inversegravity", "maze", 
+	"projectilehell", "denseiron", "bigmapsparseresources", "weapondefect", 
+	"heavyhitters", "superhardrockwithholes", "weakcarry", "weakwalls", 
+	"monstermasses", "rareiron", "weakmining", "cobaltcontribution",
+	"minorvision", "acidrain", "treefarm", "megacreeps", "instagip", "harmfuliron",
+	"emergency", "logistics", "unpredictable"
+]
 
 # Recupère l'index du prochain array à récupérer la valeur, en se basant sur le nombre d'elements total dans tous les arrays
 static func make_array_choice(arrays: Array, total_elements: int, rng: RandomNumberGenerator) -> int:

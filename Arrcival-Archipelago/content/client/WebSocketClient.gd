@@ -13,13 +13,15 @@ var should_process = false
 var is_connected = false
 
 func _init():
-	createNewSocket()
+	create_new_socket()
 
-func createNewSocket():
+func create_new_socket():
 	socket = WebSocketPeer.new()
 	socket.inbound_buffer_size = 65536 * 128
+	is_connected = false
 
 func connect_to_url(url: String) -> Error:
+	is_connected = false
 	should_process = true
 	var error = socket.connect_to_url(url)
 	return error
@@ -43,18 +45,20 @@ func poll():
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if not is_connected:
 			disconnected_without_connection.emit()
-		var code = socket.get_close_code()
-		var reason = socket.get_close_reason()
-		if code == -1:
-			connection_closed.emit(true, "Closure wasn't clear, code %d, reason %s. Clean: %s" % [code, reason])
 		else:
-			connection_closed.emit(false, "Connection closed, code %d" % [code])
+			var code = socket.get_close_code()
+			var reason = socket.get_close_reason()
+			if code == -1:
+				connection_closed.emit(true, "Closure wasn't clear, code %d, reason %s" % [code, reason])
+			else:
+				connection_closed.emit(false, "Connection closed, code %d" % [code])
 		should_process = false
-		#is_connected = false
+		is_connected = false
+		create_new_socket()
 
 func close():
 	socket.close()
-	createNewSocket()
+	should_process = true
 
 func send_text(text: String):
 	var error : Error= socket.send_text(text)

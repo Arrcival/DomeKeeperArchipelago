@@ -18,6 +18,8 @@ func _ready():
 	Style.init($Slots / Slot4 / Resource)
 	resetVisibility()
 	chamberType = CONSTARRC.TILE_CHAMBER
+
+	# TODO: refacto
 	var assignment = Data.assignments.get(Data.of("assignment.id"))
 	if assignment != null:
 		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
@@ -48,21 +50,6 @@ func updateUsedTileCoords():
 	tileCoords.append(Vector2(1, 0))
 	tileCoords.append(Vector2(0, 1))
 	tileCoords.append(Vector2(1, 1))
-
-func useHit(keeper:Keeper) -> bool:
-	if currentState == State.OPEN:
-		if GIZMO_SCENE:
-			var gizmo = GIZMO_SCENE.instantiate()
-			gizmo.archipelagoId = chamber_archipelago_id
-			gizmo.position = find_child("GizmoSpawn").global_position
-			Level.map.addDrop(gizmo)
-			keeper.attachCarry(gizmo)
-		currentState = State.EMPTY
-		onUsed()
-		Backend.event("chamber", {"status": "used", "coord":tileCoords, "type": type})
-		return true
-	else:
-		return false
 
 
 func onRevealed():

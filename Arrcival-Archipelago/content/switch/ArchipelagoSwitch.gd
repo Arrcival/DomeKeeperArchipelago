@@ -7,6 +7,7 @@ var readyToUse: = false
 var used: = false
 
 func _ready():
+	super._ready()
 	$Sprite.visible = false
 	chamberType = CONSTARRC.TILE_ARCHIPELAGO_SWITCH
 
@@ -47,7 +48,7 @@ func _on_Sprite_animation_finished():
 	elif $Sprite.animation == "empty":
 		$Sprite.play("running")
 
-func onUsed():
+func onUsed() -> bool:
 	if readyToUse:
 		$Sprite.play("empty")
 		$Usable.queue_free()
@@ -55,11 +56,12 @@ func onUsed():
 		$ChamberAmbClosed.stop()
 		$ChamberAmbClosed.queue_free()
 		currentState = State.EMPTY
-		var time: = 0.1
 		$Tween.start()
 		GameWorld.archipelago.submitSwitch(self.coord)
+		return true
 	else :
 		used = true
+		return false
 
 func getTileType()->int:
 	return CONSTARRC.TILE_ARCHIPELAGO_SWITCH

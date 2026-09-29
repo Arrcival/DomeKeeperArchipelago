@@ -1,8 +1,8 @@
-extends LevelStage
+extends "res://stages/level/LevelStage.gd"
 
 func _ready():
 	super._ready()
-	GameWorld.archipelago.client.onDeathFound.connect(self.makeUserLose)
+	GameWorld.archipelago.onDeathFound.connect(self.makeUserLose)
 
 func _process(deltaTime: float):
 	super._process(deltaTime)
@@ -45,23 +45,11 @@ func _process(deltaTime: float):
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
-	GameWorld.archipelago.died_to_death_link = true
-	Data.changeDomeHealth(-999999)
+	GameWorld.archipelago.mark_death_link_death()
+	Data.changeDomeHealth(-999999, "team1")
 
 func beforeStart():
 	super.beforeStart()
 	if GameWorld.archipelago.isRHMode():
 		GameWorld.archipelago.scoutUpgrades()
 
-# copy paste but with new TechTreePopup
-func startUpgradesInput(keeper:Keeper):
-	var i = preload("res://stages/level/UpgradesInputProcessor.gd").new()
-	i.deviceId = Keepers.getDeviceId(keeper.playerId)
-	inputDeviceLimit = i.deviceId
-	var techTreePopup = preload("res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTreePopup.tscn").instantiate()
-	techTreePopup.addPrefixMapping(keeper.techId, keeper.playerId)
-	find_child("TechtreeContainer").add_child(techTreePopup)
-	i.popup = techTreePopup
-	i.connect("buyUpgrade", Callable(techTreePopup, "buyUpgrade"))
-	i.connect("onStop", Callable(self, "set").bind("inputDeviceLimit", -1))
-	i.integrate(self)

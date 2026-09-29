@@ -1,5 +1,7 @@
 extends "res://content/caves/Cave.gd"
 
+signal hit
+
 var hasItem: = true
 var activated: = false
 var grabs: = 0
@@ -32,13 +34,20 @@ func updateUsedTileCoords():
 	tileCoords.append(Vector2(0, 1))
 	tileCoords.append(Vector2(1, 1))
 
-func canFocusUse(keeper:Keeper)->bool:
-	return hasItem and activated
+func canFocusUse(keeper: Keeper) -> bool:
+	return hasItem
 
-func useHold(keeper:Keeper):
+func useHold(keeper: Keeper) -> bool:
 	return useHit(keeper)
 
-func useHit(keeper:Keeper)->bool:
+func useHit(keeper: Keeper) -> bool:
+	if not hasItem:
+		return false
+
+	hit.emit(keeper)
+	return true
+
+func registerHit(playerId: String)->bool:
 	if not hasItem:
 		return false
 	

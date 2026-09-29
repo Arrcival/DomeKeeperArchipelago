@@ -51,7 +51,7 @@ archipelagoupgradeironwater4:
   predecessors: [archipelagoupgradeironwater3]
 
 domeHealthMeter:
-  limit: [hostile]
+  limit: [domehealth]
   cost: iron=4
   predecessors: [dome1,dome2,dome3,dome4]
   predecessorsAny: true
@@ -59,7 +59,7 @@ domeHealthMeter:
     hud: content/hud/healthmeter/HealthMeter.tscn
 
 dome1health1:
-  limit: [dome1, hostile, domehealth]
+  limit: [dome1, domehealth]
   cost: iron=10
   propertyChanges: 
     - dome.maxhealth += 300
@@ -75,7 +75,7 @@ dome1health2:
   predecessors: [dome1health1]
 
 dome2Health1:
-  limit: [dome2, hostile, domehealth]
+  limit: [dome2, domehealth]
   cost: iron=12
   shadowing: dome1health1
   propertyChanges: 
@@ -93,7 +93,7 @@ dome2Health2:
   predecessors: [dome2Health1]
 
 dome3health1:
-  limit: [dome3, hostile, domehealth]
+  limit: [dome3, domehealth]
   cost: iron=12
   shadowing: dome1health1
   propertyChanges: 
@@ -111,7 +111,7 @@ dome3health2:
   predecessors: [dome3health1]
 
 dome4health1:
-  limit: [dome4, hostile, domehealth]
+  limit: [dome4, domehealth]
   cost: iron=12
   shadowing: dome1health1
   propertyChanges: 

@@ -1,10 +1,9 @@
-extends Object
+extends "res://content/monster/Monsters.gd"
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
-func init(chain: ModLoaderHookChain):
-	chain.execute_next()
-	var main_node : Node = chain.reference_object
+func init():
+	super.init()
 	GameWorld.archipelago.trap_received.connect(self.trap_received)
 
 func trap_received():

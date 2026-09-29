@@ -1,17 +1,18 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6rbho0mdwjco"]
+[gd_scene load_steps=21 format=3 uid="uid://b6rbho0mdwjco"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCave.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://u63jbkdc0pur" path="res://content/caves/scannercave/alpha.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://btr5tm7qwwxe4" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet.png" id="3_h1jk3"]
+[ext_resource type="Texture2D" uid="uid://dv0taij8tj3mh" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/archipelago-cave-sheet.png" id="3_h1jk3"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://bi8fw3hrhlkgs" path="res://content/gadgets/blastMining/focussed.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://cnli5sew6h3i5" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" id="6_f4gqv"]
+[ext_resource type="Texture2D" uid="uid://brso2jrsao2xi" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/checker-sheet.png" id="6_f4gqv"]
 [ext_resource type="PackedScene" uid="uid://fl5e4x7lb4px" path="res://systems/audio/Sound.tscn" id="7"]
 [ext_resource type="Script" path="res://content/map/Parallaxer.gd" id="8"]
 [ext_resource type="AudioStream" uid="uid://b20ugclvmjrs5" path="res://content/sounds/UI/UI_spice_o1.wav" id="10"]
-[ext_resource type="AudioStream" uid="uid://onkl46qrrlx4" path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" id="10_e18ha"]
+[ext_resource type="AudioStream" uid="uid://dt8exwqwkl0hp" path="res://mods-unpacked/Arrcival-Archipelago/sound/Incoming Progression.wav" id="10_e18ha"]
 [ext_resource type="Texture2D" uid="uid://rasmosh8h0qm" path="res://content/drop/iron/iron_smol.png" id="12"]
-[ext_resource type="PackedScene" path="res://content/shared/drops/ResourceGrabber.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://dr2je683l1lv6" path="res://content/shared/drops/ResourceGrabber.tscn" id="13"]
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/cave/ArchipelagoCaveSynchronizer.gd" id="13_m5m61"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aulgy"]
 atlas = ExtResource("6_f4gqv")
@@ -224,6 +225,9 @@ visible = false
 position = Vector2(22.8235, 23)
 scale = Vector2(0.647059, 1.38889)
 texture = ExtResource("2")
+
+[node name="ArchipelagoCaveSynchronizer" type="Node" parent="."]
+script = ExtResource("13_m5m61")
 
 [connection signal="grabbed_resource" from="Background/Slot1/ResourceGrabber1" to="." method="_on_ResourceGrabber1_grabbed_resource"]
 [connection signal="grabbed_resource" from="Background/Slot2/ResourceGrabber2" to="." method="_on_ResourceGrabber2_grabbed_resource"]
