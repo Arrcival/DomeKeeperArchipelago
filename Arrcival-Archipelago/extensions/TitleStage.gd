@@ -47,19 +47,20 @@ func build(data: Array):
 	if GameWorld.archipelago.is_client_connected():
 		onArchipelagoConnected()
 		
-	InputSystem.grabFocus(connectButton)
 	Style.init($Canvas / AdditionalMenu)
 	super.build(data)
 
-func beforeStart() -> void:
-	super.beforeStart()
-	InputSystem.grabFocus(connectButton)
-
-
 func moveMenuIn(delay: = defaultDelay):
 	super.moveMenuIn(delay)
+
 	find_child("ContinueButton").hide()
-	$Tween.interpolate_callback(InputSystem, delay + 0.5 * moveDuration, "grabFocus", find_child("NewGameButton"))
+
+	var focus_delay := delay + 0.5 * moveDuration + 0.05
+	get_tree().create_timer(focus_delay).timeout.connect(
+		func():
+			InputSystem.grabFocus(connectButton)
+	)
+
 	find_child("NewGameButton").focus_neighbor_left = find_child("CreditsButton").get_path()
 
 func add_child_first(node: Node, child: Node):

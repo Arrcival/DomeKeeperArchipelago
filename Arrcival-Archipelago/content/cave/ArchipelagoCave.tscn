@@ -206,6 +206,7 @@ maxAudibleDistance = 300.0
 minAudibleDistance = 80.0
 
 [node name="FocusMarker" type="Sprite2D" parent="Background/Check"]
+visible = false
 position = Vector2(2, 1)
 texture = ExtResource("5")
 

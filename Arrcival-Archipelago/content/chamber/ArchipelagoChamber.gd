@@ -20,7 +20,11 @@ func _ready():
 	chamberType = CONSTARRC.TILE_CHAMBER
 
 	# TODO: refacto
-	var assignment = Data.assignments.get(Data.of("assignment.id"))
+	var id_assignment = Data.of("assignment.id")
+	var assignment
+	if id_assignment != null:
+		assignment = Data.assignments.get(id_assignment)
+
 	if assignment != null:
 		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
 	else:

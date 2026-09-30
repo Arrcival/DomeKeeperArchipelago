@@ -6,7 +6,7 @@ const ARCHIPELAGO_CAVE_SCENE: Resource = preload("res://mods-unpacked/Arrcival-A
 
 func init(fromDeserialize: = false, defaultState := true):
 	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_ARCHIPELAGO_SWITCH:CONSTARRC.ARCHIPELAGOSWITCH})
-	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHAMBER:CONSTARRC.CHAMBER})
+	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHAMBER:CONSTARRC.AP_CHAMBER})
 	super.init(fromDeserialize, defaultState)
 	
 	if not fromDeserialize:

@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://cu4ct4grm7nvl"]
+[gd_scene load_steps=24 format=3 uid="uid://cu4ct4grm7nvl"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.gd" id="1_7jtju"]
 [ext_resource type="Texture2D" uid="uid://qr0kfvwf8udk" path="res://mods-unpacked/Arrcival-Archipelago/content/chamber/archipelago_chamber_sheet.png" id="3_82pbn"]
+[ext_resource type="Texture2D" uid="uid://dw5g77bjvhwyq" path="res://mods-unpacked/Arrcival-Archipelago/content/treasure/treasure.png" id="3_pn2ar"]
 [ext_resource type="AudioStream" uid="uid://c2hpxhgvrwf5y" path="res://content/sounds/Locations/ChamberRelic/NoiseFloor09.wav" id="5"]
 [ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="7"]
@@ -99,7 +100,7 @@ sources/0 = SubResource("TileSetAtlasSource_suwgp")
 z_index = -10
 texture_filter = 1
 script = ExtResource("1_7jtju")
-type = "charmber"
+drop_type = "ap_treasure"
 tileCover = NodePath("TileCover")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
@@ -111,6 +112,7 @@ animation = &"opening"
 visible = false
 texture_filter = 1
 position = Vector2(24, 24)
+texture = ExtResource("3_pn2ar")
 
 [node name="GizmoSpawn" type="Marker2D" parent="."]
 z_index = 50

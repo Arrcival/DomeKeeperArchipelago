@@ -3,7 +3,7 @@ extends "res://content/dome/ArtifactDropPoint.gd"
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 func _on_ArtifactDropPoint_area_entered(area):
-	var drop = area.getDeliverableDrop(CONSTARRC.ARTIFACT)
+	var drop = area.getDeliverableDrop(CONSTARRC.AP_TREASURE)
 	if drop:
 		drop.floatToDropTarget(self)
 	else:

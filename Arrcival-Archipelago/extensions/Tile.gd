@@ -23,7 +23,7 @@ func setType(type:String):
 		max_health = max(1, round(healthMultiplier * baseHealth))
 		health = max_health
 	
-	if type == CONSTARRC.CHAMBER:
+	if type == CONSTARRC.AP_CHAMBER:
 		var baseHealth:float = Data.of("map.tileBaseHealth")
 	
 		set_meta("destructable", true)

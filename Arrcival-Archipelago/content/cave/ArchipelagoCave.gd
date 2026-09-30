@@ -35,7 +35,7 @@ func updateUsedTileCoords():
 	tileCoords.append(Vector2(1, 1))
 
 func canFocusUse(keeper: Keeper) -> bool:
-	return hasItem
+	return hasItem and activated
 
 func useHold(keeper: Keeper) -> bool:
 	return useHit(keeper)

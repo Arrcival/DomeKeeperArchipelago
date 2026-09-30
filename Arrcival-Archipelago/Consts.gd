@@ -10,9 +10,9 @@ const TILE_ARCHIPELAGO_SWITCH: int = 4242
 const SECONDS_LOST_PER_TRAP: int = 15
 
 const TILE_CHAMBER = 77
-const CHAMBER = "chamber"
+const AP_CHAMBER = "ap_chamber"
 
-const ARTIFACT = "artifact"
+const AP_TREASURE = "ap_treasure"
 
 const PROTECTED_SPAWNS : Array[Vector2] = [
 	Vector2(0, 0),

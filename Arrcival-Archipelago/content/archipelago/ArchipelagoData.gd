@@ -95,8 +95,10 @@ func connect_new_session() -> void:
 func disconnect_client_and_reset() -> void:
 	_connection_manager.disconnect_client()
 	reset_all_state()
+	_connection_manager.reset_received_item_history()
 
 func reset_all_state() -> void:
+	_connection_manager.clear_pending_checks()
 	_slot_data.reset()
 	_progression.reset()
 	_locations.reset_all()
@@ -156,7 +158,7 @@ func submitUpgrade(upgradeName: String) -> void:
 		sendCheck(location_id)
 
 func sendCheck(locationId: int) -> void:
-	_connection_manager.send_check(locationId)
+	_connection_manager.queue_location_check(locationId)
 
 func send_death(reason: String) -> void:
 	_connection_manager.send_death(reason)
@@ -225,9 +227,8 @@ func item_found(itemId: int) -> void:
 	receive_item(itemId)
 
 func connected() -> void:
-	if isRHMode():
-		return
-	_assignment_manager.process_checked_locations(_connection_manager.get_checked_locations())
+	if not isRHMode():
+		_assignment_manager.process_checked_locations(_connection_manager.get_checked_locations())
 
 
 

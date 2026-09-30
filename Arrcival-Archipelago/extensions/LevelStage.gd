@@ -6,6 +6,7 @@ func _ready():
 
 func _process(deltaTime: float):
 	super._process(deltaTime)
+
 	# Process upgrade in frame per frame basis
 	# Unwinds the upgrades retrieved to avoid locks
 	var upgrades: Array = GameWorld.archipelago.checkUpgrades()

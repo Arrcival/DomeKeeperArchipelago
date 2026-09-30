@@ -9,6 +9,7 @@ var server_name: String = ""
 var slot_name: String = ""
 var password: String = ""
 var status: STATUS = STATUS.DISCONNECTED
+var _pending_checks: Array[int] = []
 
 signal slot_data_received(raw_slot_data: Dictionary)
 signal scout_received(network_items: Array)
@@ -43,10 +44,17 @@ func connect_client() -> void:
 	status = STATUS.IN_PROGRESS
 	client.connect_to_server(server_name, slot_name, password)
 
+# Disconnects without clearing queued location checks. This is used for
+# transient connection failures and pause-menu reconnects.
 func disconnect_client() -> void:
 	_set_disconnected()
 	if client != null:
 		client.disconnect_from_ap()
+
+# Clears checks that are waiting to be sent. A new/manual session should use
+# this before connecting so it cannot inherit checks from the previous session.
+func clear_pending_checks() -> void:
+	_pending_checks.clear()
 
 func reset_received_item_history() -> void:
 	if client != null:
@@ -69,11 +77,35 @@ func get_checked_locations() -> Array:
 		return []
 	return client._checked_locations
 
-func send_check(location_id: int) -> void:
-	if client == null or not has_connection():
-		push_warning("Cannot send location check while Archipelago is disconnected.")
+# Queues a location check and sends it immediately when the connection is
+# available. The queue survives transient disconnects and is flushed after
+# reconnecting.
+func queue_location_check(location_id: int) -> void:
+	if has_checked_location(location_id) or _pending_checks.has(location_id):
 		return
+
+	_pending_checks.append(location_id)
+	process_pending_checks()
+
+func process_pending_checks() -> void:
+	if not has_connection():
+		return
+
+	while not _pending_checks.is_empty():
+		var location_id: int = _pending_checks.front()
+		if has_checked_location(location_id):
+			_pending_checks.pop_front()
+			continue
+
+		if not send_check(location_id):
+			return
+		_pending_checks.pop_front()
+
+func send_check(location_id: int) -> bool:
+	if client == null or not has_connection():
+		return false
 	client.sendLocation(location_id)
+	return true
 
 func send_scout(location_ids: Array) -> void:
 	if client == null or not has_connection():
@@ -121,6 +153,7 @@ func _connect_client_signals() -> void:
 func _on_slot_data_retrieved(raw_slot_data: Dictionary) -> void:
 	status = STATUS.CONNECTED
 	slot_data_received.emit(raw_slot_data)
+	process_pending_checks()
 
 func _on_location_scout_retrieved(network_items: Array) -> void:
 	scout_received.emit(network_items)
@@ -146,6 +179,7 @@ func _on_connection_failed(message: String) -> void:
 
 func _on_packet_connected() -> void:
 	packet_connected.emit()
+	process_pending_checks()
 
 func _on_client_connected(message: String) -> void:
 	client_connected.emit(message)

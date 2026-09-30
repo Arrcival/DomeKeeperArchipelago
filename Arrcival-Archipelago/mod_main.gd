@@ -6,6 +6,8 @@ const MYMODNAME_LOG = "Arrcival-Archipelago"
 const EXTENSIONS_DIR = "extensions/"
 const HOOKS_DIR = "hooks/"
 
+const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+
 func _init(modLoader = ModLoader):
 	ModLoaderLog.info("init starting", MYMODNAME_LOG)
 	var dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
@@ -13,7 +15,7 @@ func _init(modLoader = ModLoader):
 	#var hooks_dir = dir + HOOKS_DIR
 	
 	# Add extensions
-	#loadExtension(ext_dir, "Audio.gd")
+	loadExtension(ext_dir, "Audio.gd")
 	loadExtension(ext_dir, "ArtifactDropPoint.gd")
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	#loadExtension(ext_dir, "Data.gd")
@@ -63,6 +65,5 @@ func modInit():
 	
 
 func archipelagoInit():
-	pass
-	# Magic strings cause magic godot
-	#Data.DROP_SCENES["charm"] = preload("res://mods-unpacked/Arrcival-Archipelago/content/charm/CharmDrop.tscn")
+	Data.DROP_TYPES.append(CONSTARRC.AP_TREASURE)
+	Data.DROP_SCENES[CONSTARRC.AP_TREASURE] = preload("res://mods-unpacked/Arrcival-Archipelago/content/treasure/APTreasureDrop.tscn")
