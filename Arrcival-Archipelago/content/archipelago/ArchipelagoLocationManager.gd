@@ -77,7 +77,11 @@ func next_chamber_location(is_relic_hunt: bool, assignment_id: int = 0) -> int:
 	return location_id
 
 func get_upgrade_location(upgrade_name: String) -> int:
-	return int(location_ids.get(upgrade_name, -1))
+	var upgrade = upgrade_name
+	if upgrade.contains("team1."):
+		upgrade = upgrade_name.split("team1.")[1]
+
+	return int(location_ids.get(upgrade, -1))
 
 func get_scout_description(location_id: int) -> String:
 	return str(location_scouts.get(location_id, ""))

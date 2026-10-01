@@ -128,3 +128,21 @@ func get_layer_unlock_count() -> int:
 	if mapSize == 3:
 		return 6
 	return 2
+
+func get_layer_amount() -> int:
+	return get_layer_unlock_count() + 1
+
+func get_relic_hunt_slot_data() -> Dictionary:
+	return {
+		"mapSize": mapSize,
+		"keeper": keeperSlot,
+		"difficulty": difficulty,
+		"domeSlot": domeSlot,
+		"domeGadgetSlot": domeGadgetSlot
+	}
+
+func get_starting_assignment_id() -> int:
+	return startingGuildAssignment
+
+func get_starting_assignment_name() -> String:
+	return CONSTARRC.ASSIGNMENTS_LIST[startingGuildAssignment]

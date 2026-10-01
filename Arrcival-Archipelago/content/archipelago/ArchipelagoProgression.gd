@@ -9,6 +9,7 @@ signal trap_received
 
 func setup(progression_slot_data: ArchipelagoSlotData) -> void:
 	slot_data = progression_slot_data
+	relic.setup(progression_slot_data)
 	relic.log_informations.connect(_on_relic_log)
 	relic.trap_received.connect(_on_relic_trap)
 

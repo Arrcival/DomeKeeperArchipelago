@@ -298,3 +298,9 @@ func get_relic_hunt_stats() -> String:
 
 func complete_relichunt() -> void:
 	_connection_manager.complete_goal()
+
+func get_relic_hunt_slot_data() -> Dictionary:
+	return _slot_data.get_relic_hunt_slot_data()
+
+func get_starting_assignment_name() -> String:
+	return _slot_data.get_starting_assignment_name()

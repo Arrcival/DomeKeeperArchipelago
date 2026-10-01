@@ -205,15 +205,16 @@ const ASSIGNMENTS_DEFAULT_EMPTY: Dictionary = {
 	"rareiron": false,
 	"weakmining": false,
 	"cobaltcontribution": false,
-	"minorvision": false, # Darkness?
-	"acidrain": false,
+
+	"unpredictable": false,
+	"minorvision": false,
 	"treefarm": false,
-	"megacreeps": false,
-	"instagip": false,
-	"harmfuliron" : false, # Hazardous Iron
+	"acidrain": false,
+	"harmfuliron" : false,
 	"emergency" : false,
+	"instagip": false,
 	"logistics" : false,
-	"unpredictable": false
+	"megacreeps": false,
 }
 
 const ASSIGNMENTS_LIST : Array[String] = [
@@ -221,8 +222,8 @@ const ASSIGNMENTS_LIST : Array[String] = [
 	"projectilehell", "denseiron", "bigmapsparseresources", "weapondefect", 
 	"heavyhitters", "superhardrockwithholes", "weakcarry", "weakwalls", 
 	"monstermasses", "rareiron", "weakmining", "cobaltcontribution",
-	"minorvision", "acidrain", "treefarm", "megacreeps", "instagip", "harmfuliron",
-	"emergency", "logistics", "unpredictable"
+	"unpredictable", "minorvision", "treefarm",  "acidrain", "harmfuliron",
+	"emergency", "instagip", "logistics", "megacreeps", 
 ]
 
 # Recupère l'index du prochain array à récupérer la valeur, en se basant sur le nombre d'elements total dans tous les arrays

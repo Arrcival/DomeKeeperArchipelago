@@ -1,5 +1,7 @@
 class_name ArchipelagoRelicProgression
 
+var slot_data: ArchipelagoSlotData
+
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
 var waterRetrieved: int = 0
@@ -12,6 +14,9 @@ var total_layer_count: int = 3
 
 signal log_informations(text: String)
 signal trap_received
+
+func setup(progression_slot_data: ArchipelagoSlotData) -> void:
+	slot_data = progression_slot_data
 
 func reset() -> void:
 	cobaltRetrieved = 0
@@ -50,7 +55,7 @@ func process_item(item_id: int, layer_unlock_count: int) -> bool:
 
 func update_colored_layers() -> void:
 	coloredLayersUnlocked += 1
-	if coloredLayersUnlocked >= total_layer_count:
+	if coloredLayersUnlocked >= slot_data.get_layer_amount():
 		log_informations.emit("You unlocked every layers.")
 		everyLayersUnlockFound = true
 
@@ -60,7 +65,7 @@ func get_relic_hunt_stats() -> String:
 		if everyLayersUnlockFound:
 			text += "You unlocked every layers\n"
 		else:
-			text += "Layers : " + str(coloredLayersUnlocked + 1) + "/" + str(total_layer_count) + "\n"
+			text += "Layers : " + str(coloredLayersUnlocked + 1) + "/" + str(slot_data.get_layer_amount()) + "\n"
 	
 		text += "Total iron received : " + str(ironRetrieved) + "\n"
 		text += "Total water received : " + str(waterRetrieved) + "\n"

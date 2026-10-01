@@ -3,7 +3,7 @@ class_name ArchipelagoAssignmentManager
 const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 const LOCATION_FIRST_ASSIGNMENT_ID: int = 4243030
-const LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID: int = 4243050
+const LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID: int = 4243060
 const ITEM_FIRST_ASSIGNMENT_ID: int = 4242200
 const ASSIGNMENTS_AMOUNT: int = 25
 

@@ -22,11 +22,11 @@ func _process(deltaTime: float):
 	# Apply resources received since the previous frame.
 	var resources: Dictionary = GameWorld.archipelago.consume_resource_deltas()
 	if resources["sand"] > 0:
-		Data.changeByInt("inventory.sand", resources["sand"])
+		Data.changeByInt("team1.inventory.sand", resources["sand"])
 	if resources["water"] > 0:
-		Data.changeByInt("inventory.water", resources["water"])
+		Data.changeByInt("team1.inventory.water", resources["water"])
 	if resources["iron"] > 0:
-		Data.changeByInt("inventory.iron", resources["iron"])
+		Data.changeByInt("team1.inventory.iron", resources["iron"])
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
