@@ -157,6 +157,14 @@ func submitUpgrade(upgradeName: String) -> void:
 	if location_id != -1:
 		sendCheck(location_id)
 
+func get_upgrade_description(upgrade_name: String) -> String:
+	var location_id := _locations.get_upgrade_location(upgrade_name)
+	if location_id == -1:
+		return ""
+	if _connection_manager.has_checked_location(location_id):
+		return "Location already checked!"
+	return _locations.get_scout_description(location_id)
+
 func sendCheck(locationId: int) -> void:
 	_connection_manager.queue_location_check(locationId)
 
@@ -230,9 +238,6 @@ func connected() -> void:
 	if not isRHMode():
 		_assignment_manager.process_checked_locations(_connection_manager.get_checked_locations())
 
-
-
-
 func _on_progression_log(text: String) -> void:
 	logInformations.emit(text)
 
@@ -288,3 +293,8 @@ func get_seed(assignment: String = "showdown") -> int:
 func get_assignment_id(assignment: String) -> int:
 	return _assignment_manager.get_assignment_id(assignment)
 
+func get_relic_hunt_stats() -> String:
+	return _progression.get_relic_hunt_stats()
+
+func complete_relichunt() -> void:
+	_connection_manager.complete_goal()

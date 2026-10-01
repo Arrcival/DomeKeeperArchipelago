@@ -74,3 +74,8 @@ func _on_relic_trap() -> void:
 func _on_relic_log(text: String) -> void:
 	log_informations.emit(text)
 
+func get_relic_hunt_stats() -> String:
+	if slot_data.is_guild_assignment():
+		return ""
+	else: 
+		return relic.get_relic_hunt_stats()

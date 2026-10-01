@@ -44,7 +44,7 @@ func buyUpgrade(id: String, teamId: String, playerId: String):
 		return
 
 	# Archipelago upgrades, default behavior
-	if id.begins_with("archipelago"):
+	if id.begins_with("team1.archipelago"):
 		archipelago.submitUpgrade(id)
 
 	# Usual upgrades

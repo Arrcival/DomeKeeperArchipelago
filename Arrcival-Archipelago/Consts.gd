@@ -158,15 +158,16 @@ const DRONEYARD_SPECIAL_CHOICE: Array = [
 const DRONEYARD_OVERCHARGE: Array[String] = ["droneyardovercharge1", "droneyardovercharge2", "droneyardovercharge3"]
 #endregion
 
+# This is to avoid having the cross on the root component in the tech tree
 const PURCHASABLE_UPGRADES: Array[String] = [
-	"orchard", "shield", "repellent", "droneyard", 
-	"tesla", "artillery", "sword", "laser", "drillbot", 
-	"player1.keeper1", "player1.keeper2", "drill"
+	"team1.orchard", "team1.shield", "team1.repellent", "team1.droneyard", 
+	"team1.tesla", "team1.artillery", "team1.sword", "team1.laser", "team1.drillbot", 
+	"player1.keeper1", "player1.keeper2", "player1.keeper3", "player1.keeper4", "player1.drill"
 ]
 
 const UNPURCHASABLE_UPGRADES_STARTSWITH: Array[String] = [
-	"laser", "doublelaser", "sword", "artillery", "tesla", 
-	"shield", "repellent", "orchard", "droneyard", "jetpack",
+	"team1.laser", "team1.doublelaser", "team1.sword", "team1.artillery", "team1.tesla", 
+	"team1.shield", "team1.repellent", "team1.orchard", "team1.droneyard",
 	"player1"
 ]
 

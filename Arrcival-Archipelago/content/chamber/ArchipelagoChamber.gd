@@ -19,16 +19,17 @@ func _ready():
 	resetVisibility()
 	chamberType = CONSTARRC.TILE_CHAMBER
 
-	# TODO: refacto
-	var id_assignment = Data.of("assignment.id")
-	var assignment
-	if id_assignment != null:
-		assignment = Data.assignments.get(id_assignment)
+	if not GameWorld.archipelago.isRHMode():
+		var id_assignment = Data.of("assignment.id")
+		var assignment
+		if id_assignment != null:
+			assignment = Data.assignments.get(id_assignment)
 
-	if assignment != null:
-		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
+		if assignment != null:
+			chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
 	else:
 		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId()
+	print("Chamber archipelago id is : " + str(chamber_archipelago_id))
 
 func resetVisibility():
 	$Slots / Slot1 / Resource.visible = false
@@ -36,6 +37,22 @@ func resetVisibility():
 	$Slots / Slot3 / Resource.visible = false
 	$Slots / Slot4 / Resource.visible = false
 
+func registerHit(playerId: String) -> void:
+	if multiplayer.is_server() and drop_type != "":
+		var keeper = Keepers.getKeeper(playerId)
+		var drop = Level.drops.network_spawn({
+			"type": drop_type,
+			"position": $GizmoSpawn.global_position,
+			"carriers": [playerId],
+			"team": keeper.teamId,
+		})
+
+		if is_instance_valid(drop):
+			drop.archipelagoId = chamber_archipelago_id
+
+	currentState = State.EMPTY
+	onUsed()
+	Backend.event("chamber", {"status": "used", "coord": tileCoords, "type": type})
 
 func deserialize(data: Dictionary):
 	super.deserialize(data)

@@ -4,8 +4,8 @@ const FIRST_SWITCH_ID: int = 4243301
 const LAYER_OFFSET: int = 100
 
 const LOCATION_FIRST_CAVE_ID: int = 4243020
-const LOCATION_FIRST_CHAMBER_SYNC_ID: int = 4243070
-const LOCATION_FIRST_CHAMBER_ASYNC_ID: int = 4243080
+const LOCATION_FIRST_CHAMBER_SYNC_ID: int = 4243090
+const LOCATION_FIRST_CHAMBER_ASYNC_ID: int = 4243100
 const ASSIGNMENTS_AMOUNT: int = 25
 
 var location_ids: Dictionary = {
@@ -78,6 +78,9 @@ func next_chamber_location(is_relic_hunt: bool, assignment_id: int = 0) -> int:
 
 func get_upgrade_location(upgrade_name: String) -> int:
 	return int(location_ids.get(upgrade_name, -1))
+
+func get_scout_description(location_id: int) -> String:
+	return str(location_scouts.get(location_id, ""))
 
 func get_switch_location(position: Vector2i) -> int:
 	for layer_index: int in range(switches_location.size()):

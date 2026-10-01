@@ -25,11 +25,13 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "Map.gd")
 	loadExtension(ext_dir, "Monsters.gd")
 	loadExtension(ext_dir, "MultiplayerLoadoutStage.gd")
-	#loadExtension(ext_dir, "PauseMenu.gd")
+	#loadExtension(ext_dir, "PauseMenu.gd") # Could not resolve class?
 	loadExtension(ext_dir, "RelicDropPoint.gd")
-	#loadExtension(ext_dir, "RelicHunt.gd")
+	loadExtension(ext_dir, "Relichunt.gd")
 	loadExtension(ext_dir, "RunFinishedPopup.gd")
 	loadExtension(ext_dir, "StageManager.gd")
+	loadExtension(ext_dir, "Tech2.gd")
+	loadExtension(ext_dir, "TechTreePopup.gd")
 	loadExtension(ext_dir, "Tile.gd")
 	loadExtension(ext_dir, "TileDataGenerator.gd")
 	loadExtension(ext_dir, "TitleStage.gd")
@@ -57,6 +59,12 @@ func loadHook(vanilla_class, hooks_dir, fileName):
 func modInit():
 	var pathToModYaml : String = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR + "yaml/"
 	Data.parseUpgradesYaml(pathToModYaml + "upgrades.yaml")
+
+	# move archipelago to reach always the top tab
+	var index :int = Data.orderedUpgradeKeys.find("archipelago")
+	if index != -1:
+		Data.orderedUpgradeKeys.remove_at(index)
+		Data.orderedUpgradeKeys.push_front("archipelago")
 	#var levelStage = preload("res://mods-unpacked/Arrcival-Archipelago/content/levelstage/APLevelStage.tscn")
 	#levelStage.take_over_path("res://stages/level/LevelStage.tscn")
 	#var techTree = preload("res://mods-unpacked/Arrcival-Archipelago/content/techtree/APTechTreePopup.tscn")
