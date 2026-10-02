@@ -30,13 +30,13 @@ func handleGameLost(backendData:Dictionary = {}):
 # They are given back in LevelStage
 func levelInitialized():
 	super.levelInitialized()
-	if archipelago.isRHMode():
+	if archipelago.is_relic_hunt():
 		archipelago.prepare_level()
 
 
 
 func buyUpgrade(id: String, teamId: String, playerId: String):
-	if not archipelago.isRHMode():
+	if not archipelago.is_relic_hunt():
 		return super.buyUpgrade(id, teamId, playerId)
 	
 	# preventing any crash from empty upgrades

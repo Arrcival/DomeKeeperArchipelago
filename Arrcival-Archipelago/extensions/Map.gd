@@ -38,7 +38,7 @@ func getSceneForTileType(tileType:int) -> PackedScene:
 func addCaves(minDistanceToCenter: = 10):
 	super.addCaves(minDistanceToCenter)
 
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		return
 
 	# TODO: alimenter le dict avec les nouvelles caves

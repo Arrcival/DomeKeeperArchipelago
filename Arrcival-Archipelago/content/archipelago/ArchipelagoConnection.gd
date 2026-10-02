@@ -44,15 +44,11 @@ func connect_client() -> void:
 	status = STATUS.IN_PROGRESS
 	client.connect_to_server(server_name, slot_name, password)
 
-# Disconnects without clearing queued location checks. This is used for
-# transient connection failures and pause-menu reconnects.
 func disconnect_client() -> void:
 	_set_disconnected()
 	if client != null:
 		client.disconnect_from_ap()
 
-# Clears checks that are waiting to be sent. A new/manual session should use
-# this before connecting so it cannot inherit checks from the previous session.
 func clear_pending_checks() -> void:
 	_pending_checks.clear()
 
@@ -77,9 +73,6 @@ func get_checked_locations() -> Array:
 		return []
 	return client._checked_locations
 
-# Queues a location check and sends it immediately when the connection is
-# available. The queue survives transient disconnects and is flushed after
-# reconnecting.
 func queue_location_check(location_id: int) -> void:
 	if has_checked_location(location_id) or _pending_checks.has(location_id):
 		return

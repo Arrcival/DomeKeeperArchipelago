@@ -6,8 +6,7 @@ const DEFAULT_ASSIGNMENTS_AMOUNT: int = 25
 
 enum PROGRESSION_TYPE {
 	RELIC_HUNT = 0,
-	RELIC_HUNT_COLORED_LAYERS = 1,
-	GUILD_ASSIGNMENT = 2,
+	GUILD_ASSIGNMENT = 1,
 }
 
 var seedNumber: int = 0
@@ -30,6 +29,12 @@ var startingGuildAssignment: int = 0
 var challengeMode: bool = false
 var assignmentsAmount: int = DEFAULT_ASSIGNMENTS_AMOUNT
 var death_link: bool = false
+var defaultMiningValue: int = 100
+var defaultSpeedValue: int = 100
+var miningBonusValue: int = 5
+var speedBonusValue: int = 5
+
+
 
 func reset() -> void:
 	seedNumber = 0
@@ -52,6 +57,10 @@ func reset() -> void:
 	challengeMode = false
 	assignmentsAmount = DEFAULT_ASSIGNMENTS_AMOUNT
 	death_link = false
+	defaultMiningValue = 100
+	defaultSpeedValue = 100
+	miningBonusValue = 5
+	speedBonusValue = 5
 
 func apply(raw_slot_data: Dictionary) -> void:
 	reset()
@@ -101,12 +110,17 @@ func apply(raw_slot_data: Dictionary) -> void:
 		assignmentsAmount = int(raw_slot_data["assignmentsAmount"])
 	if raw_slot_data.has("deathLink"):
 		death_link = bool(raw_slot_data["deathLink"])
+	if raw_slot_data.has("defaultMining"):
+		defaultMiningValue = int(raw_slot_data["defaultMining"])
+	if raw_slot_data.has("defaultMovement"):
+		defaultSpeedValue = int(raw_slot_data["defaultMovement"])
+	if raw_slot_data.has("miningBonus"):
+		miningBonusValue = int(raw_slot_data["miningBonus"])
+	if raw_slot_data.has("movementBonus"):
+		speedBonusValue = int(raw_slot_data["movementBonus"])
 
 func is_relic_hunt() -> bool:
 	return progressionType == PROGRESSION_TYPE.RELIC_HUNT
-
-func is_relic_hunt_with_colored_layers() -> bool:
-	return progressionType == PROGRESSION_TYPE.RELIC_HUNT_COLORED_LAYERS
 
 func is_guild_assignment() -> bool:
 	return progressionType == PROGRESSION_TYPE.GUILD_ASSIGNMENT
@@ -116,7 +130,7 @@ func get_assignment_id(assignment: String) -> int:
 	return maxi(index, 0)
 
 func get_seed(assignment: String = "showdown") -> int:
-	if is_relic_hunt() or is_relic_hunt_with_colored_layers():
+	if is_relic_hunt():
 		return seedNumber
 	return seedNumber + get_assignment_id(assignment)
 
@@ -139,6 +153,14 @@ func get_relic_hunt_slot_data() -> Dictionary:
 		"difficulty": difficulty,
 		"domeSlot": domeSlot,
 		"domeGadgetSlot": domeGadgetSlot
+	}
+
+func get_assignment_slot_data() -> Dictionary:
+	return {
+		"defaultMining": defaultMiningValue,
+		"miningBonus": miningBonusValue,
+		"defaultSpeed": defaultSpeedValue,
+		"speedBonus": speedBonusValue,
 	}
 
 func get_starting_assignment_id() -> int:

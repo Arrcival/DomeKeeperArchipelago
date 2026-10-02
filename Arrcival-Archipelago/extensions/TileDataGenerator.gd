@@ -10,7 +10,7 @@ func generate_resources(rand):
 
 	print("@@@@ Generating archipelago water and switches")
 
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		return
 
 	var firstBiomeCells: Array = _mapData.get_biome_cells_by_index(FIRSTLAYERID)
@@ -32,7 +32,7 @@ func generate_gadget_chambers():
 	super.generate_gadget_chambers()
 	print("@@@@ Generating AP chambers")
 	
-	if GameWorld.archipelago.isRHMode():
+	if GameWorld.archipelago.is_relic_hunt():
 		var biomes = 3 if GameWorld.devMode else len(GameWorld.archipelago.get_switches_per_layer())
 		for i in range(biomes):
 			var biomeCells: Array = _mapData.get_biome_cells_by_index(FIRSTLAYERID + i)

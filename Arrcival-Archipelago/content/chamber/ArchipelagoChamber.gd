@@ -19,7 +19,7 @@ func _ready():
 	resetVisibility()
 	chamberType = CONSTARRC.TILE_CHAMBER
 
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		var id_assignment = Data.of("assignment.id")
 		var assignment
 		if id_assignment != null:

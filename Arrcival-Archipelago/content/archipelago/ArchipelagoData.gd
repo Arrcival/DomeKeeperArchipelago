@@ -10,17 +10,6 @@ var _slot_data: ArchipelagoSlotData = ArchipelagoSlotData.new()
 var _locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
 
 #region slot data
-
-var keeperSlot: int:
-	get: return _slot_data.keeperSlot
-var domeSlot: int:
-	get: return _slot_data.domeSlot
-var domeGadgetSlot: int:
-	get: return _slot_data.domeGadgetSlot
-var mapSize: int:
-	get: return _slot_data.mapSize
-var difficulty: int:
-	get: return _slot_data.difficulty
 var switchesPerLayer: Array:
 	get: return _slot_data.switchesPerLayer
 var miningEverything: bool:
@@ -41,7 +30,6 @@ var everyLayersUnlockFound: bool:
 func _init() -> void:
 	_connection_manager.slot_data_received.connect(retrieveSlotData)
 	_connection_manager.scout_received.connect(retrieveScout)
-	_connection_manager.packet_connected.connect(connected)
 	_connection_manager.client_connected.connect(on_client_connected)
 	_connection_manager.client_disconnected.connect(on_client_disconnected)
 	_connection_manager.item_received.connect(_on_item_received)
@@ -76,22 +64,17 @@ signal trap_received
 func set_client(value: Variant) -> void:
 	_connection_manager.client = value
 
-# Starts a connection without changing the current run state.
-# This is used by the pause menu after a transient disconnection.
 func connect_client() -> void:
 	_connection_manager.connect_client()
 
-# Disconnects while preserving _progression, received items, and _locations.
 func disconnect_client() -> void:
 	_connection_manager.disconnect_client()
 
-# Starts a completely new Archipelago session from the title screen.
 func connect_new_session() -> void:
 	reset_all_state()
 	_connection_manager.reset_received_item_history()
 	_connection_manager.connect_client()
 
-# Disconnects and removes all Archipelago state from the previous session.
 func disconnect_client_and_reset() -> void:
 	_connection_manager.disconnect_client()
 	reset_all_state()
@@ -147,6 +130,12 @@ func retrieveSlotData(raw_slot_data: Dictionary) -> void:
 		_assignment_manager.receive_starting_assignment(_slot_data.startingGuildAssignment)
 	slot_data_have_been_retrieved.emit()
 
+	if not is_relic_hunt():
+		var checked := _connection_manager.get_checked_locations()
+		print("AP checked locations: ", checked)
+		print("AP challenge mode: ", challengeMode)
+		_assignment_manager.process_checked_locations(checked)
+
 func submitSwitch(switchPos: Vector2i) -> void:
 	var switch_id :int = _locations.get_switch_location(switchPos)
 	if switch_id != -1:
@@ -196,26 +185,20 @@ func prepare_level() -> void:
 	generateUpgrades()
 	reset_given_resources()
 
-# Resets resource and _progression state for a new game.
 func reset_progression() -> void:
 	_progression.reset()
 
-# Resets generated location state without changing received item data.
 func reset_location_generation() -> void:
 	_locations.reset()
 
-# Clears items that have not yet been applied to the game.
 func reset_item_processing() -> void:
 	_item_processor.reset_pending()
 
-# Resets all transient game state while preserving the received item history.
-# This keeps the old reset() API available to existing callers.
 func reset() -> void:
 	reset_progression()
 	reset_location_generation()
 	_item_processor.reset_for_new_run()
 
-# Generate deterministic upgrade pools and give them to the item processor.
 func generateUpgrades() -> void:
 	reset()
 	_item_processor.prepare_received_items()
@@ -234,10 +217,6 @@ func receive_item(item_id: int) -> void:
 func item_found(itemId: int) -> void:
 	receive_item(itemId)
 
-func connected() -> void:
-	if not isRHMode():
-		_assignment_manager.process_checked_locations(_connection_manager.get_checked_locations())
-
 func _on_progression_log(text: String) -> void:
 	logInformations.emit(text)
 
@@ -245,7 +224,7 @@ func checkUpgrades() -> Array[String]:
 	return _item_processor.check_upgrades()
 
 func hasLayerUnlocked(layerId: int) -> bool:
-	if not is_relic_hunt_with_colored_layers():
+	if not is_relic_hunt():
 		return true
 
 	if everyLayersUnlockFound:
@@ -254,13 +233,6 @@ func hasLayerUnlocked(layerId: int) -> bool:
 
 func is_relic_hunt() -> bool:
 	return _slot_data.is_relic_hunt()
-
-func is_relic_hunt_with_colored_layers() -> bool:
-	return _slot_data.is_relic_hunt_with_colored_layers()
-
-# Compatibility wrapper for existing extensions.
-func isRHMode() -> bool:
-	return is_relic_hunt() or is_relic_hunt_with_colored_layers()
 
 func retrieveScout(networkItems: Array) -> void:
 	_locations.receive_scouts(networkItems)
@@ -278,7 +250,7 @@ func getLocationCaveId() -> int:
 	return _locations.next_cave_location()
 
 func getLocationChamberId(assignment: String = "showdown") -> int:
-	return _locations.next_chamber_location(isRHMode(), get_assignment_id(assignment))
+	return _locations.next_chamber_location(is_relic_hunt(), get_assignment_id(assignment))
 
 func is_async_won() -> bool:
 	return _assignment_manager.is_async_won()
@@ -304,3 +276,9 @@ func get_relic_hunt_slot_data() -> Dictionary:
 
 func get_starting_assignment_name() -> String:
 	return _slot_data.get_starting_assignment_name()
+
+func get_speed_multiplier() -> float:
+	return _progression.get_speed_multiplier()
+
+func get_mining_multiplier() -> float:
+	return _progression.get_mining_multiplier()

@@ -33,11 +33,7 @@ func reset_given_resources() -> void:
 	waterGiven = 0
 	ironGiven = 0
 
-func handles_item(item_id: int) -> bool:
-	return item_id in [4242090, 4242091, 4242092, 4242095, 4242100]
-
-func process_item(item_id: int, layer_unlock_count: int) -> bool:
-	total_layer_count = layer_unlock_count
+func process_item(item_id: int) -> bool:
 	match item_id:
 		4242090:
 			cobaltRetrieved += 1

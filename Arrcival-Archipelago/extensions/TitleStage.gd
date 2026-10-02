@@ -53,15 +53,16 @@ func build(data: Array):
 func moveMenuIn(delay: = defaultDelay):
 	super.moveMenuIn(delay)
 
+	find_child("NewGameButton").focus_neighbor_left = find_child("CreditsButton").get_path()
 	find_child("ContinueButton").hide()
 
-	var focus_delay := delay + 0.5 * moveDuration + 0.05
-	get_tree().create_timer(focus_delay).timeout.connect(
-		func():
-			InputSystem.grabFocus(connectButton)
-	)
+	if GameWorld.archipelago.is_connection_disconnected():
+		var focus_delay := delay + 0.5 * moveDuration + 0.05
+		get_tree().create_timer(focus_delay).timeout.connect(
+			func():
+				InputSystem.grabFocus(connectButton)
+		)
 
-	find_child("NewGameButton").focus_neighbor_left = find_child("CreditsButton").get_path()
 
 func add_child_first(node: Node, child: Node):
 	node.add_child(child)

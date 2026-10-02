@@ -10,6 +10,7 @@ signal trap_received
 func setup(progression_slot_data: ArchipelagoSlotData) -> void:
 	slot_data = progression_slot_data
 	relic.setup(progression_slot_data)
+	guild.setup(progression_slot_data)
 	relic.log_informations.connect(_on_relic_log)
 	relic.trap_received.connect(_on_relic_trap)
 
@@ -55,7 +56,7 @@ func consume_resource_deltas() -> Dictionary:
 func process_item(item_id: int) -> bool:
 	if slot_data.is_guild_assignment():
 		return guild.process_item(item_id)
-	return relic.process_item(item_id, slot_data.get_layer_unlock_count())
+	return relic.process_item(item_id)
 
 func is_immediate_item(item_id: int) -> bool:
 	return slot_data.is_guild_assignment() and guild.is_assignment_unlock_item(item_id)
@@ -80,3 +81,15 @@ func get_relic_hunt_stats() -> String:
 		return ""
 	else: 
 		return relic.get_relic_hunt_stats()
+
+func get_speed_multiplier() -> float:
+	if slot_data.is_guild_assignment():
+		return guild.get_speed_multiplier()
+	else:
+		return 1
+
+func get_mining_multiplier() -> float:
+	if slot_data.is_guild_assignment():
+		return guild.get_mining_multiplier()
+	else:
+		return 1

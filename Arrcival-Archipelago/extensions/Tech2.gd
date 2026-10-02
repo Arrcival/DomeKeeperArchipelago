@@ -8,7 +8,7 @@ var crossIcon: TextureRect
 
 func build(id:String, tier: = - 1):
 	
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		super.build(id, tier)
 		return
 	

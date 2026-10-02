@@ -4,6 +4,8 @@ const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Co
 const ITEM_FIRST_ASSIGNMENT_ID: int = 4242200
 const ASSIGNMENT_UNLOCK_COUNT: int = 25
 
+var slot_data: ArchipelagoSlotData
+
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
 var waterRetrieved: int = 0
@@ -11,13 +13,14 @@ var waterGiven: int = 0
 var ironRetrieved: int = 0
 var ironGiven: int = 0
 var miningStrengthRetrieved: int = 0
-var miningStrengthGiven: int = 0
 var movementSpeedRetrieved: int = 0
-var movementSpeedGiven: int = 0
 var assignmentsUnlocked: Dictionary = {}
 var assignmentsChecked: Dictionary = {}
 
 signal assignment_unlocked(id: int)
+
+func setup(progression_slot_data: ArchipelagoSlotData) -> void:
+	slot_data = progression_slot_data
 
 func reset() -> void:
 	cobaltRetrieved = 0
@@ -27,9 +30,7 @@ func reset() -> void:
 	ironRetrieved = 0
 	ironGiven = 0
 	miningStrengthRetrieved = 0
-	miningStrengthGiven = 0
 	movementSpeedRetrieved = 0
-	movementSpeedGiven = 0
 	assignmentsUnlocked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
 	assignmentsChecked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
 
@@ -40,12 +41,6 @@ func reset_given_resources() -> void:
 
 func is_assignment_unlock_item(item_id: int) -> bool:
 	return item_id >= ITEM_FIRST_ASSIGNMENT_ID and item_id < ITEM_FIRST_ASSIGNMENT_ID + ASSIGNMENT_UNLOCK_COUNT
-
-func handles_item(item_id: int) -> bool:
-	return (
-		item_id >= ITEM_FIRST_ASSIGNMENT_ID
-		and item_id < ITEM_FIRST_ASSIGNMENT_ID + ASSIGNMENT_UNLOCK_COUNT
-	) or item_id in [4242230, 4242231, 4242232, 4242233, 4242234]
 
 func process_item(item_id: int) -> bool:
 	if item_id >= ITEM_FIRST_ASSIGNMENT_ID and item_id < ITEM_FIRST_ASSIGNMENT_ID + ASSIGNMENT_UNLOCK_COUNT:
@@ -99,3 +94,13 @@ func is_async_won(assignments_amount: int) -> bool:
 		if value == true:
 			won_assignments += 1
 	return won_assignments >= assignments_amount
+
+func get_speed_multiplier() -> float:
+	var data = slot_data.get_assignment_slot_data()
+	var amount = data["defaultSpeed"] + data["speedBonus"] * movementSpeedRetrieved
+	return float(amount) / 100
+
+func get_mining_multiplier() -> float:
+	var data = slot_data.get_assignment_slot_data()
+	var amount = data["defaultMining"] + data["miningBonus"] * miningStrengthRetrieved
+	return float(amount) / 100

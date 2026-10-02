@@ -20,6 +20,7 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	#loadExtension(ext_dir, "Data.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
+	loadExtension(ext_dir, "Keeper1.gd")
 	#loadExtension(ext_dir, "Keeper2.gd")
 	loadExtension(ext_dir, "LevelStage.gd")
 	loadExtension(ext_dir, "Map.gd")

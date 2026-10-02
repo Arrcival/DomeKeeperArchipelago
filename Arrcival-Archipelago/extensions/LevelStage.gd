@@ -35,6 +35,6 @@ func makeUserLose():
 
 func beforeStart():
 	super.beforeStart()
-	if GameWorld.archipelago.isRHMode():
+	if GameWorld.archipelago.is_relic_hunt():
 		GameWorld.archipelago.scoutUpgrades()
 

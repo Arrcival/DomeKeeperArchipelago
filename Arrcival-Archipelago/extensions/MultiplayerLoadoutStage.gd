@@ -9,7 +9,7 @@ var keeper: Keeper
 func build(data: Array):
 	super.build(data)
 	
-	if GameWorld.archipelago.isRHMode():
+	if GameWorld.archipelago.is_relic_hunt():
 		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
 		domeSelected(Data.loadoutDomes[slot_data["domeSlot"]], "team1", false)
 		primaryGadgetSelected(Data.loadoutGadgets[slot_data["domeGadgetSlot"]], "team1", false)
@@ -38,7 +38,7 @@ func fillGameModes():
 
 	var mode_id: String = (
 		CONST.MODE_RELICHUNT
-		if GameWorld.archipelago.isRHMode()
+		if GameWorld.archipelago.is_relic_hunt()
 		else CONST.MODE_ASSIGNMENTS
 	)
 
@@ -50,7 +50,7 @@ func fillGameModes():
 	gameModeSelected(mode_id, false)
 
 func manageAssignments():
-	if GameWorld.archipelago.isRHMode():
+	if GameWorld.archipelago.is_relic_hunt():
 		return
 	assignmentSelected(GameWorld.archipelago.get_starting_assignment_name())
 	var assignments = find_child("AssignmentsContainer")
@@ -60,7 +60,7 @@ func manageAssignments():
 			assignment.makeVisibleAP()
 
 func desactivate_keepers(keeper_selected: int):
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		return
 	var kc = find_child("KeeperContainers")
 	for i in range(4):
@@ -75,13 +75,13 @@ func desactivate_keepers(keeper_selected: int):
 
 
 func desactivate_domes():
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		return
 	var container = find_child("DomeContainersTeam1")
 	desactivate_children_loadout_choices(container)
 
 func desactivate_gadgets():
-	if not GameWorld.archipelago.isRHMode():
+	if not GameWorld.archipelago.is_relic_hunt():
 		return
 	var container = find_child("PrimaryGadgetContainersTeam1")
 	desactivate_children_loadout_choices(container)
