@@ -30,11 +30,6 @@ func build(id:String, tier: = - 1):
 		explanationBb += getRelicHuntStats()
 
 	updateState()
-	
-	# Adding visuals for archipelago upgrades
-	if id.begins_with("team1.archipelago"):
-		icon = Data.loadIconOrFallback("res://mods-unpacked/Arrcival-Archipelago/content/icons/upgrades/" + visualTechId + ".png")
-		find_child("Icon").texture = icon
 
 	if not CONSTARRC.is_upgrade_purchasable(id):
 		isArchipelagoLocked = true

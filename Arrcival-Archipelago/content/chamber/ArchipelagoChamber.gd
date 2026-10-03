@@ -26,9 +26,9 @@ func _ready():
 			assignment = Data.assignments.get(id_assignment)
 
 		if assignment != null:
-			chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
+			chamber_archipelago_id = GameWorld.archipelago.get_location_chamber_id_ga(assignment.id)
 	else:
-		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId()
+		chamber_archipelago_id = GameWorld.archipelago.get_location_chamber_id_rh()
 	print("Chamber archipelago id is : " + str(chamber_archipelago_id))
 
 func resetVisibility():

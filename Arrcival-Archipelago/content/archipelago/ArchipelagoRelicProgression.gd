@@ -51,13 +51,13 @@ func process_item(item_id: int) -> bool:
 
 func update_colored_layers() -> void:
 	coloredLayersUnlocked += 1
-	if coloredLayersUnlocked >= slot_data.get_layer_amount():
+	if coloredLayersUnlocked == slot_data.get_layer_amount():
 		log_informations.emit("You unlocked every layers.")
 		everyLayersUnlockFound = true
 
 func get_relic_hunt_stats() -> String:
 	var text = "\n\n"
-	if GameWorld.archipelago.is_relic_hunt_with_colored_layers():
+	if GameWorld.archipelago.is_relic_hunt():
 		if everyLayersUnlockFound:
 			text += "You unlocked every layers\n"
 		else:

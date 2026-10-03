@@ -4,6 +4,8 @@ const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Co
 const ITEM_FIRST_ASSIGNMENT_ID: int = 4242200
 const ASSIGNMENT_UNLOCK_COUNT: int = 25
 
+const MAX_BONUS_UPGRADES: int = 10
+
 var slot_data: ArchipelagoSlotData
 
 var cobaltRetrieved: int = 0
@@ -97,10 +99,10 @@ func is_async_won(assignments_amount: int) -> bool:
 
 func get_speed_multiplier() -> float:
 	var data = slot_data.get_assignment_slot_data()
-	var amount = data["defaultSpeed"] + data["speedBonus"] * movementSpeedRetrieved
+	var amount = data["defaultSpeed"] + data["speedBonus"] * min(movementSpeedRetrieved, MAX_BONUS_UPGRADES)
 	return float(amount) / 100
 
 func get_mining_multiplier() -> float:
 	var data = slot_data.get_assignment_slot_data()
-	var amount = data["defaultMining"] + data["miningBonus"] * miningStrengthRetrieved
+	var amount = data["defaultMining"] + data["miningBonus"] * min(miningStrengthRetrieved, MAX_BONUS_UPGRADES)
 	return float(amount) / 100

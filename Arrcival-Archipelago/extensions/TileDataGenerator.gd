@@ -8,6 +8,8 @@ const FIRSTLAYERID = 0
 func generate_resources(rand):
 	super.generate_resources(rand)
 
+	GameWorld.archipelago.reset()
+
 	print("@@@@ Generating archipelago water and switches")
 
 	if not GameWorld.archipelago.is_relic_hunt():

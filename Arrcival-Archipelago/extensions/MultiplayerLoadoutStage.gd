@@ -11,10 +11,6 @@ func build(data: Array):
 	
 	if GameWorld.archipelago.is_relic_hunt():
 		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
-		domeSelected(Data.loadoutDomes[slot_data["domeSlot"]], "team1", false)
-		primaryGadgetSelected(Data.loadoutGadgets[slot_data["domeGadgetSlot"]], "team1", false)
-		difficultySelected([-2, -1, 0, 2][slot_data["difficulty"]], "team1", false)
-		mapSizeSelected(getMapSizeName(slot_data["mapSize"]))
 		desactivate_keepers(slot_data["keeper"])
 		desactivate_domes()
 		desactivate_gadgets()
@@ -47,7 +43,30 @@ func fillGameModes():
 		if choice is LoadoutChoice:
 			choice.set_enabled(false)
 
+	_force_archipelago_mode.call_deferred(mode_id)
+
+func _force_archipelago_mode(mode_id: String) -> void:
+	await get_tree().create_timer(0.55).timeout
+
+	if not is_inside_tree() or not multiplayer.is_server():
+		return
+
 	gameModeSelected(mode_id, false)
+
+	if GameWorld.archipelago.is_relic_hunt():
+		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
+		domeSelected(Data.loadoutDomes[slot_data["domeSlot"]], "team1", false, false)
+		primaryGadgetSelected(Data.loadoutGadgets[slot_data["domeGadgetSlot"]], "team1", false, false)
+		difficultySelected([-2, -1, 0, 2][slot_data["difficulty"]], "team1", false, false)
+		mapSizeSelected(getMapSizeName(slot_data["mapSize"]), false, false)
+		desactivate_keepers(slot_data["keeper"])
+		desactivate_domes()
+		desactivate_gadgets()
+		desactivate_mapsizes()
+		desactivate_difficulties()
+		desactivate_modifiers()
+	else:
+		manageAssignments()
 
 func manageAssignments():
 	if GameWorld.archipelago.is_relic_hunt():

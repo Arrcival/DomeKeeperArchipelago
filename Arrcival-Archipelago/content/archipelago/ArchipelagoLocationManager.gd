@@ -65,12 +65,12 @@ func next_cave_location() -> int:
 	cave_location_id += 1
 	return location_id
 
-func next_chamber_location(is_relic_hunt: bool, assignment_id: int = 0) -> int:
-	if is_relic_hunt:
-		var location_id := chamber_sync_location_id
-		chamber_sync_location_id += 1
-		return location_id
+func next_chamber_location_id_rh() -> int:
+	var location_id := chamber_sync_location_id
+	chamber_sync_location_id += 1
+	return location_id
 
+func next_chamber_location_id_ga(assignment_id: int = 0) -> int:
 	chamber_async_location_id = LOCATION_FIRST_CHAMBER_ASYNC_ID + assignment_id
 	var location_id := chamber_async_location_id + chambers_generated * ASSIGNMENTS_AMOUNT
 	chambers_generated += 1

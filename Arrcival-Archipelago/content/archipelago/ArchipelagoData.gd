@@ -10,6 +10,8 @@ var _slot_data: ArchipelagoSlotData = ArchipelagoSlotData.new()
 var _locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
 
 #region slot data
+var mapSize: int:
+	get: return _slot_data.mapSize
 var switchesPerLayer: Array:
 	get: return _slot_data.switchesPerLayer
 var miningEverything: bool:
@@ -249,8 +251,11 @@ func isGADone(assignment_name: String) -> bool:
 func getLocationCaveId() -> int:
 	return _locations.next_cave_location()
 
-func getLocationChamberId(assignment: String = "showdown") -> int:
-	return _locations.next_chamber_location(is_relic_hunt(), get_assignment_id(assignment))
+func get_location_chamber_id_rh() -> int:
+	return _locations.next_chamber_location_id_rh()
+
+func get_location_chamber_id_ga(assignment: String = "showdown") -> int:
+	return _locations.next_chamber_location_id_ga(get_assignment_id(assignment))
 
 func is_async_won() -> bool:
 	return _assignment_manager.is_async_won()
