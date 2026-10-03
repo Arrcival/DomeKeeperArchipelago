@@ -13,7 +13,6 @@ var _pending_checks: Array[int] = []
 
 signal slot_data_received(raw_slot_data: Dictionary)
 signal scout_received(network_items: Array)
-signal packet_connected
 signal client_connected(message: String)
 signal client_disconnected
 signal connection_failed(message: String)
@@ -61,9 +60,6 @@ func has_connection() -> bool:
 
 func is_disconnected() -> bool:
 	return status == STATUS.DISCONNECTED
-
-func is_connecting() -> bool:
-	return status == STATUS.IN_PROGRESS
 
 func get_server_name() -> String:
 	return server_name
@@ -171,7 +167,6 @@ func _on_connection_failed(message: String) -> void:
 	connection_failed.emit(message)
 
 func _on_packet_connected() -> void:
-	packet_connected.emit()
 	process_pending_checks()
 
 func _on_client_connected(message: String) -> void:

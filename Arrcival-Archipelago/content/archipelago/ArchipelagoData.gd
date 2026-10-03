@@ -18,8 +18,6 @@ var miningEverything: bool:
 	get: return _slot_data.miningEverything
 var challengeMode: bool:
 	get: return _slot_data.challengeMode
-var assignmentsAmount: int:
-	get: return _slot_data.assignmentsAmount
 #endregion
 
 var coloredLayersUnlocked: int:
@@ -123,9 +121,6 @@ func _on_connected_with_room_info() -> void:
 func _on_connection_log(text: String) -> void:
 	logInformations.emit(text)
 
-func reset_client() -> void:
-	_item_processor.reset_upgrades()
-
 func retrieveSlotData(raw_slot_data: Dictionary) -> void:
 	_slot_data.apply(raw_slot_data)
 	if raw_slot_data.has("startingGA"):
@@ -193,9 +188,6 @@ func reset_progression() -> void:
 func reset_location_generation() -> void:
 	_locations.reset()
 
-func reset_item_processing() -> void:
-	_item_processor.reset_pending()
-
 func reset() -> void:
 	reset_progression()
 	reset_location_generation()
@@ -214,10 +206,6 @@ func _on_upgrade_received(item_name: String) -> void:
 
 func receive_item(item_id: int) -> void:
 	_item_processor.receive_item(item_id)
-
-# Compatibility wrapper for existing callers.
-func item_found(itemId: int) -> void:
-	receive_item(itemId)
 
 func _on_progression_log(text: String) -> void:
 	logInformations.emit(text)

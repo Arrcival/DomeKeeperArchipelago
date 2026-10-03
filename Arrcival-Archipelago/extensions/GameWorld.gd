@@ -14,6 +14,8 @@ func init():
 	# bruteforce unlock everything :/
 	unlockEverything()
 
+	upgradeBought.connect(_on_upgrade_bought)
+
 func _on_archipelago_upgrade_received(item_name: String) -> void:
 	addUpgrade(item_name, "team1")
 
@@ -25,7 +27,6 @@ func handleGameLost(backendData:Dictionary = {}):
 		if not archipelago.consume_death_link_death():
 			archipelago.send_death("The dome was destroyed...")
 
-
 # Restart items given from AP
 # They are given back in LevelStage
 func levelInitialized():
@@ -33,25 +34,26 @@ func levelInitialized():
 	if archipelago.is_relic_hunt():
 		archipelago.prepare_level()
 
-
+func _on_upgrade_bought(id: String, teamId: String, playerId: String):
+	if id.begins_with("team1.archipelago"):
+		archipelago.submitUpgrade(id)
 
 func buyUpgrade(id: String, teamId: String, playerId: String):
-	if not archipelago.is_relic_hunt():
-		return super.buyUpgrade(id, teamId, playerId)
-	
 	# preventing any crash from empty upgrades
 	if id == "":
 		return
 
-	# Archipelago upgrades, default behavior
-	if id.begins_with("team1.archipelago"):
-		archipelago.submitUpgrade(id)
-
-	# Usual upgrades
-	if not CONSTARRC.is_upgrade_purchasable(id.to_lower()):
-		return
-
 	super.buyUpgrade(id, teamId, playerId)
+
+func requestUpgrade(id: String, teamId: String) -> bool:
+	var requestUpgrade = super.requestUpgrade(id, teamId)
+	if not archipelago.is_relic_hunt():
+		return requestUpgrade
+
+	if not CONSTARRC.is_upgrade_purchasable(id.to_lower()):
+		return false
+
+	return requestUpgrade
 
 func prepareLevelStart(levelStartData:LevelStartData):
 	if levelStartData.loadout.modeId == CONST.MODE_ASSIGNMENTS:

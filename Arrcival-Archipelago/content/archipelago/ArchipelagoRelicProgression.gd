@@ -10,7 +10,6 @@ var ironRetrieved: int = 0
 var ironGiven: int = 0
 var coloredLayersUnlocked: int = 0
 var everyLayersUnlockFound: bool = false
-var total_layer_count: int = 3
 
 signal log_informations(text: String)
 signal trap_received

@@ -19,8 +19,6 @@ var movementSpeedRetrieved: int = 0
 var assignmentsUnlocked: Dictionary = {}
 var assignmentsChecked: Dictionary = {}
 
-signal assignment_unlocked(id: int)
-
 func setup(progression_slot_data: ArchipelagoSlotData) -> void:
 	slot_data = progression_slot_data
 
@@ -72,7 +70,6 @@ func receive_unlock(item_id: int) -> void:
 
 	var assignment_name: String = CONSTARRC.ASSIGNMENTS_LIST[unlock_id]
 	assignmentsUnlocked[assignment_name] = true
-	assignment_unlocked.emit(unlock_id)
 
 func mark_assignment_checked(assignment_name: String) -> void:
 	if assignmentsChecked.has(assignment_name):

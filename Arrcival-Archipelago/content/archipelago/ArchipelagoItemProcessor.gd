@@ -55,10 +55,6 @@ func prepare_received_items() -> void:
 func set_upgrade_pools(pools: Dictionary) -> void:
 	upgrade_pools = pools
 
-# Compatibility wrapper for existing callers.
-func item_found(item_id: int) -> void:
-	receive_item(item_id)
-
 func process_item(item_id: int) -> String:
 	if progression.process_item(item_id):
 		return ""

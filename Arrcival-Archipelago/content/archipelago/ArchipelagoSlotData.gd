@@ -163,8 +163,5 @@ func get_assignment_slot_data() -> Dictionary:
 		"speedBonus": speedBonusValue,
 	}
 
-func get_starting_assignment_id() -> int:
-	return startingGuildAssignment
-
 func get_starting_assignment_name() -> String:
 	return CONSTARRC.ASSIGNMENTS_LIST[startingGuildAssignment]
