@@ -4,6 +4,8 @@ extends "res://content/gamemode/relichunt/Relichunt.gd"
 func afterInitialized():
 	super.afterInitialized()
 	GameWorld.addUpgrade("archipelago", "team1")
+	var hud = preload("res://mods-unpacked/Arrcival-Archipelago/content/hud/DepthCounter.tscn")
+	Level.addHudElement(hud, "team1")
 
 func propertyChanged(property: String, oldValue, newValue):
 	super.propertyChanged(property, oldValue, newValue)

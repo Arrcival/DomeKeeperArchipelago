@@ -5,27 +5,18 @@ var _item_processor: ArchipelagoItemProcessor = ArchipelagoItemProcessor.new()
 var _connection_manager: ArchipelagoConnection = ArchipelagoConnection.new()
 var _upgrade_generator: ArchipelagoUpgradeGenerator = ArchipelagoUpgradeGenerator.new()
 var _assignment_manager: ArchipelagoAssignmentManager = ArchipelagoAssignmentManager.new()
-
 var _slot_data: ArchipelagoSlotData = ArchipelagoSlotData.new()
 var _locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
+var _tile_manager: ArchipelagoTileManager = ArchipelagoTileManager.new()
 
 #region slot data
 var mapSize: int:
 	get: return _slot_data.mapSize
-var switchesPerLayer: Array:
-	get: return _slot_data.switchesPerLayer
 var miningEverything: bool:
 	get: return _slot_data.miningEverything
 var challengeMode: bool:
 	get: return _slot_data.challengeMode
 #endregion
-
-var coloredLayersUnlocked: int:
-	get: return _progression.relic.coloredLayersUnlocked
-	set(value): _progression.relic.coloredLayersUnlocked = value
-var everyLayersUnlockFound: bool:
-	get: return _progression.relic.everyLayersUnlockFound
-	set(value): _progression.relic.everyLayersUnlockFound = value
 
 func _init() -> void:
 	_connection_manager.slot_data_received.connect(retrieveSlotData)
@@ -41,8 +32,13 @@ func _init() -> void:
 
 	_progression.setup(_slot_data)
 	_progression.log_informations.connect(_on_progression_log)
+
+	_tile_manager.setup(_slot_data, _progression)
+
 	_assignment_manager.setup(_progression.guild, _slot_data, Callable(self, "sendCheck"))
+
 	_upgrade_generator.setup(_slot_data)
+
 	_item_processor.setup(_progression, _slot_data)
 	_item_processor.trap_received.connect(_on_item_trap_received)
 	_item_processor.upgrade_received.connect(_on_upgrade_received)
@@ -172,6 +168,9 @@ func consume_resource_deltas() -> Dictionary:
 func get_switches_per_layer() -> Array:
 	return _slot_data.switchesPerLayer.duplicate()
 
+func get_layers_amount() -> int:
+	return _slot_data.get_layer_amount()
+
 func clear_switch_locations() -> void:
 	_locations.switches_location.clear()
 
@@ -213,14 +212,6 @@ func _on_progression_log(text: String) -> void:
 func checkUpgrades() -> Array[String]:
 	return _item_processor.check_upgrades()
 
-func hasLayerUnlocked(layerId: int) -> bool:
-	if not is_relic_hunt():
-		return true
-
-	if everyLayersUnlockFound:
-		return true
-	return layerId <= coloredLayersUnlocked
-
 func is_relic_hunt() -> bool:
 	return _slot_data.is_relic_hunt()
 
@@ -259,7 +250,10 @@ func get_assignment_id(assignment: String) -> int:
 	return _assignment_manager.get_assignment_id(assignment)
 
 func get_relic_hunt_stats() -> String:
-	return _progression.get_relic_hunt_stats()
+	var rh_stats = _progression.get_relic_hunt_stats()
+	rh_stats += "\n"
+	rh_stats += "Max mineable depth : " + str(_tile_manager.get_maximum_depth())
+	return rh_stats
 
 func complete_relichunt() -> void:
 	_connection_manager.complete_goal()
@@ -275,3 +269,20 @@ func get_speed_multiplier() -> float:
 
 func get_mining_multiplier() -> float:
 	return _progression.get_mining_multiplier()
+
+func generate_layers(mapData: Array) -> void:
+	_tile_manager.generate_layers_per_distance(mapData)
+
+func get_generated_layers() -> Array:
+	return _tile_manager.get_generated_layers()
+
+func get_cell_distance(coord: Vector2) -> int:
+	return _tile_manager.get_cell_distance(coord)
+
+func has_tile_unlocked(distance: int) -> bool:
+	if not is_relic_hunt():
+		return true
+
+	if _progression.has_every_layers_unlocked():
+		return true
+	return _tile_manager.can_tile_be_mined(distance)

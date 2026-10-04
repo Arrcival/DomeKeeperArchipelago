@@ -49,6 +49,8 @@ func process_item(item_id: int) -> bool:
 	return true
 
 func update_colored_layers() -> void:
+	if coloredLayersUnlocked >= slot_data.get_layer_amount():
+		return
 	coloredLayersUnlocked += 1
 	if coloredLayersUnlocked == slot_data.get_layer_amount():
 		log_informations.emit("You unlocked every layers.")
@@ -66,3 +68,9 @@ func get_relic_hunt_stats() -> String:
 		text += "Total water received : " + str(waterRetrieved) + "\n"
 		text += "Total cobalt received : " + str(cobaltRetrieved) + "\n"
 	return text
+
+func get_layer_unlocked_amount() -> int:
+	return coloredLayersUnlocked
+
+func has_every_layers_unlocked():
+	return everyLayersUnlockFound

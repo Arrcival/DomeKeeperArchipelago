@@ -93,3 +93,15 @@ func get_mining_multiplier() -> float:
 		return guild.get_mining_multiplier()
 	else:
 		return 1
+
+func get_layer_unlocked_amount() -> int:
+	if slot_data.is_guild_assignment():
+		return 0
+	else:
+		return relic.get_layer_unlocked_amount()
+
+func has_every_layers_unlocked() -> bool:
+	if slot_data.is_guild_assignment():
+		return true
+	else:
+		return relic.has_every_layers_unlocked()

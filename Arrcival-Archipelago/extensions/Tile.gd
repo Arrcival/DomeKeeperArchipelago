@@ -2,6 +2,8 @@ extends "res://content/map/tile/Tile.gd"
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
+var distance_to_dome = 0
+
 func _ready():
 	super._ready()
 	var resourceSprite: Sprite2D = find_child("ResourceSprite")
@@ -37,11 +39,14 @@ func setType(type:String):
 		max_health = max(1, round(healthMultiplier * baseHealth))
 		health = max_health
 
+	distance_to_dome = GameWorld.archipelago.get_cell_distance(coord)
+
 
 # Protect tile from being hit if the layer hasn't been accessed yet
-# Work for everything (mining, sphere, drillbert, bomb...) but not drill !!
-# TODO: check if i'm wrong
 func hit(dir: Vector2, dmg: float, teamId: String = "", keeperTechId: String = ""):
-	var biomeId = Level.map.tileData.get_biomev(coord)
-	if GameWorld.archipelago.hasLayerUnlocked(biomeId):
+	if GameWorld.archipelago.has_tile_unlocked(distance_to_dome):
 		super.hit(dir, dmg, teamId, keeperTechId)
+	if distance_to_dome == 0 or distance_to_dome == null:
+		Data.apply("team1.archipelago.depth", 0)
+	else:
+		Data.apply("team1.archipelago.depth", distance_to_dome)

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1ichafiqhd75"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/hud/DepthCounter.gd" id="1_6ljyb"]
+[ext_resource type="LabelSettings" uid="uid://qsc7kngg06e5" path="res://gui/fontsettings/SmallFontSettings.tres" id="2_osuk2"]
+
+[node name="DepthCounter" type="MarginContainer"]
+offset_right = 15.0
+offset_bottom = 18.0
+scale = Vector2(0.333, 0.333)
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+script = ExtResource("1_6ljyb")
+element_size = Vector2(6, 2)
+layoutWeights = Vector2(0, 7)
+layoutPriority = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Depth :"
+label_settings = ExtResource("2_osuk2")
+
+[node name="DepthLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_osuk2")

@@ -17,12 +17,14 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "ArtifactDropPoint.gd")
 	loadExtension(ext_dir, "AssignmentChoice.gd")
 	loadExtension(ext_dir, "GameWorld.gd")
+	loadExtension(ext_dir, "IntroStage.gd")
 	loadExtension(ext_dir, "Keeper1.gd")
 	loadExtension(ext_dir, "Keeper2.gd")
 	#loadExtension(ext_dir, "Keeper4.gd") # Could not resolve class?
 	loadExtension(ext_dir, "Kunai.gd")
 	loadExtension(ext_dir, "LevelStage.gd")
 	loadExtension(ext_dir, "Map.gd")
+	loadExtension(ext_dir, "MapData.gd")
 	loadExtension(ext_dir, "Monsters.gd")
 	loadExtension(ext_dir, "MultiplayerLoadoutStage.gd")
 	#loadExtension(ext_dir, "PauseMenu.gd") # Could not resolve class?

@@ -11,21 +11,19 @@ func init(fromDeserialize: = false, defaultState := true):
 	
 	if not fromDeserialize:
 		var clusterCenters = tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
-		if GameWorld.devMode or OS.is_debug_build():
-			print("Tile AP switches :")
-			print(clusterCenters)
+		if clusterCenters.size() > 0 and (GameWorld.devMode or OS.is_debug_build()):
+			print("Tile AP switches : %s", clusterCenters)
 		for tile in clusterCenters:
 			addChamber(tile, getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 		
-		clusterCenters = tileData.get_resource_cells_by_id(CONSTARRC.TILE_CHAMBER)
-		if GameWorld.devMode or OS.is_debug_build():
-			print("Tile AP chambers :")
-			print(clusterCenters)
-		for tile in clusterCenters:
-			addChamber(tile, getSceneForTileType(CONSTARRC.TILE_CHAMBER))
-		
 		if GameWorld.devMode:
 			addChamber(Vector2(0, 2), getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
+
+static func generateChamberPlacements(tileData) -> Dictionary:
+	var placements: Dictionary = super.generateChamberPlacements(tileData)
+	var apChamberOrigins: Array = tileData.get_resource_cells_by_id(CONSTARRC.TILE_CHAMBER)
+	placements[CONSTARRC.TILE_CHAMBER] = apChamberOrigins
+	return placements
 
 func getSceneForTileType(tileType:int) -> PackedScene:
 	if tileType == CONSTARRC.TILE_ARCHIPELAGO_SWITCH:

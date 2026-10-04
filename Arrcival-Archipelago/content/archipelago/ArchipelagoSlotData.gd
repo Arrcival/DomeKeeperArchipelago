@@ -135,16 +135,10 @@ func get_seed(assignment: String = "showdown") -> int:
 	return seedNumber + get_assignment_id(assignment)
 
 func get_layer_unlock_count() -> int:
-	if mapSize == 1:
-		return 3
-	if mapSize == 2:
-		return 5
-	if mapSize == 3:
-		return 6
-	return 2
+	return get_layer_unlock_count() - 1
 
 func get_layer_amount() -> int:
-	return get_layer_unlock_count() + 1
+	return len(switchesPerLayer)
 
 func get_relic_hunt_slot_data() -> Dictionary:
 	return {
