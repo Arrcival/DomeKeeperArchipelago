@@ -23,6 +23,7 @@ func _ready():
 		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId(assignment.id)
 	else:
 		chamber_archipelago_id = GameWorld.archipelago.getLocationChamberId()
+	print("Chamber with id %s generated" % chamber_archipelago_id)
 
 func resetVisibility():
 	$Slots / Slot1 / Resource.visible = false

@@ -664,3 +664,7 @@ func get_layer_unlock_count() -> int:
 	if mapSize == 3:
 		return 6
 	return 2
+
+func reset_chamber_ids() -> void:
+	locationIdChamberSync = LOCATION_FIRST_CHAMBER_SYNC_ID
+	chambers_generated = 0

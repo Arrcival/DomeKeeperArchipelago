@@ -10,6 +10,8 @@ func init(chain: ModLoaderHookChain, fromDeserialize: = false, defaultState := t
 	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHAMBER:CONSTARRC.CHAMBER})
 	chain.execute_next([fromDeserialize, defaultState])
 	var main_node : Node = chain.reference_object
+
+	GameWorld.archipelago.reset_chamber_ids()
 	
 	if not fromDeserialize:
 		var clusterCenters = Level.map.tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
