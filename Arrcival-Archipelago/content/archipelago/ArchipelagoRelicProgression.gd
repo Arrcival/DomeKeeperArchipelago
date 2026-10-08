@@ -1,6 +1,7 @@
 class_name ArchipelagoRelicProgression
 
 var slot_data: ArchipelagoSlotData
+var _tile_manager: ArchipelagoTileManager
 
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
@@ -14,8 +15,9 @@ var everyLayersUnlockFound: bool = false
 signal log_informations(text: String)
 signal trap_received
 
-func setup(progression_slot_data: ArchipelagoSlotData) -> void:
+func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: ArchipelagoTileManager) -> void:
 	slot_data = progression_slot_data
+	_tile_manager = tile_manager
 
 func reset() -> void:
 	cobaltRetrieved = 0
@@ -52,6 +54,7 @@ func update_colored_layers() -> void:
 	if coloredLayersUnlocked >= slot_data.get_layer_amount():
 		return
 	coloredLayersUnlocked += 1
+	_tile_manager.update_max_depth_hud()
 	if coloredLayersUnlocked == slot_data.get_layer_amount():
 		log_informations.emit("You unlocked every layers.")
 		everyLayersUnlockFound = true

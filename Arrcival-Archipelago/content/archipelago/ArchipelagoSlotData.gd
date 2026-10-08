@@ -33,7 +33,7 @@ var defaultMiningValue: int = 100
 var defaultSpeedValue: int = 100
 var miningBonusValue: int = 5
 var speedBonusValue: int = 5
-
+var relicDeathLink: bool = false
 
 
 func reset() -> void:
@@ -61,6 +61,7 @@ func reset() -> void:
 	defaultSpeedValue = 100
 	miningBonusValue = 5
 	speedBonusValue = 5
+	relicDeathLink = false
 
 func apply(raw_slot_data: Dictionary) -> void:
 	reset()
@@ -118,6 +119,8 @@ func apply(raw_slot_data: Dictionary) -> void:
 		miningBonusValue = int(raw_slot_data["miningBonus"])
 	if raw_slot_data.has("movementBonus"):
 		speedBonusValue = int(raw_slot_data["movementBonus"])
+	if raw_slot_data.has("relicDeath"):
+		speedBonusValue = bool(raw_slot_data["relicDeath"])
 
 func is_relic_hunt() -> bool:
 	return progressionType == PROGRESSION_TYPE.RELIC_HUNT

@@ -46,6 +46,8 @@ func setType(type:String):
 func hit(dir: Vector2, dmg: float, teamId: String = "", keeperTechId: String = ""):
 	if GameWorld.archipelago.has_tile_unlocked(distance_to_dome):
 		super.hit(dir, dmg, teamId, keeperTechId)
+
+	# should be moved cause any tile hit will occur that
 	if distance_to_dome == 0 or distance_to_dome == null:
 		Data.apply("team1.archipelago.depth", 0)
 	else:

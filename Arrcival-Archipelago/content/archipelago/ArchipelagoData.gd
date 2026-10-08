@@ -30,7 +30,7 @@ func _init() -> void:
 	_connection_manager.log_informations.connect(_on_connection_log)
 	_connection_manager.connection_failed.connect(connection_failed)
 
-	_progression.setup(_slot_data)
+	_progression.setup(_slot_data, _tile_manager)
 	_progression.log_informations.connect(_on_progression_log)
 
 	_tile_manager.setup(_slot_data, _progression)
@@ -286,3 +286,24 @@ func has_tile_unlocked(distance: int) -> bool:
 	if _progression.has_every_layers_unlocked():
 		return true
 	return _tile_manager.can_tile_be_mined(distance)
+
+func update_max_depth_hud() -> void:
+	_tile_manager.update_max_depth_hud()
+
+func end_game(won: bool) -> void:
+	var disable_dl = false
+	var config: Dictionary = ModLoaderConfig.get_current_config(CONST.MOD_ID).data
+	if config.has("disable_dl"):
+		disable_dl = bool(config["disable_dl"])
+
+	if disable_dl:
+		return
+
+	if not won:
+		check_for_death_link()
+	if won and _slot_data.relicDeathLink:
+		check_for_death_link()
+
+func check_for_death_link():
+	if not consume_death_link_death():
+		send_death("The dome was destroyed...")

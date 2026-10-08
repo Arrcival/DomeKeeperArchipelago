@@ -7,9 +7,9 @@ var died_to_death_link: bool = false
 signal log_informations(text: String)
 signal trap_received
 
-func setup(progression_slot_data: ArchipelagoSlotData) -> void:
+func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: ArchipelagoTileManager) -> void:
 	slot_data = progression_slot_data
-	relic.setup(progression_slot_data)
+	relic.setup(progression_slot_data, tile_manager)
 	guild.setup(progression_slot_data)
 	relic.log_informations.connect(_on_relic_log)
 	relic.trap_received.connect(_on_relic_trap)

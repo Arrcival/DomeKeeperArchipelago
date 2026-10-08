@@ -23,9 +23,7 @@ func _on_archipelago_upgrade_received(item_name: String) -> void:
 # TODO: deathlink issue on ressurection: HP technically drops to 0
 func handleGameLost(backendData:Dictionary = {}):
 	super.handleGameLost(backendData)
-	if not won:
-		if not archipelago.consume_death_link_death():
-			archipelago.send_death("The dome was destroyed...")
+	GameWorld.archipelago.end_game(won)
 
 # Restart items given from AP
 # They are given back in LevelStage

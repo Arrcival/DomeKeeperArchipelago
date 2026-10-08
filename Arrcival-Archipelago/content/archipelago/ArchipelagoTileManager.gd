@@ -107,4 +107,10 @@ func can_tile_be_mined(distance: int) -> bool:
 
 func get_maximum_depth() -> int:
 	var mineable_layers = _progression.get_layer_unlocked_amount()
+	if mineable_layers >= len(_layer_max_distances):
+		return 999
 	return _layer_max_distances[mineable_layers]
+
+func update_max_depth_hud() -> void:
+	var max_depth = get_maximum_depth()
+	Data.apply("team1.archipelago.maxdepth", max_depth)

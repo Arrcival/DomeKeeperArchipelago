@@ -32,6 +32,11 @@
 						"default": "",
 						"title": "Slot password",
 						"type": "string"
+					},
+					"disable_dl": {
+						"default": false,
+						"title": "Force disable deathlink",
+						"type": "boolean"
 					}
 				},
 				"title": "Archipelago configuration schema",
