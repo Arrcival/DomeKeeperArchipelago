@@ -7,12 +7,13 @@ const ARCHIPELAGO_CAVE_SCENE: Resource = preload("res://mods-unpacked/Arrcival-A
 func init(fromDeserialize: = false, defaultState := true):
 	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_ARCHIPELAGO_SWITCH:CONSTARRC.ARCHIPELAGOSWITCH})
 	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHAMBER:CONSTARRC.AP_CHAMBER})
+	Data.TILE_ID_TO_STRING_MAP.merge({CONSTARRC.TILE_CHEST:CONSTARRC.AP_CHEST})
 	super.init(fromDeserialize, defaultState)
 	
 	if not fromDeserialize:
 		var clusterCenters = tileData.get_resource_cells_by_id(CONSTARRC.TILE_ARCHIPELAGO_SWITCH)
 		if clusterCenters.size() > 0 and (GameWorld.devMode or OS.is_debug_build()):
-			print("Tile AP switches : %s", clusterCenters)
+			print("Tile AP switches :", clusterCenters)
 		for tile in clusterCenters:
 			addChamber(tile, getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 		
@@ -20,9 +21,11 @@ func init(fromDeserialize: = false, defaultState := true):
 			addChamber(Vector2(0, 2), getSceneForTileType(CONSTARRC.TILE_ARCHIPELAGO_SWITCH))
 
 static func generateChamberPlacements(tileData) -> Dictionary:
-	var placements: Dictionary = super.generateChamberPlacements(tileData)
 	var apChamberOrigins: Array = tileData.get_resource_cells_by_id(CONSTARRC.TILE_CHAMBER)
+	var apChestOrigins: Array = tileData.get_resource_cells_by_id(CONSTARRC.TILE_CHEST)
+	var placements: Dictionary = super.generateChamberPlacements(tileData)
 	placements[CONSTARRC.TILE_CHAMBER] = apChamberOrigins
+	placements[CONSTARRC.TILE_CHEST] = apChestOrigins
 	return placements
 
 func getSceneForTileType(tileType:int) -> PackedScene:
@@ -30,6 +33,8 @@ func getSceneForTileType(tileType:int) -> PackedScene:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/switch/ArchipelagoSwitch.tscn")
 	if tileType == CONSTARRC.TILE_CHAMBER:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/chamber/ArchipelagoChamber.tscn")
+	if tileType == CONSTARRC.TILE_CHEST:
+		return preload("res://mods-unpacked/Arrcival-Archipelago/content/chest/ArchipelagoChest.tscn")
 	return super.getSceneForTileType(tileType)
 
 # Add one archipelago cave per accessible layer
@@ -54,7 +59,6 @@ func addCaves(minDistanceToCenter: = 10):
 		addArchipelagoCave(5)
 	if GameWorld.archipelago.mapSize >= 3:
 		addArchipelagoCave(6)
-
 
 func addArchipelagoCave(biomeId: int):
 	var cave: Node = ARCHIPELAGO_CAVE_SCENE.instantiate()

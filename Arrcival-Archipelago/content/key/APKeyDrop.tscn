@@ -1,0 +1,124 @@
+[gd_scene load_steps=19 format=3 uid="uid://dyhremchb0ktx"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/key/APKeyDrop.gd" id="1_ycyny"]
+[ext_resource type="Texture2D" uid="uid://dbx7ru6j4m4rx" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key_smol.png" id="2_7ij25"]
+[ext_resource type="Texture2D" uid="uid://c6a1slus2bh5g" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key1.png" id="3_qsuen"]
+[ext_resource type="Material" uid="uid://c4rg5bvijyfin" path="res://content/shared/HighlightShader.tres" id="4"]
+[ext_resource type="Texture2D" uid="uid://dax5lvo8i17go" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key2.png" id="4_g3icd"]
+[ext_resource type="Texture2D" uid="uid://u707pf4fdkpl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key3.png" id="5_aq87o"]
+[ext_resource type="PackedScene" path="res://content/shared/drops/DropEnterTrigger.tscn" id="6"]
+[ext_resource type="Texture2D" uid="uid://1bomlov5g3ys" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key4.png" id="6_avgq0"]
+[ext_resource type="PackedScene" uid="uid://cal1wf2f0kx7b" path="res://systems/deprecatedtween/DeprecatedTween.tscn" id="7"]
+[ext_resource type="Texture2D" uid="uid://sqr2nbbrwrr6" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key5.png" id="7_i7ec3"]
+[ext_resource type="Texture2D" uid="uid://ckbad8oyqtdoo" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key6.png" id="8_o0oy8"]
+[ext_resource type="Texture2D" uid="uid://disd8b1kpeum3" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key7.png" id="9_ii6e3"]
+[ext_resource type="Texture2D" uid="uid://b3q7cu53wnmdl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key8.png" id="10_j2gg4"]
+[ext_resource type="Texture2D" uid="uid://dbleajyug6huw" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key9.png" id="11_qpt1v"]
+[ext_resource type="Texture2D" uid="uid://dff528fifqjg5" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key10.png" id="12_s7qd6"]
+
+[sub_resource type="PhysicsMaterial" id="1"]
+friction = 0.1
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1mdcf"]
+load_path = "res://.godot/imported/carried.png-4f77d1b82f5d21a96bd0ff1067f851cf.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6v5ed"]
+load_path = "res://.godot/imported/focussed.png-fdfe65abf920901a363a168de83306a9.ctex"
+
+[node name="APKeyDrop" type="RigidBody2D" node_paths=PackedStringArray("dropSprite", "focus_sprite", "carry_sprite") groups=["carryable", "saveable"]]
+z_index = 21
+texture_filter = 1
+collision_layer = 34
+collision_mask = 522
+mass = 3.0
+physics_material_override = SubResource("1")
+gravity_scale = 0.5
+can_sleep = false
+script = ExtResource("1_ycyny")
+type = "ap_key"
+hasInterDropCollisionSound = true
+floatUncarried = true
+dropSprite = NodePath("Sprite2D")
+additionalSlowdown = 0.4
+carryableType = "gadget"
+carryInfluenceSize = 2.0
+focus_sprite = NodePath("FocusSprite")
+carry_sprite = NodePath("CarrySprite")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_7ij25")
+
+[node name="Key1" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("3_qsuen")
+
+[node name="Key2" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("4_g3icd")
+
+[node name="Key3" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("5_aq87o")
+
+[node name="Key4" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("6_avgq0")
+
+[node name="Key5" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("7_i7ec3")
+
+[node name="Key6" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("8_o0oy8")
+
+[node name="Key7" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("9_ii6e3")
+
+[node name="Key8" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("10_j2gg4")
+
+[node name="Key9" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("11_qpt1v")
+
+[node name="Key10" type="Sprite2D" parent="Sprite2D"]
+visible = false
+position = Vector2(-5.5, -0.5)
+texture = ExtResource("12_s7qd6")
+
+[node name="CarrySprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, 2.38419e-07)
+scale = Vector2(1, 0.444444)
+texture = SubResource("CompressedTexture2D_1mdcf")
+
+[node name="FocusSprite" type="Sprite2D" parent="."]
+visible = false
+z_index = 30
+texture_filter = 1
+material = ExtResource("4")
+position = Vector2(-1.04308e-06, 4.76837e-07)
+scale = Vector2(1, 0.545455)
+texture = SubResource("CompressedTexture2D_6v5ed")
+
+[node name="DropEnterTrigger" parent="." instance=ExtResource("6")]
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-0.396847, -0.595274)
+polygon = PackedVector2Array(-8.60315, -1.40473, -7.60315, -3.40473, -2.60315, -3.40473, 9.39685, -1.40473, 9.39685, 2.59527, 5.39685, 4.59527, -7.60315, 3.59527, -8.60315, 2.59527)
+
+[node name="Tween" parent="." instance=ExtResource("7")]

@@ -39,6 +39,20 @@ func setType(type:String):
 		max_health = max(1, round(healthMultiplier * baseHealth))
 		health = max_health
 
+	if type == CONSTARRC.AP_CHEST:
+		var baseHealth:float = Data.of("map.tileBaseHealth")
+	
+		set_meta("destructable", true)
+		initResourceSprite(Vector2(5, 0))
+		baseHealth += Data.of("map.relicAdditionalHealth")
+	
+		var healthMultiplier:float = Data.of("map.tileHealthBaseMultiplier")
+
+		healthMultiplier *= (pow(Data.of("map.tileHealthMultiplierPerLayer"), layer))
+		
+		max_health = max(1, round(healthMultiplier * baseHealth))
+		health = max_health
+
 	distance_to_dome = GameWorld.archipelago.get_cell_distance(coord)
 
 

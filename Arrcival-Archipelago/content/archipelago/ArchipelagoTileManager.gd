@@ -31,9 +31,6 @@ func generate_layers_per_distance(mineable_cells: Array):
 		_layers_per_distance = layers
 		return layers
 
-	print("@#@#@#@# I have mineable tiles ! I have %s cells" % mineable_cells.size())
-	print("@#@#@#@# Generating Archipelago cells for %s layers" % layers_amount)
-
 	var mineable_lookup: Dictionary = {}
 	for cell in mineable_cells:
 		mineable_lookup[Vector2i(cell)] = true
@@ -107,7 +104,7 @@ func can_tile_be_mined(distance: int) -> bool:
 
 func get_maximum_depth() -> int:
 	var mineable_layers = _progression.get_layer_unlocked_amount()
-	if mineable_layers >= len(_layer_max_distances):
+	if mineable_layers >= len(_layer_max_distances) - 1:
 		return 999
 	return _layer_max_distances[mineable_layers]
 

@@ -150,6 +150,15 @@ func get_upgrade_description(upgrade_name: String) -> String:
 func sendCheck(locationId: int) -> void:
 	_connection_manager.queue_location_check(locationId)
 
+func has_checked_location(locationId: int) -> bool:
+	return _connection_manager.has_checked_location(locationId)
+
+func get_pending_key_ids() -> Array[int]:
+	return _progression.relic.get_pending_keys()
+
+func consume_pending_key(key_ap_id: int) -> void:
+	_progression.relic.consume_pending_key(key_ap_id)
+
 func send_death(reason: String) -> void:
 	_connection_manager.send_death(reason)
 
@@ -235,6 +244,9 @@ func get_location_chamber_id_rh() -> int:
 
 func get_location_chamber_id_ga(assignment: String = "showdown") -> int:
 	return _locations.next_chamber_location_id_ga(get_assignment_id(assignment))
+
+func get_location_chest_id() -> int:
+	return _locations.next_chest_location_number()
 
 func is_async_won() -> bool:
 	return _assignment_manager.is_async_won()

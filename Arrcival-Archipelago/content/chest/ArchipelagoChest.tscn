@@ -1,0 +1,229 @@
+[gd_scene load_steps=35 format=3 uid="uid://dkiccxvrqi26x"]
+
+[ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chest/ArchipelagoChest.gd" id="1_25a5d"]
+[ext_resource type="Texture2D" uid="uid://brbuiuvnvqhxj" path="res://mods-unpacked/Arrcival-Archipelago/content/chest/archipelago_chest_sheet.png" id="2_dwqr6"]
+[ext_resource type="Texture2D" uid="uid://dw5g77bjvhwyq" path="res://mods-unpacked/Arrcival-Archipelago/content/treasure/treasure.png" id="3_hyg0p"]
+[ext_resource type="AudioStream" uid="uid://c2hpxhgvrwf5y" path="res://content/sounds/Locations/ChamberRelic/NoiseFloor09.wav" id="4_jkgwj"]
+[ext_resource type="PackedScene" uid="uid://02emll07tpim" path="res://content/shared/Usable.tscn" id="5_bfttk"]
+[ext_resource type="PackedScene" uid="uid://tpg22jokikqp" path="res://content/map/TileCover.tscn" id="6_54k8p"]
+[ext_resource type="Texture2D" uid="uid://yan3ge52a6vc" path="res://content/map/chamber/cover.png" id="7_5kbj2"]
+[ext_resource type="AudioStream" uid="uid://cxolv2c5th51j" path="res://content/sounds/Locations/RelicSwitchChamber/switchChamberAppear.wav" id="8_yg5o0"]
+[ext_resource type="Texture2D" uid="uid://c2lx3ltbjuvp5" path="res://content/drop/gadget/focussed.png" id="9_otpnu"]
+[ext_resource type="PackedScene" uid="uid://dr2je683l1lv6" path="res://content/shared/drops/ResourceGrabber.tscn" id="10_huxc1"]
+[ext_resource type="Texture2D" uid="uid://dbx7ru6j4m4rx" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key_smol.png" id="11_f78cb"]
+[ext_resource type="Script" path="res://content/map/chamber/ChamberSynchronizer.gd" id="12_y0377"]
+[ext_resource type="Texture2D" uid="uid://c6a1slus2bh5g" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key1.png" id="13_yh2q4"]
+[ext_resource type="Texture2D" uid="uid://dax5lvo8i17go" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key2.png" id="14_l4gep"]
+[ext_resource type="Texture2D" uid="uid://u707pf4fdkpl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key3.png" id="15_y0xgj"]
+[ext_resource type="Texture2D" uid="uid://1bomlov5g3ys" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key4.png" id="16_8mh61"]
+[ext_resource type="Texture2D" uid="uid://sqr2nbbrwrr6" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key5.png" id="17_4rth1"]
+[ext_resource type="Texture2D" uid="uid://ckbad8oyqtdoo" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key6.png" id="18_1go1e"]
+[ext_resource type="Texture2D" uid="uid://disd8b1kpeum3" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key7.png" id="19_jxe6d"]
+[ext_resource type="Texture2D" uid="uid://b3q7cu53wnmdl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key8.png" id="20_6pw05"]
+[ext_resource type="Texture2D" uid="uid://dbleajyug6huw" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key9.png" id="21_lru42"]
+[ext_resource type="Texture2D" uid="uid://dff528fifqjg5" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key10.png" id="22_px4iv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65hng"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3a1r"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(320, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jh3ak"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbshv"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abajh"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hopo0"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_en0g7"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(200, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3hod0"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(240, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x13df"]
+atlas = ExtResource("2_dwqr6")
+region = Rect2(280, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wq4pb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65hng")
+}],
+"loop": false,
+"name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3a1r")
+}],
+"loop": false,
+"name": &"empty",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jh3ak")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbshv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abajh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hopo0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_en0g7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3hod0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x13df")
+}],
+"loop": false,
+"name": &"opening",
+"speed": 5.0
+}]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_suwgp"]
+texture = ExtResource("7_5kbj2")
+texture_region_size = Vector2i(24, 24)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ci7vr"]
+tile_size = Vector2i(24, 24)
+sources/0 = SubResource("TileSetAtlasSource_suwgp")
+
+[node name="ArchipelagoChest" type="Node2D" node_paths=PackedStringArray("tileCover") groups=["chamber", "saveable"]]
+z_index = -10
+texture_filter = 1
+script = ExtResource("1_25a5d")
+drop_type = "ap_treasure"
+type = "chest"
+tileCover = NodePath("TileCover")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(24, 24)
+sprite_frames = SubResource("SpriteFrames_wq4pb")
+
+[node name="SocketedGizmo" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(24, 24)
+texture = ExtResource("3_hyg0p")
+
+[node name="GizmoSpawn" type="Marker2D" parent="."]
+z_index = 50
+position = Vector2(24, 23)
+
+[node name="ChamberAmb" type="AudioStreamPlayer" parent="GizmoSpawn"]
+stream = ExtResource("4_jkgwj")
+volume_db = -8.739
+pitch_scale = 0.8
+bus = &"Mine"
+
+[node name="Usable" parent="." instance=ExtResource("5_bfttk")]
+position = Vector2(24, 23)
+visibleOnFocus = NodePath("../FocusMarker")
+
+[node name="TileCover" parent="." instance=ExtResource("6_54k8p")]
+visible = false
+tile_set = SubResource("TileSet_ci7vr")
+layer_0/tile_data = PackedInt32Array(1, 0, 0, 65536, 0, 0, 65537, 0, 0, 0, 0, 0)
+
+[node name="DoorOpen" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_yg5o0")
+volume_db = 12.0
+bus = &"Mine"
+
+[node name="FocusMarker" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(24, 24)
+texture = ExtResource("9_otpnu")
+
+[node name="Slot" type="Node2D" parent="."]
+visible = false
+position = Vector2(24, 24)
+
+[node name="ResourceGrabber" parent="Slot" instance=ExtResource("10_huxc1")]
+dropType = "ap_key"
+
+[node name="Resource" type="Sprite2D" parent="Slot"]
+texture = ExtResource("11_f78cb")
+
+[node name="ChamberSynchronizer" type="Node" parent="."]
+script = ExtResource("12_y0377")
+
+[node name="KeyNumber" type="Node2D" parent="."]
+
+[node name="Key1" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("13_yh2q4")
+
+[node name="Key2" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("14_l4gep")
+
+[node name="Key3" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("15_y0xgj")
+
+[node name="Key4" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("16_8mh61")
+
+[node name="Key5" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("17_4rth1")
+
+[node name="Key6" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("18_1go1e")
+
+[node name="Key7" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("19_jxe6d")
+
+[node name="Key8" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("20_6pw05")
+
+[node name="Key9" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("21_lru42")
+
+[node name="Key10" type="Sprite2D" parent="KeyNumber"]
+visible = false
+position = Vector2(18.5, 23.5)
+texture = ExtResource("22_px4iv")
+
+[connection signal="animation_finished" from="Sprite2D" to="." method="_on_Sprite_animation_finished"]
+[connection signal="grabbed_resource" from="Slot/ResourceGrabber" to="." method="_on_ResourceGrabber_grabbed_resource"]

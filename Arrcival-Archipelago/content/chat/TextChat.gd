@@ -1,6 +1,5 @@
 extends Control
 
-
 var textBox: RichTextLabel
 
 const MAX_LINE_COUNT = 7

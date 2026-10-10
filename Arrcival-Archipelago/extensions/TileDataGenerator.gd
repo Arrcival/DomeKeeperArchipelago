@@ -4,7 +4,7 @@ const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 const FIRSTLAYERID = 0
 
-const archipelago_chamber_offset: = [Vector2(0, 0), Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)]
+const archipelago_chamber_offset: = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
 
 # extension 
 func generate_resources(rand):
@@ -12,6 +12,8 @@ func generate_resources(rand):
 	_prepare_archipelago_generation()
 
 	super.generate_resources(rand)
+
+	generate_ap_chambers_and_chests()
 
 	print("@@@@ Generating archipelago water and switches")
 
@@ -48,8 +50,7 @@ func _generate_extra_water():
 				break
 
 # extension
-func generate_gadget_chambers():
-	super.generate_gadget_chambers()
+func generate_ap_chambers_and_chests():
 	print("@@@@ Generating AP chambers")
 	
 	var layers_per_distance :Array = GameWorld.archipelago.get_generated_layers() # Array of array
@@ -57,28 +58,44 @@ func generate_gadget_chambers():
 		var biomes = 3 if GameWorld.devMode else layers_per_distance.size()
 		for i in range(biomes):
 			var layerCells: Array = layers_per_distance[i].duplicate()
-			_try_placing_chamber(layerCells)
+			_place(layerCells, CONSTARRC.TILE_CHAMBER)
 
 	else: # Guild assignments
 		for i in range(2):
 			var everyCells: Array = _mapData.get_resource_cells_by_id(Data.TILE_DIRT_START)
-			_try_placing_chamber(everyCells)
+			_place(everyCells, CONSTARRC.TILE_CHAMBER)
 	print("@@@@ Done generating AP chambers")
 
-func _try_placing_chamber(cells: Array) -> bool:
+
+	if GameWorld.archipelago.is_relic_hunt():
+		print("@@@@ Generating AP chests")
+		var biomes = 3 if GameWorld.devMode else layers_per_distance.size()
+		for i in range(biomes):
+			var layerCells: Array = layers_per_distance[i].duplicate()
+			_place(layerCells, CONSTARRC.TILE_CHEST)
+		print("@@@@ Done generating AP chests")
+
+func _place(cells: Array, tile_id: int) -> bool:
 	var cellsShuffled = Data.seedShuffle(cells, gen_seed)
 	for cell in cellsShuffled:
-		var coords = _get_chamber_coords(Vector2(cell))
-		var placed = tryPlace(CONSTARRC.TILE_CHAMBER, coords)
+		var coords = _get_chamber_coords(Vector2i(cell))
+		var canBePlaced = _try_place_in_layer(coords, cellsShuffled)
+		if not canBePlaced:
+			continue
+
+		var placed = tryPlace(tile_id, coords)
 		if placed:
+			print("Placed type=%s origin=%s resource=%s" % [
+				tile_id, coords[0], _mapData.get_resourcev(coords[0])
+			])
 			# keep the top left, flag the other are blocked but not chamber
 			for i in range(1, coords.size()):
 				_mapData.set_resourcev(coords[i], Data.TILE_DIRT_MARK_BLOCKED_FOR_CHAMBER)
-			#print("@@@@@@@@ Generated AP gadget chamber on " + str(cell))
+			print("@@@@@@@@ Generated AP stuff on " + str(cell))
 			return true
 	return false
 
-func _get_chamber_coords(coord: Vector2) -> Array:
+func _get_chamber_coords(coord: Vector2i) -> Array:
 	var coords := []
 	for c in archipelago_chamber_offset:
 		coords.append(c + coord)
@@ -88,10 +105,19 @@ func _get_chamber_coords(coord: Vector2) -> Array:
 func tryPlace(cellType: int, cells: Array) -> bool:
 	for cell in cells:
 		var resourceCell: int = _mapData.get_resourcev(cell)
-		if resourceCell == CONSTARRC.TILE_ARCHIPELAGO_SWITCH or resourceCell == CONSTARRC.TILE_CHAMBER or resourceCell == Data.TILE_DIRT_MARK_BLOCKED_FOR_CHAMBER:
+		if (resourceCell == CONSTARRC.TILE_ARCHIPELAGO_SWITCH 
+		or resourceCell == CONSTARRC.TILE_CHAMBER 
+		or resourceCell == CONSTARRC.TILE_CHEST
+		or resourceCell == Data.TILE_DIRT_MARK_BLOCKED_FOR_CHAMBER):
 			return false
 
 	return super.tryPlace(cellType, cells)
+
+func _try_place_in_layer(chamber_cells: Array, layer_cells: Array) -> bool:
+	for cell in chamber_cells:
+		if not layer_cells.has(cell):
+			return false
+	return true
 
 func generate_switches_coordinates(switchesPerLayer: Array) -> void:
 	print("@@@@@@@@ Generating AP switches")

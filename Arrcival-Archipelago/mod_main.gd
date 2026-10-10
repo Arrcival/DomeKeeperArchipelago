@@ -65,3 +65,5 @@ func modInit():
 func archipelagoInit():
 	Data.DROP_TYPES.append(CONSTARRC.AP_TREASURE)
 	Data.DROP_SCENES[CONSTARRC.AP_TREASURE] = preload("res://mods-unpacked/Arrcival-Archipelago/content/treasure/APTreasureDrop.tscn")
+	Data.DROP_TYPES.append(CONSTARRC.AP_KEY)
+	Data.DROP_SCENES[CONSTARRC.AP_KEY] = preload("res://mods-unpacked/Arrcival-Archipelago/content/key/APKeyDrop.tscn")

@@ -25,6 +25,7 @@ var location_ids: Dictionary = {
 
 var cave_location_id: int = LOCATION_FIRST_CAVE_ID
 var chamber_sync_location_id: int = LOCATION_FIRST_CHAMBER_SYNC_ID
+var chest_location_number: int = 0
 var chamber_async_location_id: int = LOCATION_FIRST_CHAMBER_ASYNC_ID
 var chambers_generated: int = 0
 
@@ -52,6 +53,7 @@ func reset() -> void:
 	chamber_sync_location_id = LOCATION_FIRST_CHAMBER_SYNC_ID
 	chamber_async_location_id = LOCATION_FIRST_CHAMBER_ASYNC_ID
 	chambers_generated = 0
+	chest_location_number = 0
 
 # Clears generated counters and map/session-specific location data.
 func reset_all() -> void:
@@ -75,6 +77,11 @@ func next_chamber_location_id_ga(assignment_id: int = 0) -> int:
 	var location_id := chamber_async_location_id + chambers_generated * ASSIGNMENTS_AMOUNT
 	chambers_generated += 1
 	return location_id
+
+func next_chest_location_number() -> int:
+	var number := chest_location_number
+	chest_location_number += 1
+	return number
 
 func get_upgrade_location(upgrade_name: String) -> int:
 	var upgrade = upgrade_name

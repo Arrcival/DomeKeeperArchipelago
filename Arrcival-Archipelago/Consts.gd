@@ -9,10 +9,16 @@ const TILE_ARCHIPELAGO_SWITCH: int = 4242
 
 const SECONDS_LOST_PER_TRAP: int = 15
 
+const CHEST_LOCATION_ID: int = 4243200
+
 const TILE_CHAMBER = 77
+const TILE_CHEST = 78
 const AP_CHAMBER = "ap_chamber"
 
 const AP_TREASURE = "ap_treasure"
+
+const AP_CHEST = "ap_chest"
+const AP_KEY = "ap_key"
 
 const PROTECTED_SPAWNS : Array[Vector2] = [
 	Vector2(0, 0),

@@ -24,7 +24,13 @@ func propertyChanged(property: String, oldValue, newValue):
 		updateText()
 
 func updateText():
+	if maxDepth == 999:
+		depth_label.text = str(depth)
+		element_size.x = 6
+		return
+
 	depth_label.text = str(depth) + "/" + str(maxDepth)
+
 	if element_size.x == 6 and maxDepth >= 100:
 		element_size.x = 7
 	if element_size.x == 7 and maxDepth < 100:
