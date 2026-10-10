@@ -66,7 +66,6 @@ func _spawn_pending_archipelago_keys() -> void:
 
 # Kill the user on death link with standard death behavior
 func makeUserLose():
-	GameWorld.archipelago.mark_death_link_death()
 	Data.changeDomeHealth(-999999, "team1")
 
 func beforeStart():

@@ -19,11 +19,11 @@ func init():
 func _on_archipelago_upgrade_received(item_name: String) -> void:
 	addUpgrade(item_name, "team1")
 
-# Deathlink
+# Deathlink, dome explosion / also GA loss
 # TODO: deathlink issue on ressurection: HP technically drops to 0
 func handleGameLost(backendData:Dictionary = {}):
 	super.handleGameLost(backendData)
-	GameWorld.archipelago.end_game(won)
+	GameWorld.archipelago.send_possible_dl(won, false)
 
 # Restart items given from AP
 # They are given back in LevelStage

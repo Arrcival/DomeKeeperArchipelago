@@ -14,3 +14,5 @@ func propertyChanged(property: String, oldValue, newValue):
 			GameWorld.archipelago.complete_relichunt()
 		else:
 			GameWorld.archipelago.complete_relichunt()
+	if property == "team1.monsters.wavepresent" and not newValue:
+		GameWorld.archipelago.send_possible_dl(true, relicTriggered)

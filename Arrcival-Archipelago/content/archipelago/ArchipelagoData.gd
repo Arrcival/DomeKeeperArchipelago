@@ -1,5 +1,7 @@
 class_name ArchipelagoData
 
+const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+
 var _progression: ArchipelagoProgression = ArchipelagoProgression.new()
 var _item_processor: ArchipelagoItemProcessor = ArchipelagoItemProcessor.new()
 var _connection_manager: ArchipelagoConnection = ArchipelagoConnection.new()
@@ -24,6 +26,7 @@ func _init() -> void:
 	_connection_manager.client_connected.connect(on_client_connected)
 	_connection_manager.client_disconnected.connect(on_client_disconnected)
 	_connection_manager.item_received.connect(_on_item_received)
+	_connection_manager.location_check_sent.connect(_on_location_check_sent)
 	_connection_manager.death_link_received.connect(_on_death_link_received)
 	_connection_manager.connect_status.connect(_on_connect_status)
 	_connection_manager.connected_with_room_info.connect(_on_connected_with_room_info)
@@ -105,7 +108,13 @@ func _on_item_received(item_id: int, received_index: int) -> void:
 	_item_processor.receive_item(item_id, received_index)
 	item_received.emit(item_id)
 
+func _on_location_check_sent(location_id: int) -> void:
+	var checked_locations := _connection_manager.get_checked_locations()
+	if not checked_locations.has(location_id):
+		checked_locations.append(location_id)
+
 func _on_death_link_received() -> void:
+	mark_death_link_death()
 	onDeathFound.emit()
 
 func _on_connect_status(message: String) -> void:
@@ -302,20 +311,24 @@ func has_tile_unlocked(distance: int) -> bool:
 func update_max_depth_hud() -> void:
 	_tile_manager.update_max_depth_hud()
 
-func end_game(won: bool) -> void:
-	var disable_dl = false
-	var config: Dictionary = ModLoaderConfig.get_current_config(CONST.MOD_ID).data
-	if config.has("disable_dl"):
-		disable_dl = bool(config["disable_dl"])
-
-	if disable_dl:
-		return
+func send_possible_dl(won: bool, relic_triggered: bool) -> void:
+	print("@@@@ end game signal! won: %s, relic triggered: %s" % [str(won), str(relic_triggered)])
 
 	if not won:
+		print("@@@@ the user lost; checking whether this was caused by a received death link")
 		check_for_death_link()
-	if won and _slot_data.relicDeathLink:
+	elif relic_triggered and _slot_data.relicDeathLink:
+		print("@@@@ the relic was used, a death link is still sent!")
 		check_for_death_link()
 
-func check_for_death_link():
-	if not consume_death_link_death():
-		send_death("The dome was destroyed...")
+func check_for_death_link() -> void:
+	if consume_death_link_death():
+		print("@@@@ loss was caused by a received death link; not sending it back")
+		return
+
+	var config: Dictionary = ModLoaderConfig.get_current_config(CONSTARRC.MOD_ID).data
+	if config.get("disable_dl", false):
+		print("@@@@ the user force disabled outgoing death links!")
+		return
+
+	send_death("The dome was destroyed...")

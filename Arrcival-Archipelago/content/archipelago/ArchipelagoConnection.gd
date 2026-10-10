@@ -17,6 +17,7 @@ signal client_connected(message: String)
 signal client_disconnected
 signal connection_failed(message: String)
 signal item_received(item_id: int, received_index: int)
+signal location_check_sent(location_id: int)
 signal death_link_received
 signal connect_status(message: String)
 signal connected_with_room_info
@@ -94,6 +95,7 @@ func send_check(location_id: int) -> bool:
 	if client == null or not has_connection():
 		return false
 	client.sendLocation(location_id)
+	location_check_sent.emit(location_id)
 	return true
 
 func send_scout(location_ids: Array) -> void:

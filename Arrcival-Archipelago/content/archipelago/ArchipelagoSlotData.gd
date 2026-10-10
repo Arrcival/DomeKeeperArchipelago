@@ -120,7 +120,7 @@ func apply(raw_slot_data: Dictionary) -> void:
 	if raw_slot_data.has("movementBonus"):
 		speedBonusValue = int(raw_slot_data["movementBonus"])
 	if raw_slot_data.has("relicDeath"):
-		speedBonusValue = bool(raw_slot_data["relicDeath"])
+		relicDeathLink = bool(raw_slot_data["relicDeath"])
 
 func is_relic_hunt() -> bool:
 	return progressionType == PROGRESSION_TYPE.RELIC_HUNT

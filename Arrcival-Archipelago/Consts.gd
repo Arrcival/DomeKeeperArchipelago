@@ -137,9 +137,7 @@ const SHIELD_SPECIAL_CHOICE: Array = [
 	["shieldbattlereflect", "shieldbattlereflectshortuses", "shieldbattlereflectspeed"],
 	["shieldbattleinvulnerable", "shieldbattleactivateondepletion", "shieldbattledestructionprevention"]
 ]
-const SHIELD_OVERCHARGE: Array[String] = ["shieldovercharge"]
-const SHIELD_OVERCHARGE_ROLL1: Array[String] = ["shieldoverchargeduration1", "shieldoverchargestrength1"]
-const SHIELD_OVERCHARGE_ROLL2: Array[String] = ["shieldoverchargeduration2", "shieldoverchargestrength2"]
+const SHIELD_OVERCHARGE: Array[String] = ["shieldovercharge", "shieldoverchargestrength1", "shieldoverchargestrength2"]
 
 const REPELLENT_DELAY: Array[String] = ["repellentdelay1", "repellentdelay2", "repellentdelay3"]
 const REPELLENT_SPECIAL_CHOICE: Array = [

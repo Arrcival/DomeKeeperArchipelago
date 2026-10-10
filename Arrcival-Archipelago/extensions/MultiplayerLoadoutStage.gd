@@ -6,8 +6,15 @@ var json = JSON.new()
 
 var keeper: Keeper
 
+var startRunButton: LoadoutChoice
+
 func build(data: Array):
 	super.build(data)
+
+	var choice: Node = find_child("StartRunChoice")
+	if choice is LoadoutChoice:
+		choice.set_enabled(false)
+		startRunButton = choice
 	
 	if GameWorld.archipelago.is_relic_hunt():
 		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
@@ -28,6 +35,12 @@ func spawn_keeper(loadout_keeper: LoadoutKeeper) -> void:
 		loadout_keeper.skinId = "skin0"
 
 	super.spawn_keeper(loadout_keeper)
+
+func onKeepersChanged() -> void:
+	super.onKeepersChanged()
+	if GameWorld.archipelago.is_relic_hunt():
+		desactivate_modifiers()
+
 
 func fillGameModes():
 	super.fillGameModes()
@@ -67,6 +80,9 @@ func _force_archipelago_mode(mode_id: String) -> void:
 		desactivate_modifiers()
 	else:
 		manageAssignments()
+
+	if startRunButton != null:
+		startRunButton.set_enabled(true)
 
 func manageAssignments():
 	if GameWorld.archipelago.is_relic_hunt():
