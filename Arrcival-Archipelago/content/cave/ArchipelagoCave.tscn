@@ -99,12 +99,12 @@ script = ExtResource("8")
 start_offset = 0.2
 scaling = 0.8
 
-[node name="Sprite" type="Sprite2D" parent="Sprites"]
+[node name="Background" type="Sprite2D" parent="Sprites"]
 position = Vector2(50, 45)
 texture = ExtResource("3_h1jk3")
-hframes = 3
+hframes = 4
 
-[node name="ColorRect" type="ColorRect" parent="Sprites/Sprite"]
+[node name="ColorRect" type="ColorRect" parent="Sprites/Background"]
 offset_left = -51.0
 offset_top = -46.0
 offset_right = 49.0
@@ -112,24 +112,30 @@ offset_bottom = 54.0
 color = Color(0.0980392, 0.0862745, 0.164706, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="Sprite2" type="Sprite2D" parent="Sprites"]
+[node name="SpriteStars" type="Sprite2D" parent="Sprites"]
 position = Vector2(6, 8)
 texture = ExtResource("3_h1jk3")
 centered = false
-hframes = 3
+hframes = 4
 frame = 2
 
-[node name="Sprite3" type="Sprite2D" parent="Sprites"]
+[node name="SpriteMeteor" type="Sprite2D" parent="Sprites"]
 position = Vector2(48, 48)
 texture = ExtResource("3_h1jk3")
-hframes = 3
+hframes = 4
 frame = 1
 
-[node name="Sprite4" type="Sprite2D" parent="Sprites"]
+[node name="SpritePedestal" type="Sprite2D" parent="Sprites"]
 position = Vector2(24, 33)
 texture = ExtResource("3_h1jk3")
 offset = Vector2(22, 22)
-hframes = 3
+hframes = 4
+frame = 3
+
+[node name="SpriteResources" type="Sprite2D" parent="Sprites/SpritePedestal"]
+texture = ExtResource("3_h1jk3")
+offset = Vector2(22, 22)
+hframes = 4
 
 [node name="Background" type="Node2D" parent="."]
 position = Vector2(22, 22)

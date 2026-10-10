@@ -143,6 +143,9 @@ func submitSwitch(switchPos: Vector2i) -> void:
 	if switch_id != -1:
 		sendCheck(switch_id)
 
+func get_switch_id(switch_coord: Vector2i) -> int:
+	return _locations.get_switch_location(switch_coord)
+
 func submitUpgrade(upgradeName: String) -> void:
 	var location_id :int = _locations.get_upgrade_location(upgradeName)
 	if location_id != -1:

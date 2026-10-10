@@ -106,7 +106,7 @@ tileCover = NodePath("TileCover")
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(24, 24)
 sprite_frames = SubResource("SpriteFrames_wq4pb")
-animation = &"opening"
+animation = &"empty"
 
 [node name="SocketedGizmo" type="Sprite2D" parent="."]
 visible = false

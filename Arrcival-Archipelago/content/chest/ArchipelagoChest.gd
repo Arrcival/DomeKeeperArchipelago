@@ -4,6 +4,7 @@ extends "res://content/map/chamber/Chamber.gd"
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 var grabs: int = 0
+var location_already_checked := false
 
 var chest_archipelago_id : int
 var chest_number: int
@@ -22,12 +23,24 @@ func _ready():
 
 
 	chest_number = GameWorld.archipelago.get_location_chest_id()
-	set_key_and_archipelago()
+	chest_archipelago_id = CONSTARRC.CHEST_LOCATION_ID + chest_number
+	print("Chest archipelago id is : " + str(chest_archipelago_id))
+
+	location_already_checked = GameWorld.archipelago.has_checked_location(chest_archipelago_id)
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		resetVisibility()
+		$Sprite2D.play("empty")
+		$Sprite2D.show()
+		$SocketedGizmo.hide()
+		disableResourceGrabber()
+		onUsed()
+	else:
+		set_key_and_archipelago()
 
 
 func set_key_and_archipelago():
-	chest_archipelago_id = CONSTARRC.CHEST_LOCATION_ID + chest_number
-	print("Chest archipelago id is : " + str(chest_archipelago_id))
 	var resource_grabber: ResourceGrabber = find_child("ResourceGrabber")
 	resource_grabber.dropType = CONSTARRC.AP_KEY + str(chest_number + 1)
 
@@ -42,6 +55,9 @@ func resetVisibility():
 			key_sprite.visible = false
 
 func registerHit(playerId: String) -> void:
+	if location_already_checked:
+		return
+
 	if multiplayer.is_server() and drop_type != "":
 		var keeper = Keepers.getKeeper(playerId)
 		var drop = Level.drops.network_spawn({
@@ -61,6 +77,12 @@ func registerHit(playerId: String) -> void:
 func deserialize(data: Dictionary):
 	super.deserialize(data)
 	$Sprite2D.show()
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite2D.play("empty")
+		$SocketedGizmo.hide()
+		return
 	if currentState == State.OPEN or currentState == State.OPENING:
 		$Sprite2D.play("opening")
 		$Sprite2D.frame = $Sprite2D.sprite_frames.get_frame_count("opening")-1
@@ -78,6 +100,12 @@ func updateUsedTileCoords():
 
 
 func onRevealed():
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite2D.play("empty")
+		$Sprite2D.show()
+		return
 	$Sprite2D.play("default")
 	$Sprite2D.visible = true
 
@@ -87,15 +115,25 @@ func _on_Sprite_animation_finished():
 		$SocketedGizmo.visible = true
 
 func _on_ResourceGrabber_grabbed_resource():
+	if location_already_checked:
+		return
 	$Slot / Resource.visible = true
 	onResourceGrabbed()
 
 func onResourceGrabbed():
+	if location_already_checked:
+		return
 	grabs += 1
 	if grabs >= 1:
 		resetVisibility()
 		$Sprite2D.play("opening")
 		$DoorOpen.play()
+
+func disableResourceGrabber() -> void:
+	var grabber: ResourceGrabber = find_child("ResourceGrabber")
+	if grabber != null:
+		grabber.spent = true
+		grabber.disable()
 
 func onUsed():
 	$Sprite2D.play("empty")

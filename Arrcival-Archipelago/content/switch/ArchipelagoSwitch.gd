@@ -6,14 +6,30 @@ var id:int
 var readyToUse: = false
 var used: = false
 
+var switch_ap_id: int
+var location_already_checked := false
+
 func _ready():
 	super._ready()
 	$Sprite.visible = false
 	chamberType = CONSTARRC.TILE_ARCHIPELAGO_SWITCH
-
+	switch_ap_id = GameWorld.archipelago.get_switch_id(self.coord)
+	location_already_checked = GameWorld.archipelago.has_checked_location(switch_ap_id)
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite.show()
+		$Sprite.play("empty")
+		reset()
 
 func deserialize(data:Dictionary):
 	super.deserialize(data)
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite.show()
+		$Sprite.play("empty")
+		return
 	if currentState == State.OPEN or currentState == State.OPENING:
 		$Sprite.show()
 		$Sprite.play("opening")
@@ -36,7 +52,14 @@ func actuallyOpen():
 	currentState = State.OPEN
 
 func onRevealed():
-	$Sprite.play("default")
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite.show()
+		$Sprite.play("empty")
+		return
+	if not currentState == State.EMPTY:
+		$Sprite.play("default")
 	$Sprite.visible = true
 	$ChamberAmbClosed.play()
 
@@ -49,19 +72,27 @@ func _on_Sprite_animation_finished():
 		$Sprite.play("running")
 
 func onUsed() -> bool:
+	if location_already_checked:
+		return true
 	if readyToUse:
-		$Sprite.play("empty")
-		$Usable.queue_free()
 		$ChamberSwitchHit.play()
-		$ChamberAmbClosed.stop()
-		$ChamberAmbClosed.queue_free()
-		currentState = State.EMPTY
-		$Tween.start()
-		GameWorld.archipelago.submitSwitch(self.coord)
+		reset()
+		GameWorld.archipelago.sendCheck(switch_ap_id)
 		return true
 	else :
 		used = true
 		return false
+
+	
+func reset():
+	show()
+	$Sprite.show()
+	$Sprite.play("empty")
+	$Usable.queue_free()
+	$ChamberAmbClosed.stop()
+	$ChamberAmbClosed.queue_free()
+	currentState = State.EMPTY
+	$Tween.start()
 
 func getTileType()->int:
 	return CONSTARRC.TILE_ARCHIPELAGO_SWITCH

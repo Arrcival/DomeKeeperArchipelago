@@ -3,6 +3,7 @@ extends "res://content/map/chamber/Chamber.gd"
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
 var grabs: int = 0
+var location_already_checked := false
 
 var chamber_archipelago_id : int
 
@@ -18,6 +19,7 @@ func _ready():
 	resetVisibility()
 	chamberType = CONSTARRC.TILE_CHAMBER
 
+
 	if not GameWorld.archipelago.is_relic_hunt():
 		var id_assignment = Data.of("assignment.id")
 		var assignment
@@ -28,6 +30,17 @@ func _ready():
 			chamber_archipelago_id = GameWorld.archipelago.get_location_chamber_id_ga(assignment.id)
 	else:
 		chamber_archipelago_id = GameWorld.archipelago.get_location_chamber_id_rh()
+
+	location_already_checked = GameWorld.archipelago.has_checked_location(chamber_archipelago_id)
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		resetVisibility()
+		$Sprite2D.play("empty")
+		$Sprite2D.visible = true
+		$SocketedGizmo.hide()
+		disableResourceGrabbers()
+		onUsed()
 	print("Chamber archipelago id is : " + str(chamber_archipelago_id))
 
 func resetVisibility():
@@ -37,6 +50,9 @@ func resetVisibility():
 	$Slots / Slot4 / Resource.visible = false
 
 func registerHit(playerId: String) -> void:
+	if location_already_checked:
+		return
+
 	if multiplayer.is_server() and drop_type != "":
 		var keeper = Keepers.getKeeper(playerId)
 		var drop = Level.drops.network_spawn({
@@ -56,6 +72,12 @@ func registerHit(playerId: String) -> void:
 func deserialize(data: Dictionary):
 	super.deserialize(data)
 	$Sprite2D.show()
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite2D.play("empty")
+		$SocketedGizmo.hide()
+		return
 	if currentState == State.OPEN or currentState == State.OPENING:
 		$Sprite2D.play("opening")
 		$Sprite2D.frame = $Sprite2D.sprite_frames.get_frame_count("opening")-1
@@ -73,6 +95,12 @@ func updateUsedTileCoords():
 
 
 func onRevealed():
+	if location_already_checked:
+		show()
+		currentState = State.EMPTY
+		$Sprite2D.play("empty")
+		$Sprite2D.visible = true
+		return
 	$Sprite2D.play("default")
 	$Sprite2D.visible = true
 
@@ -82,27 +110,47 @@ func _on_Sprite_animation_finished():
 		$SocketedGizmo.visible = true
 
 func _on_ResourceGrabber1_grabbed_resource():
+	if location_already_checked:
+		return
 	$Slots / Slot1 / Resource.visible = true
 	onResourceGrabbed()
 
 func _on_ResourceGrabber2_grabbed_resource():
+	if location_already_checked:
+		return
 	$Slots / Slot2 / Resource.visible = true
 	onResourceGrabbed()
 
 func _on_ResourceGrabber3_grabbed_resource():
+	if location_already_checked:
+		return
 	$Slots / Slot3 / Resource.visible = true
 	onResourceGrabbed()
 
 func _on_ResourceGrabber4_grabbed_resource():
+	if location_already_checked:
+		return
 	$Slots / Slot4 / Resource.visible = true
 	onResourceGrabbed()
 
 func onResourceGrabbed():
+	if location_already_checked:
+		return
 	grabs += 1
 	if grabs >= 4:
 		resetVisibility()
 		$Sprite2D.play("opening")
 		$DoorOpen.play()
+
+func disableResourceGrabbers() -> void:
+	for grabber in [
+		$Slots / Slot1 / ResourceGrabber1,
+		$Slots / Slot2 / ResourceGrabber2,
+		$Slots / Slot3 / ResourceGrabber3,
+		$Slots / Slot4 / ResourceGrabber4,
+	]:
+		grabber.spent = true
+		grabber.disable()
 
 func onUsed():
 	$Sprite2D.play("empty")

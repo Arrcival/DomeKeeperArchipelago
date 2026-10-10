@@ -8,6 +8,7 @@ var grabs: = 0
 
 # Archipelago
 var locationId: int
+var location_already_checked := false
 
 # port from godot v3
 func find_node(value: String) -> Node:
@@ -26,6 +27,10 @@ func _ready():
 	$Background / Slot4 / Resource.visible = false
 	$Background / Slot5 / Resource.visible = false
 	locationId = GameWorld.archipelago.getLocationCaveId()
+	location_already_checked = GameWorld.archipelago.has_checked_location(locationId)
+	if location_already_checked:
+		hasItem = false
+		removeLocationContents()
 	
 func updateUsedTileCoords():
 	tileCoords.clear()
@@ -48,7 +53,7 @@ func useHit(keeper: Keeper) -> bool:
 	return true
 
 func registerHit(playerId: String)->bool:
-	if not hasItem:
+	if location_already_checked or not hasItem:
 		return false
 	
 	$ItemTakenSound.play()
@@ -94,4 +99,16 @@ func onResourceGrabbed():
 	if grabs >= 5:
 		find_node("ActiveAmbSound").play()
 		$Background / Check / Checker.play("activating")
+
+func removeLocationContents() -> void:
+	for slot in [
+		$Background / Slot1,
+		$Background / Slot2,
+		$Background / Slot3,
+		$Background / Slot4,
+		$Background / Slot5,
+	]:
+		slot.queue_free()
+	$Background / Check / Checker.queue_free()
+	find_child("SpriteResources").queue_free()
 
