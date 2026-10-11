@@ -23,6 +23,11 @@ func reset() -> void:
 	guild.reset()
 	died_to_death_link = false
 
+func reset_for_new_run() -> void:
+	relic.reset()
+	guild.reset_for_new_run()
+	died_to_death_link = false
+
 func reset_given_resources() -> void:
 	relic.reset_given_resources()
 	guild.reset_given_resources()

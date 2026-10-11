@@ -24,6 +24,14 @@ func setup(progression_slot_data: ArchipelagoSlotData) -> void:
 	slot_data = progression_slot_data
 
 func reset() -> void:
+	_reset_run_progression()
+	assignmentsUnlocked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
+	assignmentsChecked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
+
+func reset_for_new_run() -> void:
+	_reset_run_progression()
+
+func _reset_run_progression() -> void:
 	cobaltRetrieved = 0
 	cobaltGiven = 0
 	waterRetrieved = 0
@@ -32,8 +40,7 @@ func reset() -> void:
 	ironGiven = 0
 	miningStrengthRetrieved = 0
 	movementSpeedRetrieved = 0
-	assignmentsUnlocked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
-	assignmentsChecked = CONSTARRC.ASSIGNMENTS_DEFAULT_EMPTY.duplicate()
+
 
 func reset_given_resources() -> void:
 	cobaltGiven = 0

@@ -215,7 +215,7 @@ func prepare_level() -> void:
 	reset_given_resources()
 
 func reset_progression() -> void:
-	_progression.reset()
+	_progression.reset_for_new_run()
 
 func reset_location_generation() -> void:
 	_locations.reset()
