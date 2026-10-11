@@ -20,16 +20,6 @@
 				"$schema": "https://json-schema.org/draft/2020-12/schema",
 				"description": "",
 				"properties": {
-					"disable_dl": {
-						"default": false,
-						"title": "Force disable deathlink",
-						"type": "boolean"
-					},
-					"password": {
-						"default": "",
-						"title": "Slot password",
-						"type": "string"
-					},
 					"server_uri": {
 						"default": "archipelago.gg:12345",
 						"title": "Archipelago URI",
@@ -39,6 +29,16 @@
 						"default": "",
 						"title": "Slot name",
 						"type": "string"
+					},
+					"password": {
+						"default": "",
+						"title": "Slot password",
+						"type": "string"
+					},
+					"disable_dl": {
+						"default": false,
+						"title": "Force disable deathlink",
+						"type": "boolean"
 					}
 				},
 				"title": "Archipelago configuration schema",
