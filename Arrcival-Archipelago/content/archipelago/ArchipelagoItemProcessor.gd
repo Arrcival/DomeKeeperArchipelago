@@ -1,6 +1,8 @@
 class_name ArchipelagoItemProcessor
 
-var progression: ArchipelagoProgression
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
+
+var progression: Variant
 var slot_data: ArchipelagoSlotData
 var pending_items: Array[int] = []
 var received_items: Array[int] = []
@@ -12,7 +14,7 @@ signal trap_received
 signal upgrade_received(item_name: String)
 
 func setup(
-	progression_manager: ArchipelagoProgression,
+	progression_manager: Variant,
 	slot_data_manager: ArchipelagoSlotData
 ) -> void:
 	progression = progression_manager

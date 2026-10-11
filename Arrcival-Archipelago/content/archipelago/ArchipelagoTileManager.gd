@@ -1,17 +1,18 @@
 class_name ArchipelagoTileManager
 
 const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
 
 var _slot_data: ArchipelagoSlotData
-var _progression: ArchipelagoProgression
+var _layer_unlock_getter: Callable
 
 var _layers_per_distance: Array
 var _layer_max_distances: Array[int] = []
 var _cell_distances: Dictionary = {}
 
-func setup(slot_data: ArchipelagoSlotData, progression: ArchipelagoProgression) -> void:
+func setup(slot_data: ArchipelagoSlotData, layer_unlock_getter: Callable) -> void:
 	_slot_data = slot_data
-	_progression = progression
+	_layer_unlock_getter = layer_unlock_getter
 
 func generate_layers_per_distance(mineable_cells: Array):
 	_layers_per_distance = []
@@ -103,7 +104,7 @@ func can_tile_be_mined(distance: int) -> bool:
 	return false
 
 func get_maximum_depth() -> int:
-	var mineable_layers = _progression.get_layer_unlocked_amount()
+	var mineable_layers: int = _layer_unlock_getter.call()
 	if mineable_layers >= len(_layer_max_distances) - 1:
 		return 999
 	return _layer_max_distances[mineable_layers]

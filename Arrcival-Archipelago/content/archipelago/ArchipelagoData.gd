@@ -2,14 +2,26 @@ class_name ArchipelagoData
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
 
-var _progression: ArchipelagoProgression = ArchipelagoProgression.new()
-var _item_processor: ArchipelagoItemProcessor = ArchipelagoItemProcessor.new()
-var _connection_manager: ArchipelagoConnection = ArchipelagoConnection.new()
-var _upgrade_generator: ArchipelagoUpgradeGenerator = ArchipelagoUpgradeGenerator.new()
-var _assignment_manager: ArchipelagoAssignmentManager = ArchipelagoAssignmentManager.new()
-var _slot_data: ArchipelagoSlotData = ArchipelagoSlotData.new()
-var _locations: ArchipelagoLocationManager = ArchipelagoLocationManager.new()
-var _tile_manager: ArchipelagoTileManager = ArchipelagoTileManager.new()
+# To remove? once class names from mods works!
+const ArchipelagoProgression = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoProgression.gd")
+const ArchipelagoItemProcessor = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoItemProcessor.gd")
+const ArchipelagoConnection = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoConnection.gd")
+const ArchipelagoUpgradeGenerator = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoUpgradeGenerator.gd")
+const ArchipelagoAssignmentManager = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoAssignmentManager.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
+const ArchipelagoLocationManager = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoLocationManager.gd")
+const ArchipelagoTileManager = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoTileManager.gd")
+
+# Keep preloaded manager instances dynamic: mod scripts may not be registered in
+# Godot's global script-class cache when the game loads the mod.
+var _progression: Variant = ArchipelagoProgression.new()
+var _item_processor: Variant = ArchipelagoItemProcessor.new()
+var _connection_manager: Variant = ArchipelagoConnection.new()
+var _upgrade_generator: Variant = ArchipelagoUpgradeGenerator.new()
+var _assignment_manager: Variant = ArchipelagoAssignmentManager.new()
+var _slot_data: Variant = ArchipelagoSlotData.new()
+var _locations: Variant = ArchipelagoLocationManager.new()
+var _tile_manager: Variant = ArchipelagoTileManager.new()
 
 #region slot data
 var mapSize: int:
@@ -36,7 +48,7 @@ func _init() -> void:
 	_progression.setup(_slot_data, _tile_manager)
 	_progression.log_informations.connect(_on_progression_log)
 
-	_tile_manager.setup(_slot_data, _progression)
+	_tile_manager.setup(_slot_data, Callable(_progression, "get_layer_unlocked_amount"))
 
 	_assignment_manager.setup(_progression.guild, _slot_data, Callable(self, "sendCheck"))
 
@@ -109,7 +121,7 @@ func _on_item_received(item_id: int, received_index: int) -> void:
 	item_received.emit(item_id)
 
 func _on_location_check_sent(location_id: int) -> void:
-	var checked_locations := _connection_manager.get_checked_locations()
+	var checked_locations :Array = _connection_manager.get_checked_locations()
 	if not checked_locations.has(location_id):
 		checked_locations.append(location_id)
 
@@ -133,7 +145,7 @@ func retrieveSlotData(raw_slot_data: Dictionary) -> void:
 	slot_data_have_been_retrieved.emit()
 
 	if not is_relic_hunt():
-		var checked := _connection_manager.get_checked_locations()
+		var checked :Array = _connection_manager.get_checked_locations()
 		print("AP checked locations: ", checked)
 		print("AP challenge mode: ", challengeMode)
 		_assignment_manager.process_checked_locations(checked)
@@ -152,7 +164,7 @@ func submitUpgrade(upgradeName: String) -> void:
 		sendCheck(location_id)
 
 func get_upgrade_description(upgrade_name: String) -> String:
-	var location_id := _locations.get_upgrade_location(upgrade_name)
+	var location_id :int = _locations.get_upgrade_location(upgrade_name)
 	if location_id == -1:
 		return ""
 	if _connection_manager.has_checked_location(location_id):

@@ -1,5 +1,9 @@
 class_name ArchipelagoProgression
 
+const ArchipelagoRelicProgression = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoRelicProgression.gd")
+const ArchipelagoAssignmentProgression = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoAssignmentProgression.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
+
 var relic: ArchipelagoRelicProgression = ArchipelagoRelicProgression.new()
 var guild: ArchipelagoAssignmentProgression = ArchipelagoAssignmentProgression.new()
 var slot_data: ArchipelagoSlotData
@@ -7,7 +11,7 @@ var died_to_death_link: bool = false
 signal log_informations(text: String)
 signal trap_received
 
-func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: ArchipelagoTileManager) -> void:
+func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: Variant) -> void:
 	slot_data = progression_slot_data
 	relic.setup(progression_slot_data, tile_manager)
 	guild.setup(progression_slot_data)

@@ -1,6 +1,7 @@
 class_name ArchipelagoUpgradeGenerator
 
 const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
 
 var slot_data: ArchipelagoSlotData
 var upgrade_pools: Dictionary = {}

@@ -1,9 +1,10 @@
 class_name ArchipelagoRelicProgression
 
 const CONSTARRC = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
 
 var slot_data: ArchipelagoSlotData
-var _tile_manager: ArchipelagoTileManager
+var _tile_manager: Variant
 
 var cobaltRetrieved: int = 0
 var cobaltGiven: int = 0
@@ -22,7 +23,7 @@ const KEY_COUNT: int = 10
 signal log_informations(text: String)
 signal trap_received
 
-func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: ArchipelagoTileManager) -> void:
+func setup(progression_slot_data: ArchipelagoSlotData, tile_manager: Variant) -> void:
 	slot_data = progression_slot_data
 	_tile_manager = tile_manager
 

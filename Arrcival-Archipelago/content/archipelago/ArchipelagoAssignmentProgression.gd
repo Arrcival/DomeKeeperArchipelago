@@ -1,6 +1,7 @@
 class_name ArchipelagoAssignmentProgression
 
 const CONSTARRC: GDScript = preload("res://mods-unpacked/Arrcival-Archipelago/Consts.gd")
+const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/content/archipelago/ArchipelagoSlotData.gd")
 const ITEM_FIRST_ASSIGNMENT_ID: int = 4242200
 const ASSIGNMENT_UNLOCK_COUNT: int = 25
 
