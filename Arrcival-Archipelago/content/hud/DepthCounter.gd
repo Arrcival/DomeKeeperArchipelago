@@ -4,8 +4,6 @@ var depth_label : Label
 var depth:=0
 var maxDepth:=0
 
-
-
 func init():
 	super.init()
 	depth_label = find_child("DepthLabel")
@@ -26,12 +24,12 @@ func propertyChanged(property: String, oldValue, newValue):
 func updateText():
 	if maxDepth == 999:
 		depth_label.text = str(depth)
-		element_size.x = 6
+		element_size.x = 7
 		return
 
 	depth_label.text = str(depth) + "/" + str(maxDepth)
 
-	if element_size.x == 6 and maxDepth >= 100:
+	if element_size.x == 7 and maxDepth >= 100:
+		element_size.x = 8
+	if element_size.x == 8 and maxDepth < 100:
 		element_size.x = 7
-	if element_size.x == 7 and maxDepth < 100:
-		element_size.x = 6
