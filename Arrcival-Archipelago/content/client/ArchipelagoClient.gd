@@ -17,7 +17,7 @@ var _connection_attempt_state = CONNECTION_ATTEMPT_DONE
 
 var _datapackages = {}
 var _pending_packages = []
-var _item_id_to_name: Dictionary = {}  # All games
+var item_id_to_name_by_game: Dictionary = {}  # Game name -> item ID -> name
 var _location_id_to_name: Dictionary = {}  # All games
 var _item_name_to_id: Dictionary = {}  # Game only
 var _location_name_to_id: Dictionary = {}  # Game only
@@ -34,6 +34,7 @@ var _team = 0
 var _slot = 0
 var _players = []
 var _player_name_by_slot: Dictionary = {}
+var _slot_id_to_game_name: Dictionary = {}
 var _checked_locations = []
 var _slot_data = {}
 var _received_indexes = []
@@ -191,6 +192,13 @@ func _on_data(packet: PackedByteArray):
 			for player in _players:
 				_player_name_by_slot[int(player["slot"])] = player["alias"]
 
+			_slot_id_to_game_name.clear()
+			if message.has("slot_info"):
+				for slot_id in message["slot_info"]:
+					var slot_info: Dictionary = message["slot_info"][slot_id]
+					if slot_info.has("game"):
+						_slot_id_to_game_name[int(slot_id)] = slot_info["game"]
+
 			_death_link = _slot_data.has("deathLink") and _slot_data["deathLink"]
 			
 			if _death_link:
@@ -271,7 +279,10 @@ func _on_data(packet: PackedByteArray):
 			):
 				continue
 
-			var item_name = _getItemName(int(message["item"]["item"]))
+			var item_name = _get_item_name(
+				int(message["item"]["item"]),
+				int(message["receiving"])
+			)
 			var location_name = _getLocationName(int(message["item"]["location"]))
 			var player_name = _getPlayerName(int(message["receiving"]))
 			var item_color = colorForItemType(message["item"]["flags"])
@@ -339,11 +350,14 @@ func sendLocations(loc_ids: Array):
 	sendMessage([{"cmd": "LocationChecks", "locations": loc_ids}])
 
 func processDatapackages():
-	_item_id_to_name = {}
+	item_id_to_name_by_game = {}
 	_location_id_to_name = {}
-	for package in _datapackages.values():
+	for game in _datapackages:
+		var package: Dictionary = _datapackages[game]
+		var item_id_to_name: Dictionary = {}
 		for name in package["item_name_to_id"].keys():
-			_item_id_to_name[int(package["item_name_to_id"][name])] = name
+			item_id_to_name[int(package["item_name_to_id"][name])] = name
+		item_id_to_name_by_game[game] = item_id_to_name
 
 		for name in package["location_name_to_id"].keys():
 			_location_id_to_name[int(package["location_name_to_id"][name])] = name
@@ -368,9 +382,7 @@ func processItem(item, index, from, flags):
 			return
 
 		_received_indexes.append(index)
-		var item_name = "Unknown"
-		if _item_id_to_name.has(item):
-			item_name = _item_id_to_name[item]
+		var item_name = _get_item_name(item, from)
 
 		var item_color = colorForItemType(flags)
 		emit_signal("item_received", item, index)
@@ -398,7 +410,7 @@ func _parseNetworkItem(networkItem: Dictionary) -> NetworkItemAP:
 
 func _tryUpdatingNetworkItem(networkItem: NetworkItemAP) -> void:
 	networkItem.playerName = _getPlayerName(networkItem.playerId, false)
-	networkItem.itemName = _getItemName(networkItem.itemId)
+	networkItem.itemName = _get_item_name(networkItem.itemId, networkItem.playerId)
 	networkItem.color = colorForItemType(networkItem.flag)
 
 func _getPlayerName(playerId: int, displaySlotName: bool = false) -> String:
@@ -408,10 +420,24 @@ func _getPlayerName(playerId: int, displaySlotName: bool = false) -> String:
 		return _player_name_by_slot[playerId]
 	return "Unknown"
 
-func _getItemName(itemId: int) -> String:
-	if _item_id_to_name.has(itemId):
-		return _item_id_to_name[itemId]
-	return "Unknown"
+func get_game_name_for_slot(slot_id: int) -> String:
+		return _slot_id_to_game_name.get(slot_id, "Unknown")
+
+func get_item_name_for_game(game_name: String, item_id: int) -> String:
+	if not item_id_to_name_by_game.has(game_name):
+		return "Unknown"
+	var item_id_to_name: Dictionary = item_id_to_name_by_game[game_name]
+	return item_id_to_name.get(item_id, "Unknown")
+
+func _get_item_name(itemId: int, slotId: int = -1) -> String:
+	var game_name = GAME_NAME
+	print("Get item name %s for slot %s" % [itemId, slotId])
+	if slotId >= 0:
+		game_name = get_game_name_for_slot(slotId)
+	print("Game name %s" % game_name)
+	var item_name = get_item_name_for_game(game_name, itemId)
+	print("Item name %s" % item_name)
+	return item_name
 	
 func _getLocationName(locationId: int) -> String:
 	if _location_id_to_name.has(locationId):

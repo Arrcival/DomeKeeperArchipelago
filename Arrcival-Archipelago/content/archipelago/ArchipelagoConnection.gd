@@ -102,7 +102,7 @@ func send_scout(location_ids: Array) -> void:
 	if client == null or not has_connection():
 		push_warning("Cannot scout locations while Archipelago is disconnected.")
 		return
-	client.sendScout(location_ids, 0)
+	client.sendScout(location_ids, 2)
 
 func complete_goal() -> void:
 	if client == null or not has_connection():
@@ -183,3 +183,18 @@ func _set_disconnected() -> void:
 	status = STATUS.DISCONNECTED
 	client_disconnected.emit()
 
+func get_game_name_for_slot(player_id: int) -> String:
+	if client == null:
+		return "Unknown"
+	return client.get_game_name_for_slot(player_id)
+
+func get_item_name_for_game(game_name: String, item_id: int) -> String:
+	if client == null:
+		return "Unknown"
+	return client.get_item_name_for_game(game_name, item_id)
+
+func get_item_name_for_slot(item_id: int, player_id: int) -> String:
+	if client == null:
+		return "Unknown"
+	var game_name = client.get_game_name_for_slot(player_id)
+	return client.get_item_name_for_game(game_name, item_id)

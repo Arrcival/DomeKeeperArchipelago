@@ -31,6 +31,7 @@ var chambers_generated: int = 0
 
 var switches_found: Array[int] = []
 var switches_location: Array = []
+var item_name_lookup: Callable
 
 var location_scouts: Dictionary = {
 	4243001: "",
@@ -90,8 +91,30 @@ func get_upgrade_location(upgrade_name: String) -> int:
 
 	return int(location_ids.get(upgrade, -1))
 
+func set_item_name_lookup(lookup: Callable) -> void:
+	item_name_lookup = lookup
+
 func get_scout_description(location_id: int) -> String:
-	return str(location_scouts.get(location_id, ""))
+	var scout: Variant = location_scouts.get(location_id, "")
+	if scout is Dictionary:
+		var item_name := "Unknown"
+		if item_name_lookup.is_valid():
+			item_name = item_name_lookup.call(scout["item_id"], scout["player_id"])
+		return "Unlocks [color=%s]%s[/color] for %s" % [
+			_get_scout_color(int(scout["flags"])),
+			item_name,
+			str(scout["player_name"])
+		]
+	return str(scout)
+
+func _get_scout_color(flags: int) -> String:
+	if flags & 1:
+		return "#bc51e0"
+	elif flags & 2:
+		return "#2b67ff"
+	elif flags & 4:
+		return "#d63a22"
+	return "#14de9e"
 
 func get_switch_location(position: Vector2i) -> int:
 	for layer_index: int in range(switches_location.size()):
@@ -111,7 +134,12 @@ func get_switch_location(position: Vector2i) -> int:
 func receive_scouts(network_items: Array) -> void:
 	for item: Variant in network_items:
 		if location_scouts.has(item.locationId):
-			location_scouts[item.locationId] = item.displayUnlock()
+			location_scouts[item.locationId] = {
+				"item_id": item.itemId,
+				"player_id": item.playerId,
+				"flags": item.flag,
+				"player_name": item.playerName,
+			}
 
 func get_scout_location_ids() -> Array:
 	return location_scouts.keys()

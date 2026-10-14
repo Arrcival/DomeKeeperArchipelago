@@ -54,6 +54,8 @@ func _init() -> void:
 
 	_upgrade_generator.setup(_slot_data)
 
+	_locations.set_item_name_lookup(Callable(self, "_get_item_name"))
+
 	_item_processor.setup(_progression, _slot_data)
 	_item_processor.trap_received.connect(_on_item_trap_received)
 	_item_processor.upgrade_received.connect(_on_upgrade_received)
@@ -250,6 +252,9 @@ func is_relic_hunt() -> bool:
 
 func retrieveScout(networkItems: Array) -> void:
 	_locations.receive_scouts(networkItems)
+
+func _get_item_name(item_id: int, player_id: int) -> String:
+	return _connection_manager.get_item_name_for_slot(item_id, player_id)
 
 func scoutUpgrades() -> void:
 	_connection_manager.send_scout(_locations.get_scout_location_ids())
