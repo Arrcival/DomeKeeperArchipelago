@@ -28,7 +28,7 @@ func _init(modLoader = ModLoader):
 	loadExtension(ext_dir, "Monsters.gd")
 	loadExtension(ext_dir, "MultiplayerLoadoutStage.gd")
 	#loadExtension(ext_dir, "PauseMenu.gd") # Could not resolve class?
-	loadExtension(ext_dir, "Pinball.gd")
+	#loadExtension(ext_dir, "Pinball.gd")
 	loadExtension(ext_dir, "RelicDropPoint.gd")
 	loadExtension(ext_dir, "Relichunt.gd")
 	loadExtension(ext_dir, "RunFinishedPopup.gd")
