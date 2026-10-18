@@ -262,7 +262,7 @@ func _on_data(packet: PackedByteArray):
 		elif cmd == "ReceivedItems":
 			var i = 0
 			for item in message["items"]:
-				processItem(int(item["item"]), int(message["index"] + i), int(item["player"]), int(item["flags"]))
+				received_item(int(item["item"]), int(message["index"] + i), int(item["player"]), int(item["flags"]))
 				i += 1
 		elif cmd == "LocationInfo":
 			var _locations = message["locations"]
@@ -375,14 +375,14 @@ func completedGoal():
 	sendMessage([{"cmd": "StatusUpdate", "status": 30}])  # CLIENT_GOAL
 	logInformations.emit("You have completed your goal!")
 
-func processItem(item, index, from, flags):
+func received_item(item, index, from, flags):
 	if index != null:
 		if _received_indexes.has(index):
 			# Do not re-process items.
 			return
 
 		_received_indexes.append(index)
-		var item_name = _get_item_name(item, from)
+		var item_name = _get_item_name(item, _slot)
 
 		var item_color = colorForItemType(flags)
 		emit_signal("item_received", item, index)
