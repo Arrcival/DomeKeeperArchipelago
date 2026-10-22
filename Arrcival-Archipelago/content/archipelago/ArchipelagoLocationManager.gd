@@ -1,5 +1,7 @@
 class_name ArchipelagoLocationManager
 
+const FORMAT_COLOR: bool = false
+
 const FIRST_SWITCH_ID: int = 4243301
 const LAYER_OFFSET: int = 100
 
@@ -100,11 +102,18 @@ func get_scout_description(location_id: int) -> String:
 		var item_name := "Unknown"
 		if item_name_lookup.is_valid():
 			item_name = item_name_lookup.call(scout["item_id"], scout["player_id"])
-		return "Unlocks [color=%s]%s[/color] for %s" % [
-			_get_scout_color(int(scout["flags"])),
-			item_name,
-			str(scout["player_name"])
-		]
+
+		if FORMAT_COLOR:
+			return "Unlocks [color=%s]%s[/color] for %s" % [
+				_get_scout_color(int(scout["flags"])),
+				item_name,
+				str(scout["player_name"])
+			]
+		else:
+			return "Unlocks %s for %s" % [
+				item_name,
+				str(scout["player_name"])
+			]
 	return str(scout)
 
 func _get_scout_color(flags: int) -> String:

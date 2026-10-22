@@ -44,14 +44,10 @@ func buyUpgrade(id: String, teamId: String, playerId: String):
 	super.buyUpgrade(id, teamId, playerId)
 
 func requestUpgrade(id: String, teamId: String) -> bool:
-	var requestUpgrade = super.requestUpgrade(id, teamId)
-	if not archipelago.is_relic_hunt():
-		return requestUpgrade
-
-	if not CONSTARRC.is_upgrade_purchasable(id.to_lower()):
+	if archipelago.is_relic_hunt() and not CONSTARRC.is_upgrade_purchasable(id.to_lower()):
 		return false
 
-	return requestUpgrade
+	return super.requestUpgrade(id, teamId)
 
 func prepareLevelStart(levelStartData:LevelStartData):
 	if levelStartData.loadout.modeId == CONST.MODE_ASSIGNMENTS:

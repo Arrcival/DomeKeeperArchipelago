@@ -284,7 +284,7 @@ func _on_data(packet: PackedByteArray):
 				int(message["receiving"])
 			)
 			var location_name = _getLocationName(int(message["item"]["location"]))
-			var player_name = _getPlayerName(int(message["receiving"]))
+			var player_name = _get_player_name(int(message["receiving"]))
 			var item_color = colorForItemType(message["item"]["flags"])
 
 			if message["type"] == "Hint":
@@ -409,13 +409,13 @@ func _parseNetworkItem(networkItem: Dictionary) -> NetworkItemAP:
 	return item
 
 func _tryUpdatingNetworkItem(networkItem: NetworkItemAP) -> void:
-	networkItem.playerName = _getPlayerName(networkItem.playerId, false)
+	networkItem.playerName = _get_player_name(networkItem.playerId, false)
 	networkItem.itemName = _get_item_name(networkItem.itemId, networkItem.playerId)
 	networkItem.color = colorForItemType(networkItem.flag)
 
-func _getPlayerName(playerId: int, displaySlotName: bool = false) -> String:
+func _get_player_name(playerId: int, displaySlotName: bool = false) -> String:
 	if playerId == _slot and not displaySlotName:
-		return "[color=#ffffff]you[/color]"
+		return "you"
 	if _player_name_by_slot.has(playerId):
 		return _player_name_by_slot[playerId]
 	return "Unknown"
