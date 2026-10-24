@@ -19,7 +19,7 @@ func generate_layers_per_distance(mineable_cells: Array):
 	_layer_max_distances.clear()
 	_cell_distances.clear()
 
-	var layers_amount :int = _slot_data.get_layer_amount()
+	var layers_amount: int = _slot_data.get_layer_amount()
 	var layers: Array = []
 	if layers_amount <= 0:
 		return layers
@@ -36,10 +36,15 @@ func generate_layers_per_distance(mineable_cells: Array):
 	for cell in mineable_cells:
 		mineable_lookup[Vector2i(cell)] = true
 
-	# Flood-fill the mineable cells from the dome, moving only cardinally.
+	# Don't forget to add protected spawns that were previously added for the flood fill algorithm!!!
+	# Those tiles can't have stuff spawned on them, but are used to calculate distance to the dome (0, 0)
+	var path_lookup: Dictionary = mineable_lookup.duplicate()
+	for spawn in CONSTARRC.PROTECTED_SPAWNS:
+		path_lookup[Vector2i(spawn)] = true
+
 	var distances: Dictionary = {}
 	var start: Vector2i = Vector2i.ZERO
-	if mineable_lookup.has(start):
+	if path_lookup.has(start):
 		var queue: Array[Vector2i] = [start]
 		distances[start] = 0
 		var queue_index: int = 0
@@ -55,7 +60,7 @@ func generate_layers_per_distance(mineable_cells: Array):
 			queue_index += 1
 			for direction in directions:
 				var neighbor: Vector2i = cell + direction
-				if mineable_lookup.has(neighbor) and not distances.has(neighbor):
+				if path_lookup.has(neighbor) and not distances.has(neighbor):
 					distances[neighbor] = distances[cell] + 1
 					queue.append(neighbor)
 
@@ -64,10 +69,12 @@ func generate_layers_per_distance(mineable_cells: Array):
 		max_distance = max(max_distance, distance)
 
 	# Split the full reachable distance range evenly across the requested layers.
-	# Cells disconnected from the dome have no path distance, so keep them in the
-	# outermost layer rather than silently dropping them.
+	# Disconnected mineable cells remain in the outermost layer.
 	for cell in mineable_cells:
 		var coord: Vector2i = Vector2i(cell)
+		if CONSTARRC.PROTECTED_SPAWNS.has(Vector2(coord)):
+			continue
+
 		var cell_distance: int = -1
 		var layer_index: int = layers_amount - 1
 		if distances.has(coord):
@@ -84,6 +91,7 @@ func generate_layers_per_distance(mineable_cells: Array):
 	if OS.is_debug_build():
 		for i in range(len(_layers_per_distance)):
 			print("@#@#@#@# Layer %s : %s" % [i, _layers_per_distance[i]])
+
 
 func get_generated_layers() -> Array:
 	return _layers_per_distance

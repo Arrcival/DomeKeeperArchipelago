@@ -32,11 +32,19 @@ func generate_resources(rand):
 func _prepare_archipelago_generation():
 	GameWorld.archipelago.reset()
 
-	var mineable_tiles :Array = []
+	var protected_spawn_cells: Array[Vector2i] = []
+	for spawn in CONSTARRC.PROTECTED_SPAWNS:
+		protected_spawn_cells.append(Vector2i(spawn))
+
+	var mineable_tiles: Array = []
 	for i in range(0, 5):
-		mineable_tiles.append_array(_mapData.get_hardness_cells_by_grade(i))
+		var hardness_cells = _mapData.get_hardness_cells_by_grade(i)
+		for cell in hardness_cells:
+			if not protected_spawn_cells.has(Vector2i(cell)):
+				mineable_tiles.append(cell)
 
 	GameWorld.archipelago.generate_layers(mineable_tiles)
+
 
 func _generate_extra_water():
 	var firstBiomeCells: Array = _mapData.get_biome_cells_by_index(FIRSTLAYERID)
@@ -144,6 +152,7 @@ func generate_switches_coordinates(switchesPerLayer: Array) -> void:
 				#	cell.x = 0
 				#	cell.y = 2
 				if not tryPlace(CONSTARRC.TILE_ARCHIPELAGO_SWITCH, [cell]):
+					print("@@@@@@@@@@@@!!!! Could not place a cell at %s" % str(cell))
 					continue
 				array.append(cell)
 				#print("@@@@@@@@@@@@ Generated on layer " + str(i) + " a switch at " + str(cell))

@@ -37,64 +37,54 @@ func getSceneForTileType(tileType:int) -> PackedScene:
 		return preload("res://mods-unpacked/Arrcival-Archipelago/content/chest/ArchipelagoChest.tscn")
 	return super.getSceneForTileType(tileType)
 
-# Add one archipelago cave per accessible layer
+# Add one archipelago cave per generated layer.
 func addCaves(minDistanceToCenter: = 10):
 	super.addCaves(minDistanceToCenter)
 
 	if not GameWorld.archipelago.is_relic_hunt():
 		return
 
-	# TODO: alimenter le dict avec les nouvelles caves
-	addArchipelagoCave(0)
-	addArchipelagoCave(1)
-	addArchipelagoCave(2)
-	
+	var layers: Array = GameWorld.archipelago.get_generated_layers()
+	var layerCount: int = layers.size()
 	if GameWorld.devMode:
-		return
-	
-	if GameWorld.archipelago.mapSize >= 1:
-		addArchipelagoCave(3)
-	if GameWorld.archipelago.mapSize >= 2:
-		addArchipelagoCave(4)
-		addArchipelagoCave(5)
-	if GameWorld.archipelago.mapSize >= 3:
-		addArchipelagoCave(6)
+		layerCount = mini(3, layerCount)
 
-func addArchipelagoCave(biomeId: int):
+	for layerIndex in range(layerCount):
+		addArchipelagoCave(layerIndex, layers[layerIndex])
+
+func addArchipelagoCave(layerIndex: int, layerCells: Array) -> void:
 	var cave: Node = ARCHIPELAGO_CAVE_SCENE.instantiate()
-	addCaveWithSpawnProtections(cave, biomeId, 0)
-
-# Same as addCave, but adds a protection so cave can't spawn near the dome
-func addCaveWithSpawnProtections(cave, biomeIndex, minDistanceToCenter):
-	var rand = RandomNumberGenerator.new()
-	rand.seed = Level.levelSeed
 	cave.updateUsedTileCoords()
 
-	for _i in 25:
-		var cells = tileData.get_biome_cells_by_index(biomeIndex)
-		if cells.size() < cave.tileCoords.size():
-			return 
-		
-		var cell = cells[rand.randi() % cells.size()]
-		if abs(cell.x) < minDistanceToCenter:
-			continue
-			
-		if isCellInProtectedCells(cell):
-			print("tried generating AP cave but got skipped at : ", cell)
-			continue
-		
+	var shuffledCells: Array = Data.seedShuffle(layerCells, Level.levelSeed)
+
+	for cell in shuffledCells:
 		if not tileData.is_area_free(cell, cave.tileCoords):
 			continue
 
+		var validLayerArea := true
+		for offset in cave.tileCoords:
+			var caveCell := Vector2i(cell) + Vector2i(offset)
+			if not layerCells.has(caveCell) or isCellInProtectedCells(caveCell):
+				validLayerArea = false
+				break
+
+		if not validLayerArea:
+			continue
 
 		addLandmark(cell, cave)
-		for c in cave.tileCoords:
-			var absCoord = Vector2(cell) + c
-			tileData.clear_resource(absCoord)
+		for offset in cave.tileCoords:
+			tileData.clear_resource(Vector2(cell) + offset)
+		print("Layer %s, cave generated at %s" % [layerIndex + 1, cell])
 		return
 
-func isCellInProtectedCells(cell) -> bool:
+	push_warning("Could not place Archipelago cave in layer %s" % [layerIndex + 1])
+	cave.free()
+
+func isCellInProtectedCells(cell: Vector2i) -> bool:
 	for protectedCell in CONSTARRC.PROTECTED_SPAWNS:
-		if cell.x == protectedCell.x and cell.y == protectedCell.y:
+		if cell == Vector2i(protectedCell):
 			return true
 	return false
+
+

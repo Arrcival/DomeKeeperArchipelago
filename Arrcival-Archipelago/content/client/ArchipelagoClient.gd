@@ -431,12 +431,9 @@ func get_item_name_for_game(game_name: String, item_id: int) -> String:
 
 func _get_item_name(itemId: int, slotId: int = -1) -> String:
 	var game_name = GAME_NAME
-	print("Get item name %s for slot %s" % [itemId, slotId])
 	if slotId >= 0:
 		game_name = get_game_name_for_slot(slotId)
-	print("Game name %s" % game_name)
 	var item_name = get_item_name_for_game(game_name, itemId)
-	print("Item name %s" % item_name)
 	return item_name
 	
 func _getLocationName(locationId: int) -> String:

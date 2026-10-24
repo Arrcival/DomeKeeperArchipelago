@@ -52,7 +52,7 @@ const KEEPER2_SPECIAL_CHOICES: Array = [
 
 const INFILTRATOR_CARRY: Array[String] = ["player1.keeper3carrylimit1", "player1.keeper3carrylimit2", "player1.keeper3carrylimit3"]
 const INFILTRATOR_AERIAL: Array[String] = ["player1.keeper3doublejump", "player1.keeper3slidecontrol", "player1.keeper3quadjump", "player1.keeper3aerialmastery"]
-const INFILTRATOR_MINING_NAME: String = "keeper3kunaidamage4"
+const INFILTRATOR_MINING_NAME: String = "player1.keeper3kunaidamage4"
 const INFILTRATOR_COOLDOWN: Array[String] = ["player1.keeper3kunaicooldown1", "player1.keeper3kunaicooldown2", "player1.keeper3kunaicooldown3"]
 const INFILTRATOR_ASSIST: Array[String] = ["player1.keeper3kunaibounce1", "player1.keeper3kunaibounce2"]
 const INFILTRATOR_SHURIKEN_CHOICES: Array = [
@@ -70,7 +70,7 @@ const BEASTMASTER_MINING_RAMPING_NAME: String = "player1.keeper4ramping4"
 const BEASTMASTER_MINING_FLEXIBLE_NAME: String = "player1.keeper4flexible4"
 const BEASTMASTER_MINING_PUNCH_NAME: String = "player1.keeper4punch4"
 
-const BEASTMASTER_CATGOBLIN_AMOUNT_NAME: String = "keeper4catgoblinamount"
+const BEASTMASTER_CATGOBLIN_AMOUNT_NAME: String = "player1.keeper4catgoblinamount"
 const BEASTMASTER_CATGOBLIN_MINING: Array[String] = ["player1.keeper4catgoblindig1", "player1.keeper4catgoblindig2", "player1.keeper4catgoblinsleeptime"]
 const BEASTMASTER_SQUAD_AMOUNT: Array[String] = ["player1.keeper4squad1", "player1.keeper4squad1", "player1.keeper4squad1"]
 const BEASTMASTER_SQUAD_MINING: Array[String] = ["player1.keeper4autospawnminers", "player1.keeper4squad2", "player1.keeper4squad3"]
