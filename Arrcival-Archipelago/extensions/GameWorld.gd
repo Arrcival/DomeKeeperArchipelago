@@ -25,12 +25,9 @@ func handleGameLost(backendData:Dictionary = {}):
 	super.handleGameLost(backendData)
 	GameWorld.archipelago.send_possible_dl(won, false)
 
-# Restart items given from AP
-# They are given back in LevelStage
 func levelInitialized():
 	super.levelInitialized()
-	if archipelago.is_relic_hunt():
-		archipelago.prepare_level()
+	archipelago.prepare_level()
 
 func _on_upgrade_bought(id: String, teamId: String, playerId: String):
 	if id.begins_with("team1.archipelago"):
