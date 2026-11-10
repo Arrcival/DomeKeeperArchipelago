@@ -32,18 +32,20 @@ func generate_resources(rand):
 func _prepare_archipelago_generation():
 	GameWorld.archipelago.reset()
 
-	var protected_spawn_cells: Array[Vector2i] = []
+	var protected_spawn_lookup: Dictionary = {}
 	for spawn in CONSTARRC.PROTECTED_SPAWNS:
-		protected_spawn_cells.append(Vector2i(spawn))
+		protected_spawn_lookup[Vector2i(spawn)] = true
 
-	var mineable_tiles: Array = []
-	for i in range(0, 5):
-		var hardness_cells = _mapData.get_hardness_cells_by_grade(i)
-		for cell in hardness_cells:
-			if not protected_spawn_cells.has(Vector2i(cell)):
-				mineable_tiles.append(cell)
+	var biome_cells: Array = []
+	for biome_index in range(maxBiome + 1):
+		var layer_cells: Array = []
+		for cell in _mapData.get_biome_cells_by_index(biome_index):
+			var coord := Vector2i(cell)
+			if not protected_spawn_lookup.has(coord):
+				layer_cells.append(coord)
+		biome_cells.append(layer_cells)
 
-	GameWorld.archipelago.generate_layers(mineable_tiles)
+	GameWorld.archipelago.generate_layers(biome_cells)
 
 
 func _generate_extra_water():

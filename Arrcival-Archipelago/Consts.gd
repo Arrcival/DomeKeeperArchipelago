@@ -230,6 +230,11 @@ const ASSIGNMENTS_LIST : Array[String] = [
 	"emergency", "instagip", "logistics", "megacreeps", 
 ]
 
+const ASSIGNMENTS_LIST_DLC : Array[String] = [
+	"unpredictable", "minorvision", "treefarm",  "acidrain", "harmfuliron",
+	"emergency", "instagip", "logistics", "megacreeps", 
+]
+
 # Recupère l'index du prochain array à récupérer la valeur, en se basant sur le nombre d'elements total dans tous les arrays
 static func make_array_choice(arrays: Array, total_elements: int, rng: RandomNumberGenerator) -> int:
 	# Génère un nombre aléatoire correspondant à la position d'un élément dans l'array global s'il était aplati

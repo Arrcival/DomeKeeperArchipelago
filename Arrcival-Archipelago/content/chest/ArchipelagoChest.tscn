@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dkiccxvrqi26x"]
+[gd_scene load_steps=26 format=3 uid="uid://dkiccxvrqi26x"]
 
 [ext_resource type="Script" path="res://mods-unpacked/Arrcival-Archipelago/content/chest/ArchipelagoChest.gd" id="1_25a5d"]
 [ext_resource type="Texture2D" uid="uid://brbuiuvnvqhxj" path="res://mods-unpacked/Arrcival-Archipelago/content/chest/archipelago_chest_sheet.png" id="2_dwqr6"]
@@ -12,16 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dr2je683l1lv6" path="res://content/shared/drops/ResourceGrabber.tscn" id="10_huxc1"]
 [ext_resource type="Texture2D" uid="uid://dbx7ru6j4m4rx" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key_smol.png" id="11_f78cb"]
 [ext_resource type="Script" path="res://content/map/chamber/ChamberSynchronizer.gd" id="12_y0377"]
-[ext_resource type="Texture2D" uid="uid://c6a1slus2bh5g" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key1.png" id="13_yh2q4"]
-[ext_resource type="Texture2D" uid="uid://dax5lvo8i17go" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key2.png" id="14_l4gep"]
-[ext_resource type="Texture2D" uid="uid://u707pf4fdkpl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key3.png" id="15_y0xgj"]
-[ext_resource type="Texture2D" uid="uid://1bomlov5g3ys" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key4.png" id="16_8mh61"]
-[ext_resource type="Texture2D" uid="uid://sqr2nbbrwrr6" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key5.png" id="17_4rth1"]
-[ext_resource type="Texture2D" uid="uid://ckbad8oyqtdoo" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key6.png" id="18_1go1e"]
-[ext_resource type="Texture2D" uid="uid://disd8b1kpeum3" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key7.png" id="19_jxe6d"]
-[ext_resource type="Texture2D" uid="uid://b3q7cu53wnmdl" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key8.png" id="20_6pw05"]
-[ext_resource type="Texture2D" uid="uid://dbleajyug6huw" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key9.png" id="21_lru42"]
-[ext_resource type="Texture2D" uid="uid://dff528fifqjg5" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key10.png" id="22_px4iv"]
+[ext_resource type="Texture2D" uid="uid://d23yttk5u6atp" path="res://mods-unpacked/Arrcival-Archipelago/content/key/key_symbols.png" id="13_v4gpg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_65hng"]
 atlas = ExtResource("2_dwqr6")
@@ -178,52 +169,50 @@ script = ExtResource("12_y0377")
 [node name="Key1" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("13_yh2q4")
+texture = ExtResource("13_v4gpg")
+hframes = 7
 
 [node name="Key2" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("14_l4gep")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 1
 
 [node name="Key3" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("15_y0xgj")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 2
 
 [node name="Key4" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("16_8mh61")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 3
 
 [node name="Key5" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("17_4rth1")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 4
 
 [node name="Key6" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("18_1go1e")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 5
 
 [node name="Key7" type="Sprite2D" parent="KeyNumber"]
 visible = false
 position = Vector2(18.5, 23.5)
-texture = ExtResource("19_jxe6d")
-
-[node name="Key8" type="Sprite2D" parent="KeyNumber"]
-visible = false
-position = Vector2(18.5, 23.5)
-texture = ExtResource("20_6pw05")
-
-[node name="Key9" type="Sprite2D" parent="KeyNumber"]
-visible = false
-position = Vector2(18.5, 23.5)
-texture = ExtResource("21_lru42")
-
-[node name="Key10" type="Sprite2D" parent="KeyNumber"]
-visible = false
-position = Vector2(18.5, 23.5)
-texture = ExtResource("22_px4iv")
+texture = ExtResource("13_v4gpg")
+hframes = 7
+frame = 6
 
 [connection signal="animation_finished" from="Sprite2D" to="." method="_on_Sprite_animation_finished"]
 [connection signal="grabbed_resource" from="Slot/ResourceGrabber" to="." method="_on_ResourceGrabber_grabbed_resource"]

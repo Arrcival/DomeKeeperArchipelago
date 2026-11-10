@@ -311,8 +311,8 @@ func get_speed_multiplier() -> float:
 func get_mining_multiplier() -> float:
 	return _progression.get_mining_multiplier()
 
-func generate_layers(mapData: Array) -> void:
-	_tile_manager.generate_layers_per_distance(mapData)
+func generate_layers(biome_cells_by_layer: Array) -> void:
+	_tile_manager.generate_layers_by_biome(biome_cells_by_layer)
 
 func get_generated_layers() -> Array:
 	return _tile_manager.get_generated_layers()

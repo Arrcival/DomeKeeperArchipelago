@@ -8,31 +8,37 @@ var keeper: Keeper
 
 var startRunButton: LoadoutChoice
 
-func build(data: Array):
-	super.build(data)
-
-	var choice: Node = find_child("StartRunChoice")
-	if choice is LoadoutChoice:
-		choice.set_enabled(false)
-		startRunButton = choice
-	
-	if GameWorld.archipelago.is_relic_hunt():
-		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
-		desactivate_keepers(slot_data["keeper"])
-		desactivate_domes()
-		desactivate_gadgets()
-		desactivate_mapsizes()
-		desactivate_difficulties()
-		desactivate_modifiers()
-	else:
-		manageAssignments()
+#func build(data: Array):
+#	super.build(data)
+#
+#	var choice: Node = find_child("StartRunChoice")
+#	if choice is LoadoutChoice:
+#		choice.set_enabled(false)
+#		startRunButton = choice
+#	
+#	if GameWorld.archipelago.is_relic_hunt():
+#		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
+#		desactivate_keepers(slot_data["keeper"])
+#		desactivate_domes()
+#		desactivate_gadgets()
+#		desactivate_mapsizes()
+#		desactivate_difficulties()
+#		desactivate_modifiers()
+#	else:
+#		manage_assignments()
 
 #extending
 func spawn_keeper(loadout_keeper: LoadoutKeeper) -> void:
-	var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
-	if multiplayer.is_server() and loadout_keeper.playerId == "player1":
-		loadout_keeper.keeperId = "keeper" + str(slot_data["keeper"] + 1)
-		loadout_keeper.skinId = "skin0"
+	if GameWorld.archipelago.is_relic_hunt():
+		var slot_data = GameWorld.archipelago.get_relic_hunt_slot_data()
+		var keeper_id = slot_data["keeper"] + 1
+		if multiplayer.is_server() and loadout_keeper.playerId == "player1":
+
+			if not Platform.purchased_keeper_dlc() and (keeper_id == 3 or keeper_id == 4):
+				GameWorld.archipelago.logInformations.emit("Trying to use a DLC character without owning the DLC, check your configuration.")
+			else:
+				loadout_keeper.keeperId = "keeper" + str(keeper_id)
+				loadout_keeper.skinId = "skin0"
 
 	super.spawn_keeper(loadout_keeper)
 
@@ -79,20 +85,30 @@ func _force_archipelago_mode(mode_id: String) -> void:
 		desactivate_difficulties()
 		desactivate_modifiers()
 	else:
-		manageAssignments()
+		manage_assignments()
 
 	if startRunButton != null:
 		startRunButton.set_enabled(true)
 
-func manageAssignments():
+func manage_assignments():
 	if GameWorld.archipelago.is_relic_hunt():
 		return
 	assignmentSelected(GameWorld.archipelago.get_starting_assignment_name())
 	var assignments = find_child("AssignmentsContainer")
+	var has_dlc = Platform.purchased_keeper_dlc()
+	var warned = false
 	for assignment in assignments.get_children():
+		if not has_dlc and assignment.id in CONSTARRC.ASSIGNMENTS_LIST_DLC:
+			if not warned:
+				assignment.set_enabled(false)
+				GameWorld.archipelago.logInformations.emit("Trying to unlock an assignment part of a DLC you do not own, check your configuration")
+				warned = true
+			continue
+
 		assignment.set_enabled(GameWorld.archipelago.isGAUnlocked(assignment.id))
 		if GameWorld.archipelago.isGADone(assignment.id):
 			assignment.makeVisibleAP()
+
 
 func desactivate_keepers(keeper_selected: int):
 	if not GameWorld.archipelago.is_relic_hunt():

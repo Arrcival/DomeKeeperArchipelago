@@ -6,48 +6,45 @@ const ArchipelagoSlotData = preload("res://mods-unpacked/Arrcival-Archipelago/co
 var _slot_data: ArchipelagoSlotData
 var _layer_unlock_getter: Callable
 
-var _layers_per_distance: Array
-var _layer_max_distances: Array[int] = []
+var _layers_per_distance: Array = []
 var _cell_distances: Dictionary = {}
 
 func setup(slot_data: ArchipelagoSlotData, layer_unlock_getter: Callable) -> void:
 	_slot_data = slot_data
 	_layer_unlock_getter = layer_unlock_getter
 
-func generate_layers_per_distance(mineable_cells: Array):
-	_layers_per_distance = []
-	_layer_max_distances.clear()
+# AI assisted
+func generate_layers_by_biome(biome_cells_by_layer: Array) -> Array:
+	_layers_per_distance.clear()
 	_cell_distances.clear()
 
 	var layers_amount: int = _slot_data.get_layer_amount()
-	var layers: Array = []
 	if layers_amount <= 0:
-		return layers
+		return _layers_per_distance
 
-	for i in range(layers_amount):
-		layers.append([])
-		_layer_max_distances.append(-1)
+	for _i in range(layers_amount):
+		_layers_per_distance.append([])
 
-	if mineable_cells.is_empty():
-		_layers_per_distance = layers
-		return layers
+	var biome_by_cell: Dictionary = {}
+	var path_lookup: Dictionary = {}
+	for biome_index in range(biome_cells_by_layer.size()):
+		for cell in biome_cells_by_layer[biome_index]:
+			var coord := Vector2i(cell)
+			biome_by_cell[coord] = biome_index
+			path_lookup[coord] = true
 
-	var mineable_lookup: Dictionary = {}
-	for cell in mineable_cells:
-		mineable_lookup[Vector2i(cell)] = true
-
-	# Don't forget to add protected spawns that were previously added for the flood fill algorithm!!!
-	# Those tiles can't have stuff spawned on them, but are used to calculate distance to the dome (0, 0)
-	var path_lookup: Dictionary = mineable_lookup.duplicate()
+	# Protected spawn tiles are traversable but aren't assigned to a biome layer
 	for spawn in CONSTARRC.PROTECTED_SPAWNS:
 		path_lookup[Vector2i(spawn)] = true
 
-	var distances: Dictionary = {}
-	var start: Vector2i = Vector2i.ZERO
+	# Flood-fill using the lowest possible maximum biome index along each route
+	# A tile behind a higher-biome bottleneck therefore inherits that bottleneck's layer
+	var required_biome: Dictionary = {}
+	var start := Vector2i.ZERO
 	if path_lookup.has(start):
 		var queue: Array[Vector2i] = [start]
-		distances[start] = 0
-		var queue_index: int = 0
+		required_biome[start] = max(0, biome_by_cell.get(start, 0))
+		var queue_index := 0
 		var directions: Array[Vector2i] = [
 			Vector2i(1, 0),
 			Vector2i(-1, 0),
@@ -60,44 +57,43 @@ func generate_layers_per_distance(mineable_cells: Array):
 			queue_index += 1
 			for direction in directions:
 				var neighbor: Vector2i = cell + direction
-				if path_lookup.has(neighbor) and not distances.has(neighbor):
-					distances[neighbor] = distances[cell] + 1
-					queue.append(neighbor)
+				if not path_lookup.has(neighbor):
+					continue
+				var neighbor_biome: int = biome_by_cell.get(neighbor, -1)
+				var candidate: int = max(required_biome[cell], neighbor_biome)
+				if required_biome.has(neighbor) and required_biome[neighbor] <= candidate:
+					continue
+				required_biome[neighbor] = candidate
+				queue.append(neighbor)
 
-	var max_distance: int = 0
-	for distance in distances.values():
-		max_distance = max(max_distance, distance)
+	for biome_index in range(biome_cells_by_layer.size()):
+		for cell in biome_cells_by_layer[biome_index]:
+			var coord := Vector2i(cell)
+			if CONSTARRC.PROTECTED_SPAWNS.has(Vector2(coord)):
+				continue
 
-	# Split the full reachable distance range evenly across the requested layers.
-	# Disconnected mineable cells remain in the outermost layer.
-	for cell in mineable_cells:
-		var coord: Vector2i = Vector2i(cell)
-		if CONSTARRC.PROTECTED_SPAWNS.has(Vector2(coord)):
-			continue
+			# Unreachable tiles stay locked until the outermost layer is available
+			# means 1,0 layer 1   2,0 layer 2   3,0 layer 1 is flagged as layer 2
+			var required_layer: int = layers_amount - 1
+			if required_biome.has(coord):
+				required_layer = min(layers_amount - 1, required_biome[coord])
+				if required_biome[coord] > biome_index:
+					print("@#@#@#@# Tile %s moved from biome layer %s to layer %s; reaching it requires traversing biome %s." % [
+						coord, biome_index, required_layer, required_biome[coord]
+					])
+			_layers_per_distance[required_layer].append(coord)
+			_cell_distances[coord] = required_layer
 
-		var cell_distance: int = -1
-		var layer_index: int = layers_amount - 1
-		if distances.has(coord):
-			cell_distance = distances[coord]
-			layer_index = min(layers_amount - 1, int(cell_distance * layers_amount / (max_distance + 1)))
-		_cell_distances[coord] = cell_distance
-		layers[layer_index].append(coord)
-		if cell_distance >= 0:
-			_layer_max_distances[layer_index] = max(_layer_max_distances[layer_index], cell_distance)
-
-	_layers_per_distance = layers.duplicate()
 	print("@#@#@#@# Result : %s" % _layers_per_distance)
-
 	if OS.is_debug_build():
-		for i in range(len(_layers_per_distance)):
+		for i in range(_layers_per_distance.size()):
 			print("@#@#@#@# Layer %s : %s" % [i, _layers_per_distance[i]])
+
+	return _layers_per_distance
 
 
 func get_generated_layers() -> Array:
 	return _layers_per_distance
-
-func get_generated_layer_max_distances() -> Array[int]:
-	return _layer_max_distances
 
 func get_cell_distance(coord: Vector2) -> int:
 	return _cell_distances.get(Vector2i(coord), -1)
@@ -113,9 +109,9 @@ func can_tile_be_mined(distance: int) -> bool:
 
 func get_maximum_depth() -> int:
 	var mineable_layers: int = _layer_unlock_getter.call()
-	if mineable_layers >= len(_layer_max_distances) - 1:
+	if _layers_per_distance.is_empty() or mineable_layers >= _layers_per_distance.size() - 1:
 		return 999
-	return _layer_max_distances[mineable_layers]
+	return max(0, mineable_layers)
 
 func update_max_depth_hud() -> void:
 	var max_depth = get_maximum_depth()
