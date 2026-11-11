@@ -98,14 +98,15 @@ func manage_assignments():
 	var has_dlc = Platform.purchased_keeper_dlc()
 	var warned = false
 	for assignment in assignments.get_children():
-		if not has_dlc and assignment.id in CONSTARRC.ASSIGNMENTS_LIST_DLC:
+		var is_unlocked = GameWorld.archipelago.isGAUnlocked(assignment.id)
+		if not has_dlc and is_unlocked and assignment.id in CONSTARRC.ASSIGNMENTS_LIST_DLC:
+			assignment.set_enabled(false)
 			if not warned:
-				assignment.set_enabled(false)
 				GameWorld.archipelago.logInformations.emit("Trying to unlock an assignment part of a DLC you do not own, check your configuration")
 				warned = true
 			continue
 
-		assignment.set_enabled(GameWorld.archipelago.isGAUnlocked(assignment.id))
+		assignment.set_enabled(is_unlocked)
 		if GameWorld.archipelago.isGADone(assignment.id):
 			assignment.makeVisibleAP()
 
