@@ -28,12 +28,18 @@ func receive_starting_assignment(assignment_id: int) -> void:
 	progression.receive_unlock(ITEM_FIRST_ASSIGNMENT_ID + assignment_id)
 
 func process_checked_locations(checked_locations: Array) -> void:
+	var first_id: int = (
+		LOCATION_CHALLENGE_FIRST_ASSIGNMENT_ID
+		if slot_data.challengeMode
+		else LOCATION_FIRST_ASSIGNMENT_ID
+	)
+
+	# id must be between O and assignment max amount if i substract it to the first id
+	# if it's an actual assignment location check
 	for location_id: int in checked_locations:
-		var assignment_id: int = location_id - LOCATION_FIRST_ASSIGNMENT_ID
-		if not slot_data.challengeMode and assignment_id >= 0 and assignment_id < ASSIGNMENTS_AMOUNT:
+		var assignment_id: int = location_id - first_id
+		if assignment_id >= 0 and assignment_id < ASSIGNMENTS_AMOUNT:
 			_mark_assignment_checked(assignment_id)
-		elif slot_data.challengeMode and assignment_id >= ASSIGNMENTS_AMOUNT and assignment_id < ASSIGNMENTS_AMOUNT * 2:
-			_mark_assignment_checked(assignment_id - ASSIGNMENTS_AMOUNT)
 
 func _mark_assignment_checked(assignment_id: int) -> void:
 	progression.mark_assignment_checked(CONSTARRC.ASSIGNMENTS_LIST[assignment_id])
