@@ -5,14 +5,15 @@ const MOD_ID: String = "Arrcival-Archipelago"
 const ADDITIONNAL_INFOS: String = "Please use the latest apworld in the AP discord !"
 
 const ARCHIPELAGOSWITCH: String = "archipelagoswitch"
-const TILE_ARCHIPELAGO_SWITCH: int = 4242
+
+const TILE_ARCHIPELAGO_SWITCH: int = 34 # id is sensitive to coloring it in the mw
+const TILE_CHAMBER = 37
+const TILE_CHEST = 39
 
 const SECONDS_LOST_PER_TRAP: int = 15
 
 const CHEST_LOCATION_ID: int = 4243200
 
-const TILE_CHAMBER = 77
-const TILE_CHEST = 78
 const AP_CHAMBER = "ap_chamber"
 
 const AP_TREASURE = "ap_treasure"
